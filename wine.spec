@@ -6,7 +6,7 @@
 Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	0.9.58
-Release:	%mkrel 1
+Release:	%mkrel 2
 Epoch:		1
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 License:	LGPLv2+
@@ -26,6 +26,8 @@ Patch108:	wine-0.9.58-wineprefixcreate-mdkconf.patch
 #             alsa is busy due to pulseaudio being used, it will use esd. Preferring
 #             it as a last alternative due to latency issues with pulseaudio..
 Patch109:	wine-0.9.56-use-esd-if-other-fails.patch
+# (eandry) generate symbol ttf font file
+Patch110:	wine-fontforge-symbol-font.patch
 Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 # (anssi) Wine does not yet build on x86_64 without hacks (as of 0.9.42). Note
 # also that 64-bit wine cannot run 32-bit programs, so it should be named
@@ -40,6 +42,7 @@ BuildRequires:	cups-devel jackit-devel ImageMagick isdn4k-utils-devel xpm-devel
 BuildRequires:	sane-devel glibc-static-devel esound-devel ungif-devel chrpath
 BuildRequires:	desktop-file-utils libalsa-devel openldap-devel lcms-devel
 BuildRequires:	nas-devel libxslt-devel dbus-devel hal-devel
+BuildRequires:	fontforge
 %if %mdkversion >= 200700
 BuildRequires:	mesaglu-devel
 %else
@@ -118,6 +121,7 @@ find . -type d -name CVS|xargs rm -rf
 %if %mdkversion >= 200810
 %patch109 -p1 -b .esd
 %endif
+%patch110
 
 %build
 autoconf
