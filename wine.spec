@@ -127,6 +127,7 @@ find . -type d -name CVS|xargs rm -rf
 autoconf
 %configure2_5x	--with-x \
 		--enable-opengl \
+		--disable-debug \
 %ifarch x86_64
 		--enable-win64
 %endif
