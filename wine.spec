@@ -6,7 +6,7 @@
 Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	0.9.58
-Release:	%mkrel 2
+Release:	%mkrel 3
 Epoch:		1
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 License:	LGPLv2+
@@ -124,6 +124,13 @@ find . -type d -name CVS|xargs rm -rf
 %patch110
 
 %build
+%ifarch %ix86
+# (Anssi 04/2008) bug #39604
+# Some protection systems complain "debugger detected" with our
+# -fomit-frame-pointer flag, so disable it.
+export CFLAGS="%{optflags} -fno-omit-frame-pointer"
+%endif
+
 autoconf
 %configure2_5x	--with-x \
 		--enable-opengl \
