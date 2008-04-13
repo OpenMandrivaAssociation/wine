@@ -44,7 +44,7 @@ BuildRequires:	cups-devel jackit-devel ImageMagick isdn4k-utils-devel xpm-devel
 BuildRequires:	sane-devel glibc-static-devel esound-devel ungif-devel chrpath
 BuildRequires:	desktop-file-utils libalsa-devel openldap-devel lcms-devel
 BuildRequires:	nas-devel libxslt-devel dbus-devel hal-devel
-BuildRequires:	fontforge valgrind icoutils librsvg
+BuildRequires:	fontforge valgrind librsvg
 %if %mdkversion >= 200700
 BuildRequires:	mesaglu-devel
 %else
@@ -132,6 +132,12 @@ find . -type d -name CVS|xargs rm -rf
 # -fomit-frame-pointer flag, so disable it.
 export CFLAGS="%{optflags} -fno-omit-frame-pointer"
 %endif
+
+# (Anssi 04/2008)
+# If icotool is present, it is used to rebuild icon files. It is in contrib
+# so we do not do that; this is here to ensure that installed icoutils does
+# not change build behaviour.
+export ICOTOOL=false
 
 autoconf
 %configure2_5x	--with-x \
