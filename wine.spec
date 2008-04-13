@@ -5,8 +5,8 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	0.9.58
-Release:	%mkrel 3
+Version:	0.9.59
+Release:	%mkrel 1
 Epoch:		1
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 License:	LGPLv2+
@@ -27,6 +27,8 @@ Patch108:	wine-0.9.58-wineprefixcreate-mdkconf.patch
 #             it as a last alternative due to latency issues with pulseaudio..
 Patch109:	wine-0.9.56-use-esd-if-other-fails.patch
 # (eandry) generate symbol ttf font file
+# (Anssi 04/2008) Workarounds a bug in certain fontforge versions, fixed as of 20080302
+# http://bugs.winehq.org/show_bug.cgi?id=10660
 Patch110:	wine-fontforge-symbol-font.patch
 Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 # (anssi) Wine does not yet build on x86_64 without hacks (as of 0.9.42). Note
@@ -42,7 +44,7 @@ BuildRequires:	cups-devel jackit-devel ImageMagick isdn4k-utils-devel xpm-devel
 BuildRequires:	sane-devel glibc-static-devel esound-devel ungif-devel chrpath
 BuildRequires:	desktop-file-utils libalsa-devel openldap-devel lcms-devel
 BuildRequires:	nas-devel libxslt-devel dbus-devel hal-devel
-BuildRequires:	fontforge
+BuildRequires:	fontforge valgrind icoutils librsvg
 %if %mdkversion >= 200700
 BuildRequires:	mesaglu-devel
 %else
