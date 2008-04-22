@@ -5,7 +5,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	0.9.59
+Version:	0.9.60
 Release:	%mkrel 1
 Epoch:		1
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
@@ -20,7 +20,7 @@ Source1:	http://ibiblio.org/pub/linux/system/emulators/wine/%{name}-%{version}.t
 Source2:        wine.init
 # Patch108 assumes floppy is mounted at /media rather than /mnt,
 # which is only available in >= 2008.0
-Patch108:	wine-0.9.58-wineprefixcreate-mdkconf.patch
+Patch108:	wine-0.9.60-wineprefixcreate-mdkconf.patch
 # (fc) 0.9.55-2mdv use esd by default for PulseAudio (2008.1 and later)
 #(peroyvind): Ressurected patch, but only use if other alternatives fails. Ie. if
 #             alsa is busy due to pulseaudio being used, it will use esd. Preferring
@@ -282,7 +282,6 @@ rm -fr %{buildroot}
 %{_bindir}/winhelp
 %{_bindir}/regsvr32
 %{_bindir}/winefile
-%{_bindir}/winelauncher
 %{_mandir}/man1/wine.1*
 %lang(de) %{_mandir}/de.UTF-8/man1/wine.1*
 %lang(fr) %{_mandir}/fr.UTF-8/man1/*
