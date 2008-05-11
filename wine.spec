@@ -5,22 +5,36 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	0.9.60
-Release:	%mkrel 1
+Version:	1.0
+%define pre	rc1
+%define rel	1
+%if %pre
+Release:	%mkrel 0.%pre.%rel
+%define o_ver	%version-%pre
+%else
+Release:	%mkrel %rel
+%define o_ver	%version
+%endif
 Epoch:		1
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 License:	LGPLv2+
 Group:		Emulators
 URL:		http://www.winehq.com/
 BuildRoot:      %_tmppath/%{name}-%{version}-%{release}-buildroot
-Source0:	http://ibiblio.org/pub/linux/system/emulators/wine/%{name}-%{version}.tar.bz2
-Source1:	http://ibiblio.org/pub/linux/system/emulators/wine/%{name}-%{version}.tar.bz2.sign
+Source0:	http://ibiblio.org/pub/linux/system/emulators/wine/%{name}-%{o_ver}.tar.bz2
+Source1:	http://ibiblio.org/pub/linux/system/emulators/wine/%{name}-%{o_ver}.tar.bz2.sign
 
 # RH stuff
 Source2:        wine.init
-# Patch108 assumes floppy is mounted at /media rather than /mnt,
+# (Anssi 05/2008) Adds:
+# a: => /media/floppy
+# d: => /media/cdrom
+# e: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
+#              note that Wine also provides $HOME in My Documents)
+# com4 => /dev/ttyUSB0 (replaces /dev/ttyS3)
+# Patch108 assumes floppy/cdrom is mounted at /media rather than /mnt,
 # which is only available in >= 2008.0
-Patch108:	wine-0.9.60-wineprefixcreate-mdkconf.patch
+Patch108:	wine-mdkconf.patch
 # (fc) 0.9.55-2mdv use esd by default for PulseAudio (2008.1 and later)
 #(peroyvind): Ressurected patch, but only use if other alternatives fails. Ie. if
 #             alsa is busy due to pulseaudio being used, it will use esd. Preferring
@@ -30,7 +44,6 @@ Patch109:	wine-0.9.56-use-esd-if-other-fails.patch
 # (Anssi 04/2008) Workarounds a bug in certain fontforge versions, fixed as of 20080302
 # http://bugs.winehq.org/show_bug.cgi?id=10660
 Patch110:	wine-fontforge-symbol-font.patch
-Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 # (anssi) Wine does not yet build on x86_64 without hacks (as of 0.9.42). Note
 # also that 64-bit wine cannot run 32-bit programs, so it should be named
 # differently. Also, 64-bit wine cannot yet run 64-bit Windows programs
@@ -117,8 +130,7 @@ develop programs which make use of wine.
 Wine is often updated.
 
 %prep
-%setup -q
-find . -type d -name CVS|xargs rm -rf
+%setup -q -n %name-%o_ver
 %patch108 -p1 -b .conf
 %if %mdkversion >= 200810
 %patch109 -p1 -b .esd
@@ -141,20 +153,16 @@ export ICOTOOL=false
 
 autoconf
 %configure2_5x	--with-x \
-		--enable-opengl \
 %ifarch x86_64
 		--enable-win64
 %endif
 
-make depend
+%make depend
 %make
-%make -C programs
 
 %install
 rm -rf %{buildroot}
 %makeinstall_std LDCONFIG=/bin/true 
-
-%makeinstall_std -C programs prefix=%{buildroot}%{_prefix}
 
 # Danny: dirty:
 install -m755 tools/fnt2bdf -D %{buildroot}%{_bindir}/fnt2bdf
