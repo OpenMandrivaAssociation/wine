@@ -7,7 +7,7 @@ Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.0
 %define pre	rc1
-%define rel	1
+%define rel	2
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -27,13 +27,13 @@ Source1:	http://ibiblio.org/pub/linux/system/emulators/wine/%{name}-%{o_ver}.tar
 # RH stuff
 Source2:        wine.init
 # (Anssi 05/2008) Adds:
-# a: => /media/floppy
-# d: => /media/cdrom
-# e: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
+# a: => /media/floppy (/mnt/floppy on 2007.1 and older)
+# d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
 #              note that Wine also provides $HOME in My Documents)
+# only on 2008.0: e: => /media/cdrom (does not exist on 2008.1+)
+# only on 2007.1 and older: e: => /mnt/cdrom
 # com4 => /dev/ttyUSB0 (replaces /dev/ttyS3)
-# Patch108 assumes floppy/cdrom is mounted at /media rather than /mnt,
-# which is only available in >= 2008.0
+# have to substitute @MDKVERSION@ in dlls/ntdll/server.c
 Patch108:	wine-mdkconf.patch
 # (fc) 0.9.55-2mdv use esd by default for PulseAudio (2008.1 and later)
 #(peroyvind): Ressurected patch, but only use if other alternatives fails. Ie. if
@@ -136,6 +136,7 @@ Wine is often updated.
 %patch109 -p1 -b .esd
 %endif
 %patch110
+sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
 
 %build
 %ifarch %ix86
