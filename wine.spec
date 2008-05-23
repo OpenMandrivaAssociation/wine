@@ -6,8 +6,8 @@
 Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.0
-%define pre	rc1
-%define rel	2
+%define pre	rc2
+%define rel	1
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -288,7 +288,6 @@ rm -fr %{buildroot}
 %{_bindir}/uninstaller
 %{_bindir}/winemine
 %{_bindir}/winepath
-%{_bindir}/winhelp
 %{_bindir}/regsvr32
 %{_bindir}/winefile
 %{_mandir}/man1/wine.1*
