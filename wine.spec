@@ -26,6 +26,7 @@ Source1:	http://ibiblio.org/pub/linux/system/emulators/wine/%{name}-%{o_ver}.tar
 
 # RH stuff
 Source2:        wine.init
+Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 # (Anssi 05/2008) Adds:
 # a: => /media/floppy (/mnt/floppy on 2007.1 and older)
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -131,6 +132,9 @@ Wine is often updated.
 
 %prep
 %setup -q -n %name-%o_ver
+%if %mdkversion >= 200900
+%patch0 -p0
+%endif
 %patch108 -p1 -b .conf
 %if %mdkversion >= 200810
 %patch109 -p1 -b .esd
