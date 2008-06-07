@@ -327,7 +327,6 @@ rm -fr %{buildroot}
 
 %files -n %{lib_name_devel}
 %defattr(-,root,root)
-%doc ChangeLog
 %{_libdir}/%{name}/*.a
 %{_libdir}/libwine*.so
 %{_libdir}/%{name}/*.def
