@@ -6,7 +6,7 @@
 Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.0
-%define pre	rc3
+%define pre	rc4
 %define rel	1
 %if %pre
 Release:	%mkrel 0.%pre.%rel
@@ -132,9 +132,6 @@ Wine is often updated.
 
 %prep
 %setup -q -n %name-%o_ver
-%if %mdkversion >= 200900
-%patch0 -p0
-%endif
 %patch108 -p1 -b .conf
 %if %mdkversion >= 200810
 %patch109 -p1 -b .esd
