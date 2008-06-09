@@ -261,11 +261,15 @@ rm -fr %{buildroot}
 
 %post -n %{lib_name}
 %{__sed} -i "N;s#%{_libdir}/wine\n##g" %{_sysconfdir}/ld.so.conf
+%if %mdkversion < 200900
 /sbin/ldconfig
+%endif
 
 %postun -n %{lib_name}
 %{__sed} -i "N;s#%{_libdir}/wine\n##g" %{_sysconfdir}/ld.so.conf
+%if %mdkversion < 200900
 /sbin/ldconfig
+%endif
 
 %files
 %defattr(-,root,root)
