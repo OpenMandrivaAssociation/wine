@@ -64,9 +64,7 @@ BuildRequires:	mesaglu-devel
 %else
 BuildRequires:	MesaGLU-devel
 %endif
-%if %mdkversion >= 1020
 BuildRequires:	fontforge
-%endif
 Provides:	wine-utils = %{epoch}:%{version}-%{release} wine-full = %{epoch}:%{version}-%{release}
 Provides:	%{lib_name}-capi = %{epoch}:%{version}-%{release} %{lib_name}-twain = %{epoch}:%{version}-%{release}
 Obsoletes:	wine-utils wine-full %{lib_name}-capi %{lib_name}-twain
@@ -76,10 +74,8 @@ Requires:	xmessage
 %else
 Requires:	X11R6-contrib
 %endif
-%if %mdkversion >= 200700
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
-%endif
 Requires(post): desktop-common-data
 Requires(postun): desktop-common-data
 Requires(preun): rpm-helper
@@ -248,15 +244,11 @@ rm -fr %{buildroot}
 
 %post
 %_post_service %{name}
-%if %mdkversion >= 200700
 %{update_desktop_database}
-%endif
 %{update_menus}
 
 %postun
-%if %mdkversion >= 200700
 %{clean_desktop_database}
-%endif
 %{clean_menus}
 
 %post -n %{lib_name}
@@ -306,10 +298,8 @@ rm -fr %{buildroot}
 %{_datadir}/applications/*.desktop
 %{_sysconfdir}/xdg/menus/applications-merged/mandriva-%{name}.menu
 %{_datadir}/desktop-directories/mandriva-%{name}.directory
-%if %mdkversion >= 1020
 %dir %{_datadir}/wine/fonts
 %{_datadir}/wine/fonts/*
-%endif
 %{_miconsdir}/%{name}.png
 %{_iconsdir}/%{name}.png
 %{_liconsdir}/%{name}.png
