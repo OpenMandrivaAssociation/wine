@@ -244,12 +244,16 @@ rm -fr %{buildroot}
 
 %post
 %_post_service %{name}
+%if %mdkversion < 200900
 %{update_desktop_database}
 %{update_menus}
+%endif
 
+%if %mdkversion < 200900
 %postun
 %{clean_desktop_database}
 %{clean_menus}
+%endif
 
 %post -n %{lib_name}
 %{__sed} -i "N;s#%{_libdir}/wine\n##g" %{_sysconfdir}/ld.so.conf
