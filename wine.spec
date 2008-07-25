@@ -312,6 +312,7 @@ rm -fr %{buildroot}
 %defattr(-,root,root)
 %{_libdir}/libwine*.so.%{lib_major}*
 %dir %{_libdir}/%{name}
+%{_libdir}/%{name}/*.cpl.so
 %{_libdir}/%{name}/*.drv.so
 %{_libdir}/%{name}/*.dll.so
 %{_libdir}/%{name}/*.exe.so
