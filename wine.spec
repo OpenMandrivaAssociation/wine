@@ -280,7 +280,6 @@ rm -fr %{buildroot}
 %{_bindir}/wineserver
 %{_bindir}/wineboot
 %{_bindir}/function_grep.pl
-%{_bindir}/wineshelllink
 %{_bindir}/winebrowser
 %{_bindir}/wineprefixcreate
 %{_bindir}/wine-preloader
