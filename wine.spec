@@ -55,7 +55,7 @@ Patch110:	wine-fontforge-symbol-font.patch
 ExclusiveArch:	%{ix86}
 BuildRequires:	bison flex gpm-devel perl-devel ncurses-devel sgml-tools
 BuildRequires:	X11-devel freetype2-devel autoconf2.5 docbook-utils docbook-dtd-sgml
-BuildRequires:	cups-devel jackit-devel ImageMagick isdn4k-utils-devel xpm-devel
+BuildRequires:	cups-devel jackit-devel imagemagick isdn4k-utils-devel xpm-devel
 BuildRequires:	sane-devel glibc-static-devel esound-devel ungif-devel chrpath
 BuildRequires:	desktop-file-utils libalsa-devel openldap-devel lcms-devel
 BuildRequires:	nas-devel libxslt-devel dbus-devel hal-devel
