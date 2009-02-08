@@ -46,13 +46,14 @@ Patch109:	wine-0.9.56-use-esd-if-other-fails.patch
 # (Anssi 04/2008) Workarounds a bug in certain fontforge versions, fixed as of 20080302
 # http://bugs.winehq.org/show_bug.cgi?id=10660
 Patch110:	wine-fontforge-symbol-font.patch
-# (anssi) Wine does not yet build on x86_64 without hacks (as of 0.9.42). Note
-# also that 64-bit wine cannot run 32-bit programs, so it should be named
-# differently. Also, 64-bit wine cannot yet run 64-bit Windows programs
-# either. When it does, upstream will at some point possibly implement it so
-# that 64-bit loader can use both 32-bit and 64-bit wine libraries. Do not
-# hold your breath, though, as this is very low priority.
+# (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
+# 64-bit wine cannot run 32-bit programs, so it should be named differently
+# to allow co-installation. Upstream has not yet implemented this
+# co-habitation, so one would need to resolve conflicts manually.
 ExclusiveArch:	%{ix86}
+%ifarch x86_64
+BuildRequires:	gcc >= 4.4
+%endif
 BuildRequires:	bison flex gpm-devel perl-devel ncurses-devel sgml-tools
 BuildRequires:	X11-devel freetype2-devel autoconf2.5 docbook-utils docbook-dtd-sgml
 BuildRequires:	cups-devel jackit-devel imagemagick isdn4k-utils-devel xpm-devel
