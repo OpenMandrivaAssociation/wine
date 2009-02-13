@@ -5,7 +5,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.1.14
+Version:	1.1.15
 %define pre	0
 %define rel	1
 %if %pre
@@ -45,7 +45,7 @@ Patch109:	wine-0.9.56-use-esd-if-other-fails.patch
 # (eandry) generate symbol ttf font file
 # (Anssi 04/2008) Workarounds a bug in certain fontforge versions, fixed as of 20080302
 # http://bugs.winehq.org/show_bug.cgi?id=10660
-Patch110:	wine-fontforge-symbol-font.patch
+# Patch110:	wine-fontforge-symbol-font.patch
 # (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
 # 64-bit wine cannot run 32-bit programs, so it should be named differently
 # to allow co-installation. Upstream has not yet implemented this
@@ -135,7 +135,7 @@ Wine is often updated.
 %if %mdkversion >= 200810
 %patch109 -p1 -b .esd
 %endif
-%patch110
+#%patch110
 sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
 
 %build
