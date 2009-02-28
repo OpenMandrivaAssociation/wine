@@ -208,8 +208,6 @@ EOF
 mkdir -p %{buildroot}%{_datadir}/applications/
 for i in	winecfg:Configurator \
 		notepad:Notepad \
-		uninstaller:Software\ Manager \
-		progman:Program\ Manager \
 		winefile:File\ Manager \
 		regedit:Registry\ Editor \
 		winemine:Minesweeper;
@@ -281,14 +279,11 @@ rm -fr %{buildroot}
 %{_bindir}/wineserver
 %{_bindir}/wineboot
 %{_bindir}/function_grep.pl
-%{_bindir}/winebrowser
 %{_bindir}/wineprefixcreate
 %{_bindir}/wine-preloader
 %{_bindir}/msiexec
 %{_bindir}/notepad
-%{_bindir}/progman
 %{_bindir}/regedit
-%{_bindir}/uninstaller
 %{_bindir}/winemine
 %{_bindir}/winepath
 %{_bindir}/regsvr32
@@ -325,6 +320,7 @@ rm -fr %{buildroot}
 %{_libdir}/%{name}/*.ds.so
 %{_libdir}/%{name}/*.sys.so
 %{_libdir}/%{name}/*16
+%{_libdir}/%{name}/*16.so
 
 %files -n %{lib_name_devel}
 %defattr(-,root,root)
