@@ -37,6 +37,13 @@ Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 # com4 => /dev/ttyUSB0 (replaces /dev/ttyS3)
 # have to substitute @MDKVERSION@ in dlls/ntdll/server.c
 Patch108:	wine-mdkconf.patch
+
+#(eandry) add a pulseaudio sound driver (from fedora)
+#patch 402 rediffed, not genuine fedora
+Patch400:       winepulse-0.17-configure.ac.patch
+Patch401:       winepulse-0.20.patch
+Patch402:	adding-pulseaudio-to-winecfg.patch
+
 ExclusiveArch:	%{ix86}
 %ifarch x86_64
 BuildRequires:	gcc >= 4.4
@@ -47,7 +54,7 @@ BuildRequires:	cups-devel jackit-devel imagemagick isdn4k-utils-devel xpm-devel
 BuildRequires:	sane-devel glibc-static-devel esound-devel ungif-devel chrpath
 BuildRequires:	desktop-file-utils libalsa-devel openldap-devel lcms-devel
 BuildRequires:	nas-devel libxslt-devel dbus-devel hal-devel
-BuildRequires:	fontforge valgrind librsvg
+BuildRequires:	fontforge valgrind librsvg pulseaudio-devel
 %if %mdkversion >= 200700
 BuildRequires:	mesaglu-devel
 %else
@@ -119,9 +126,11 @@ Wine is often updated.
 %setup -q -n %name-%o_ver
 %patch1 -p0 -b .chinese
 %patch108 -p1 -b .conf
+%patch400 -p1
+%patch401 -p1
+%patch402 -p0
 %if %mdkversion >= 200810
 %endif
-#%patch110
 sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
 
 %build
@@ -138,8 +147,9 @@ export CFLAGS="%{optflags} -fno-omit-frame-pointer"
 # not change build behaviour.
 export ICOTOOL=false
 
-autoconf
+autoreconf
 %configure2_5x	--with-x \
+		--with-pulse \
 %ifarch x86_64
 		--enable-win64
 %endif
