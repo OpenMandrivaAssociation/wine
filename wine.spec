@@ -44,6 +44,10 @@ Patch400:       winepulse-0.17-configure.ac.patch
 Patch401:       winepulse-0.20.patch
 Patch402:	adding-pulseaudio-to-winecfg.patch
 
+# (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
+# 64-bit wine cannot run 32-bit programs, so it should be named differently
+# to allow co-installation. Upstream has not yet implemented this
+# co-habitation, so one would need to resolve conflicts manually.
 ExclusiveArch:	%{ix86}
 %ifarch x86_64
 BuildRequires:	gcc >= 4.4
