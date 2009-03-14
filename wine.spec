@@ -5,7 +5,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.1.16
+Version:	1.1.17
 %define pre	0
 %define rel	1
 %if %pre
@@ -37,19 +37,6 @@ Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 # com4 => /dev/ttyUSB0 (replaces /dev/ttyS3)
 # have to substitute @MDKVERSION@ in dlls/ntdll/server.c
 Patch108:	wine-mdkconf.patch
-# (fc) 0.9.55-2mdv use esd by default for PulseAudio (2008.1 and later)
-#(peroyvind): Ressurected patch, but only use if other alternatives fails. Ie. if
-#             alsa is busy due to pulseaudio being used, it will use esd. Preferring
-#             it as a last alternative due to latency issues with pulseaudio..
-Patch109:	wine-0.9.56-use-esd-if-other-fails.patch
-# (eandry) generate symbol ttf font file
-# (Anssi 04/2008) Workarounds a bug in certain fontforge versions, fixed as of 20080302
-# http://bugs.winehq.org/show_bug.cgi?id=10660
-# Patch110:	wine-fontforge-symbol-font.patch
-# (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
-# 64-bit wine cannot run 32-bit programs, so it should be named differently
-# to allow co-installation. Upstream has not yet implemented this
-# co-habitation, so one would need to resolve conflicts manually.
 ExclusiveArch:	%{ix86}
 %ifarch x86_64
 BuildRequires:	gcc >= 4.4
@@ -133,7 +120,6 @@ Wine is often updated.
 %patch1 -p0 -b .chinese
 %patch108 -p1 -b .conf
 %if %mdkversion >= 200810
-%patch109 -p1 -b .esd
 %endif
 #%patch110
 sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
