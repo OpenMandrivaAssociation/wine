@@ -235,7 +235,7 @@ convert programs/winemenubuilder/wine.xpm -size 16x16 %{buildroot}%{_miconsdir}/
 convert programs/winemenubuilder/wine.xpm -size 32x32 %{buildroot}%{_iconsdir}/%{name}.png
 convert programs/winemenubuilder/wine.xpm -size 48x48 %{buildroot}%{_liconsdir}/%{name}.png
 
-chrpath -d %{buildroot}%{_bindir}/{wine,wine-?thread,wineserver,wmc,wrc} %{buildroot}%{_libdir}/%{name}/*.so
+chrpath -d %{buildroot}%{_bindir}/{wine,wineserver,wmc,wrc} %{buildroot}%{_libdir}/%{name}/*.so
 
 %clean
 rm -fr %{buildroot}
@@ -272,7 +272,6 @@ rm -fr %{buildroot}
 %defattr(-,root,root)
 %doc ANNOUNCE AUTHORS README
 %{_initrddir}/%{name}
-%{_bindir}/wine-?thread
 %{_bindir}/wine
 %{_bindir}/winecfg
 %{_bindir}/wineconsole*
