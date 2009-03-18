@@ -7,7 +7,7 @@ Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.1.17
 %define pre	0
-%define rel	1
+%define rel	2
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -57,7 +57,7 @@ BuildRequires:	X11-devel freetype2-devel autoconf2.5 docbook-utils docbook-dtd-s
 BuildRequires:	cups-devel jackit-devel imagemagick isdn4k-utils-devel xpm-devel
 BuildRequires:	sane-devel glibc-static-devel esound-devel ungif-devel chrpath
 BuildRequires:	desktop-file-utils libalsa-devel openldap-devel lcms-devel
-BuildRequires:	nas-devel libxslt-devel dbus-devel hal-devel
+BuildRequires:	libxslt-devel dbus-devel hal-devel
 BuildRequires:	fontforge valgrind librsvg pulseaudio-devel
 %if %mdkversion >= 200700
 BuildRequires:	mesaglu-devel
@@ -154,6 +154,7 @@ export ICOTOOL=false
 autoreconf
 %configure2_5x	--with-x \
 		--with-pulse \
+		--without-nas \
 %ifarch x86_64
 		--enable-win64
 %endif
