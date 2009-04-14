@@ -5,9 +5,9 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.1.17
+Version:	1.1.19
 %define pre	0
-%define rel	2
+%define rel	1
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -38,10 +38,10 @@ Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 # have to substitute @MDKVERSION@ in dlls/ntdll/server.c
 Patch108:	wine-mdkconf.patch
 
-#(eandry) add a pulseaudio sound driver (from fedora)
-#patch 402 rediffed, not genuine fedora
+#(eandry) add a pulseaudio sound driver (from http://art.ified.ca/downloads/ )
+#patch 402 rediffed, not genuine
 Patch400:       winepulse-0.17-configure.ac.patch
-Patch401:       winepulse-0.20.patch
+Patch401:       winepulse-0.25.patch
 Patch402:	adding-pulseaudio-to-winecfg.patch
 
 # (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
