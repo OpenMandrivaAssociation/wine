@@ -5,7 +5,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.1.21
+Version:	1.1.22
 %define pre	0
 %define rel	1
 %if %pre
@@ -132,7 +132,7 @@ Wine is often updated.
 %patch108 -p1 -b .conf
 %patch400 -p1
 %patch401 -p1
-%patch402 -p0
+%patch402 -p0 -b .pulseaudio
 %if %mdkversion >= 200810
 %endif
 sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
