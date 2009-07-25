@@ -7,7 +7,7 @@ Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.1.26
 %define pre	0
-%define rel	1
+%define rel	2
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -40,10 +40,9 @@ Patch2:		wine-1.1.23-fix-str-fmt.patch
 Patch108:	wine-mdkconf.patch
 
 #(eandry) add a pulseaudio sound driver (from http://art.ified.ca/downloads/ )
-#patch 402 rediffed, not genuine
-Patch400:       winepulse-0.17-configure.ac.patch
-Patch401:       winepulse-0.25.patch
-Patch402:	adding-pulseaudio-to-winecfg.patch
+Patch400:       http://art.ified.ca/downloads/winepulse/winepulse-0.29-configure.ac.patch
+Patch401:       http://art.ified.ca/downloads/winepulse/winepulse-0.29.patch
+Patch402:	http://art.ified.ca/downloads/winepulse/adding-pulseaudio-to-winecfg-0.3.patch
 
 # (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
 # 64-bit wine cannot run 32-bit programs, so it should be named differently
@@ -134,7 +133,7 @@ Wine is often updated.
 %patch108 -p1 -b .conf
 %patch400 -p1
 %patch401 -p1
-%patch402 -p0 -b .pulseaudio
+%patch402 -p1
 %if %mdkversion >= 200810
 %endif
 sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
