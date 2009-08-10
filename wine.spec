@@ -7,7 +7,7 @@ Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.1.27
 %define pre	0
-%define rel	1
+%define rel	2
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -58,22 +58,15 @@ BuildRequires:	cups-devel jackit-devel imagemagick isdn4k-utils-devel xpm-devel
 BuildRequires:	sane-devel glibc-static-devel esound-devel ungif-devel chrpath
 BuildRequires:	desktop-file-utils libalsa-devel openldap-devel lcms-devel
 BuildRequires:	libxslt-devel dbus-devel hal-devel
-BuildRequires:	fontforge valgrind librsvg pulseaudio-devel
-%if %mdkversion >= 200700
+BuildRequires:	valgrind librsvg pulseaudio-devel
+BuildRequires:	gsm-devel
 BuildRequires:	mesaglu-devel
-%else
-BuildRequires:	MesaGLU-devel
-%endif
 BuildRequires:	fontforge
 Provides:	wine-utils = %{epoch}:%{version}-%{release} wine-full = %{epoch}:%{version}-%{release}
 Provides:	%{lib_name}-capi = %{epoch}:%{version}-%{release} %{lib_name}-twain = %{epoch}:%{version}-%{release}
 Obsoletes:	wine-utils wine-full %{lib_name}-capi %{lib_name}-twain
 Requires:	freetype2 %{lib_name} = %{epoch}:%{version}
-%if %mdkversion >= 200700
 Requires:	xmessage
-%else
-Requires:	X11R6-contrib
-%endif
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 Requires(post): desktop-common-data
