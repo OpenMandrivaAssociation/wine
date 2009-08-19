@@ -7,7 +7,7 @@ Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.1.27
 %define pre	0
-%define rel	2
+%define rel	3
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -40,8 +40,8 @@ Patch2:		wine-1.1.23-fix-str-fmt.patch
 Patch108:	wine-mdkconf.patch
 
 #(eandry) add a pulseaudio sound driver (from http://art.ified.ca/downloads/ )
-Patch400:       http://art.ified.ca/downloads/winepulse/winepulse-0.29-configure.ac.patch
-Patch401:       http://art.ified.ca/downloads/winepulse/winepulse-0.29.patch
+Patch400:       http://art.ified.ca/downloads/winepulse/winepulse-0.30-configure.ac.patch
+Patch401:       http://art.ified.ca/downloads/winepulse/winepulse-0.30.patch
 Patch402:	http://art.ified.ca/downloads/winepulse/adding-pulseaudio-to-winecfg-0.3.patch
 
 # (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
@@ -205,7 +205,9 @@ for i in	winecfg:Configurator \
 		notepad:Notepad \
 		winefile:File\ Manager \
 		regedit:Registry\ Editor \
-		winemine:Minesweeper;
+		winemine:Minesweeper \
+		wineboot:Reboot \
+		"wineconsole cmd":Command\ Line;
 do cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}-`echo $i|cut -d: -f1`.desktop << EOF
 [Desktop Entry]
 Name=`echo $i|cut -d: -f2`
