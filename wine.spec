@@ -317,6 +317,7 @@ rm -fr %{buildroot}
 %{_libdir}/%{name}/*.sys.so
 %{_libdir}/%{name}/*16
 %{_libdir}/%{name}/*16.so
+%{_libdir}/%{name}/fakedlls
 
 %files -n %{lib_name_devel}
 %defattr(-,root,root)
