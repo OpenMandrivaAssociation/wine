@@ -324,7 +324,6 @@ rm -fr %{buildroot}
 %{_libdir}/libwine*.so
 %{_libdir}/%{name}/*.def
 %{_includedir}/*
-%{_datadir}/aclocal/*
 %{_bindir}/fnt2bdf
 %{_bindir}/wmc
 %{_bindir}/wrc
