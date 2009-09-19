@@ -62,6 +62,8 @@ BuildRequires:	valgrind librsvg pulseaudio-devel
 BuildRequires:	gsm-devel
 BuildRequires:	mesaglu-devel
 BuildRequires:	fontforge
+BuildRequires:	gphoto2-devel
+BuildRequires:	unixODBC-devel
 BuildRequires:	libmpg123-devel
 Provides:	wine-utils = %{epoch}:%{version}-%{release} wine-full = %{epoch}:%{version}-%{release}
 Provides:	%{lib_name}-capi = %{epoch}:%{version}-%{release} %{lib_name}-twain = %{epoch}:%{version}-%{release}
