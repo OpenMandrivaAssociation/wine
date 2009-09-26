@@ -5,7 +5,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.1.29
+Version:	1.1.30
 %define pre	0
 %define rel	1
 %if %pre
@@ -40,9 +40,9 @@ Patch2:		wine-1.1.23-fix-str-fmt.patch
 Patch108:	wine-mdkconf.patch
 
 #(eandry) add a pulseaudio sound driver (from http://art.ified.ca/downloads/ )
-Patch400:       http://art.ified.ca/downloads/winepulse/winepulse-0.30-configure.ac.patch
+Patch400:       http://art.ified.ca/downloads/winepulse/winepulse-0.31-configure.ac.patch
 Patch401:       http://art.ified.ca/downloads/winepulse/winepulse-0.30.patch
-Patch402:	http://art.ified.ca/downloads/winepulse/adding-pulseaudio-to-winecfg-0.4.patch
+Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-winecfg-0.6.patch
 
 # (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
 # 64-bit wine cannot run 32-bit programs, so it should be named differently
@@ -65,6 +65,7 @@ BuildRequires:	fontforge
 BuildRequires:	gphoto2-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	libmpg123-devel
+BuildRequires:	openal-devel
 Provides:	wine-utils = %{epoch}:%{version}-%{release} wine-full = %{epoch}:%{version}-%{release}
 Provides:	%{lib_name}-capi = %{epoch}:%{version}-%{release} %{lib_name}-twain = %{epoch}:%{version}-%{release}
 Obsoletes:	wine-utils wine-full %{lib_name}-capi %{lib_name}-twain
