@@ -7,7 +7,7 @@ Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.1.31
 %define pre	0
-%define rel	1
+%define rel	2
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -40,7 +40,7 @@ Patch2:		wine-1.1.23-fix-str-fmt.patch
 Patch108:	wine-mdkconf.patch
 
 #(eandry) add a pulseaudio sound driver (from http://art.ified.ca/downloads/ )
-Patch400:       http://art.ified.ca/downloads/winepulse/winepulse-0.31-configure.ac.patch
+Patch400:       http://art.ified.ca/downloads/winepulse/winepulse-0.32-configure.ac.patch
 Patch401:       http://art.ified.ca/downloads/winepulse/winepulse-0.30.patch
 Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-winecfg-0.6.patch
 
@@ -128,7 +128,7 @@ Wine is often updated.
 %patch1 -p0 -b .chinese
 %patch2 -p0 -b .str
 %patch108 -p1 -b .conf
-# %patch400 -p1
+%patch400 -p1
 %patch401 -p1
 %patch402 -p1
 %if %mdkversion >= 200810
