@@ -69,8 +69,9 @@ BuildRequires:	openal-devel
 Provides:	wine-utils = %{epoch}:%{version}-%{release} wine-full = %{epoch}:%{version}-%{release}
 Provides:	%{lib_name}-capi = %{epoch}:%{version}-%{release} %{lib_name}-twain = %{epoch}:%{version}-%{release}
 Obsoletes:	wine-utils wine-full %{lib_name}-capi %{lib_name}-twain
-Requires:	freetype2
 Requires:	xmessage
+# wine dlopen's these, so let's add the dependencies ourself
+Requires:	libfreetype.so.6 libasound.so.2
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 Requires(post): desktop-common-data
