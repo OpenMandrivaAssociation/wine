@@ -69,7 +69,7 @@ BuildRequires:	openal-devel
 Provides:	wine-utils = %{epoch}:%{version}-%{release} wine-full = %{epoch}:%{version}-%{release}
 Provides:	%{lib_name}-capi = %{epoch}:%{version}-%{release} %{lib_name}-twain = %{epoch}:%{version}-%{release}
 Obsoletes:	wine-utils wine-full %{lib_name}-capi %{lib_name}-twain
-Requires:	freetype2 %{lib_name} = %{epoch}:%{version}
+Requires:	freetype2
 Requires:	xmessage
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
@@ -128,9 +128,9 @@ Wine is often updated.
 %patch1 -p0 -b .chinese
 %patch2 -p0 -b .str
 %patch108 -p1 -b .conf
-%patch400 -p1
-%patch401 -p1
-%patch402 -p1
+#%patch400 -p1
+#%patch401 -p1
+#%patch402 -p1
 %if %mdkversion >= 200810
 %endif
 sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
