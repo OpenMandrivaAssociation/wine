@@ -80,6 +80,10 @@ Requires(preun): rpm-helper
 Requires(post):	rpm-helper
 %define	_requires_exceptions	libgphoto*\\|libieee1284*\\|libjpeg*\\|libsane*\\|libusb*\\|libesd*\\|libarts*\\|libasound*\\|libaudio*
 Conflicts:	wine < 1:0.9-3mdk
+# (Anssi) If wine-gecko is not installed, wine pops up a dialog on first
+# start proposing to download wine-gecko from sourceforge, while recommending
+# to use distribution packages instead. Therefore suggest wine-gecko here:
+Suggests:	wine-gecko
 
 %description
 Wine is a program which allows running Microsoft Windows programs
