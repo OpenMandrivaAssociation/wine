@@ -133,9 +133,9 @@ Wine is often updated.
 %patch1 -p0 -b .chinese
 %patch2 -p0 -b .str
 %patch108 -p1 -b .conf
-#%patch400 -p1
-#%patch401 -p1
-#%patch402 -p1
+%patch400 -p1
+%patch401 -p1
+%patch402 -p1
 %if %mdkversion >= 200810
 %endif
 sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
