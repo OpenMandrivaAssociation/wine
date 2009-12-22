@@ -71,7 +71,9 @@ Provides:	%{lib_name}-capi = %{epoch}:%{version}-%{release} %{lib_name}-twain = 
 Obsoletes:	wine-utils wine-full %{lib_name}-capi %{lib_name}-twain
 Requires:	xmessage
 # wine dlopen's these, so let's add the dependencies ourself
+%ifarch %{ix86}
 Requires:	libfreetype.so.6 libasound.so.2
+%endif
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 Requires(post): desktop-common-data
