@@ -106,8 +106,6 @@ Group:		Emulators
 Summary:	Libraries for %{name}
 Group:		System/Libraries
 Provides:	%{lib_name_orig} = %{epoch}:%{version}-%{release}
-Requires(post): sed
-Requires(postun): sed
 Conflicts:	wine < 1:0.9-3mdk
 Conflicts:	wine-utils < 1:0.9-3mdk
 
