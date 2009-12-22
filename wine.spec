@@ -78,7 +78,6 @@ Requires(post): desktop-common-data
 Requires(postun): desktop-common-data
 Requires(preun): rpm-helper
 Requires(post):	rpm-helper
-%define	_requires_exceptions	libgphoto*\\|libieee1284*\\|libjpeg*\\|libsane*\\|libusb*\\|libesd*\\|libarts*\\|libasound*\\|libaudio*
 Conflicts:	wine < 1:0.9-3mdk
 # (Anssi) If wine-gecko is not installed, wine pops up a dialog on first
 # start proposing to download wine-gecko from sourceforge, while recommending
