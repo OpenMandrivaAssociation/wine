@@ -48,7 +48,7 @@ Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-winecfg-0.6.patch
 # 64-bit wine cannot run 32-bit programs, so it should be named differently
 # to allow co-installation. Upstream has not yet implemented this
 # co-habitation, so one would need to resolve conflicts manually.
-ExclusiveArch:	%{ix86}
+ExclusiveArch:	%{ix86} x86_64
 %ifarch x86_64
 BuildRequires:	gcc >= 4.4
 %endif
@@ -85,13 +85,22 @@ Conflicts:	wine < 1:0.9-3mdk
 # to use distribution packages instead. Therefore suggest wine-gecko here:
 Suggests:	wine-gecko
 
-%description
-Wine is a program which allows running Microsoft Windows programs
-(including DOS, Windows 3.x and Win32 executables) on Unix.  It
-consists of a program loader which loads and executes a Microsoft
-Windows binary, and a library (called Winelib) that implements Windows
-API calls using their Unix or X11 equivalents.  The library may also
+%define desc Wine is a program which allows running Microsoft Windows programs \
+(including DOS, Windows 3.x and Win32 executables) on Unix. It \
+consists of a program loader which loads and executes a Microsoft \
+Windows binary, and a library (called Winelib) that implements Windows \
+API calls using their Unix or X11 equivalents.  The library may also \
 be used for porting Win32 code into native Unix executables.
+
+%description
+%desc
+
+%package -n	wine64
+Summary:	WINE Is Not An Emulator - runs MS Windows programs
+Group:		Emulators
+
+%description -n	wine64
+%desc
 
 %package -n	%{lib_name}
 Summary:	Libraries for %{name}
@@ -274,7 +283,11 @@ rm -fr %{buildroot}
 /sbin/ldconfig
 %endif
 
+%ifarch x86_64
+%files -n wine64
+%else
 %files
+%endif
 %defattr(-,root,root)
 %doc ANNOUNCE AUTHORS README
 %{_initrddir}/%{name}
@@ -285,7 +298,9 @@ rm -fr %{buildroot}
 %{_bindir}/wineboot
 %{_bindir}/function_grep.pl
 %{_bindir}/wineprefixcreate
+%ifarch %{ix86}
 %{_bindir}/wine-preloader
+%endif
 %{_bindir}/msiexec
 %{_bindir}/notepad
 %{_bindir}/regedit
@@ -320,12 +335,14 @@ rm -fr %{buildroot}
 %{_libdir}/%{name}/*.exe.so
 %{_libdir}/%{name}/*.acm.so
 %{_libdir}/%{name}/*.ocx.so
+%ifarch %{ix86}
 %{_libdir}/%{name}/*.vxd.so
+%{_libdir}/%{name}/*16
+%{_libdir}/%{name}/*16.so
+%endif
 %{_libdir}/%{name}/*.tlb.so
 %{_libdir}/%{name}/*.ds.so
 %{_libdir}/%{name}/*.sys.so
-%{_libdir}/%{name}/*16
-%{_libdir}/%{name}/*16.so
 %{_libdir}/%{name}/fakedlls
 
 %files -n %{lib_name_devel}
