@@ -255,34 +255,6 @@ chrpath -d %{buildroot}%{_bindir}/{wine,wineserver,wmc,wrc} %{buildroot}%{_libdi
 %clean
 rm -fr %{buildroot}
 
-%preun
-%_preun_service %{name}
-
-%post
-%_post_service %{name}
-%if %mdkversion < 200900
-%{update_desktop_database}
-%{update_menus}
-%endif
-
-%if %mdkversion < 200900
-%postun
-%{clean_desktop_database}
-%{clean_menus}
-%endif
-
-%post -n %{lib_name}
-%{__sed} -i "N;s#%{_libdir}/wine\n##g" %{_sysconfdir}/ld.so.conf
-%if %mdkversion < 200900
-/sbin/ldconfig
-%endif
-
-%postun -n %{lib_name}
-%{__sed} -i "N;s#%{_libdir}/wine\n##g" %{_sysconfdir}/ld.so.conf
-%if %mdkversion < 200900
-/sbin/ldconfig
-%endif
-
 %ifarch x86_64
 %files -n wine64
 %else
