@@ -191,11 +191,7 @@ cat > %{buildroot}%{_sysconfdir}/xdg/menus/applications-merged/mandriva-%{name}.
 <Menu>
     <Name>Applications</Name>
     <Menu>
-%if %{mdkversion} >= 200800
         <Name>Tools</Name>
-%else
-        <Name>More Applications</Name>
-%endif
         <Menu>
             <Name>Emulators</Name>
             <Menu>
