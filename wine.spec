@@ -48,7 +48,7 @@ Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-winecfg-0.6.patch
 # 64-bit wine cannot run 32-bit programs, so it should be named differently
 # to allow co-installation. Upstream has not yet implemented this
 # co-habitation, so one would need to resolve conflicts manually.
-ExclusiveArch:	%{ix86} x86_64
+ExclusiveArch:	%{ix86}
 %ifarch x86_64
 BuildRequires:	gcc >= 4.4
 %endif
