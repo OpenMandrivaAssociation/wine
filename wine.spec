@@ -96,12 +96,14 @@ be used for porting Win32 code into native Unix executables.
 %description
 %desc
 
+%ifarch x86_64
 %package -n	wine64
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 Group:		Emulators
 
 %description -n	wine64
 %desc
+%endif
 
 %package -n	%{lib_name}
 Summary:	Libraries for %{name}
@@ -307,8 +309,10 @@ rm -fr %{buildroot}
 %{_libdir}/%{name}/*.ocx.so
 %ifarch %{ix86}
 %{_libdir}/%{name}/*.vxd.so
-%{_libdir}/%{name}/*16
 %{_libdir}/%{name}/*16.so
+%endif
+%ifarch x86_64
+%{_libdir}/%{name}/*16
 %endif
 %{_libdir}/%{name}/*.tlb.so
 %{_libdir}/%{name}/*.ds.so
