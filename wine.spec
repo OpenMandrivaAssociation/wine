@@ -255,6 +255,12 @@ chrpath -d %{buildroot}%{_bindir}/{wine,wineserver,wmc,wrc} %{buildroot}%{_libdi
 %clean
 rm -fr %{buildroot}
 
+%preun
+%_preun_service %{name}
+
+%post
+%_post_service %{name}
+
 %ifarch x86_64
 %files -n wine64
 %else
