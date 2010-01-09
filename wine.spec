@@ -312,7 +312,9 @@ rm -fr %{buildroot}
 %{_libdir}/%{name}/*16.so
 %endif
 %ifarch x86_64
+%{_libdir}/%{name}/*.vxd.so
 %{_libdir}/%{name}/*16
+%{_libdir}/%{name}/*16.so
 %endif
 %{_libdir}/%{name}/*.tlb.so
 %{_libdir}/%{name}/*.ds.so
