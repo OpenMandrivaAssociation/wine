@@ -76,6 +76,24 @@ BuildRequires:	gphoto2-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	libmpg123-devel
 BuildRequires:	openal-devel
+
+%define desc Wine is a program which allows running Microsoft Windows programs \
+(including DOS, Windows 3.x and Win32 executables) on Unix. It \
+consists of a program loader which loads and executes a Microsoft \
+Windows binary, and a library (called Winelib) that implements Windows \
+API calls using their Unix or X11 equivalents.  The library may also \
+be used for porting Win32 code into native Unix executables.
+
+%description
+%desc
+
+%ifarch x86_64
+%package -n	%{wine}
+Summary:	WINE Is Not An Emulator - runs MS Windows programs
+Group:		Emulators
+
+%endif
+
 Provides:	%{wine}-utils = %{epoch}:%{version}-%{release} %{wine}-full = %{epoch}:%{version}-%{release}
 Provides:	%{lib_name}-capi = %{epoch}:%{version}-%{release} %{lib_name}-twain = %{epoch}:%{version}-%{release}
 Obsoletes:	%{wine}-utils %{wine}-full %{lib_name}-capi %{lib_name}-twain
@@ -94,22 +112,8 @@ Conflicts:	%{wine} < 1:0.9-3mdk
 # to use distribution packages instead. Therefore suggest wine-gecko here:
 Suggests:	wine-gecko
 
-%define desc Wine is a program which allows running Microsoft Windows programs \
-(including DOS, Windows 3.x and Win32 executables) on Unix. It \
-consists of a program loader which loads and executes a Microsoft \
-Windows binary, and a library (called Winelib) that implements Windows \
-API calls using their Unix or X11 equivalents.  The library may also \
-be used for porting Win32 code into native Unix executables.
-
-%description
-%desc
-
 %ifarch x86_64
-%package -n	wine64
-Summary:	WINE Is Not An Emulator - runs MS Windows programs
-Group:		Emulators
-
-%description -n	wine64
+%description -n	%{wine}
 %desc
 %endif
 
