@@ -108,6 +108,7 @@ Requires(postun): desktop-common-data
 Requires(preun): rpm-helper
 Requires(post):	rpm-helper
 Conflicts:	%{wine} < 1:0.9-3mdk
+# TODO: Fix ability to exist in parallel...
 %ifarch %{ix86}
 Conflicts:	wine64
 %else
