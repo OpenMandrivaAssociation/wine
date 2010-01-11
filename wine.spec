@@ -1,3 +1,10 @@
+%ifarch x86_64
+%define	wine	wine64
+%define	mark64	(64bit)
+%else
+%define	wine	wine
+%define	mark64	%{nil}
+%endif
 %define	lib_name_orig	lib%{name}
 %define	lib_major	1
 %define	lib_name	%mklibname %{name} %{lib_major}
@@ -49,6 +56,9 @@ Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-winecfg-0.6.patch
 # to allow co-installation. Upstream has not yet implemented this
 # co-habitation, so one would need to resolve conflicts manually.
 ExclusiveArch:	%{ix86}
+%if %mdkversion >= 201010
+ExclusiveArch:	x86_64
+%endif
 %ifarch x86_64
 BuildRequires:	gcc >= 4.4
 %endif
@@ -66,21 +76,19 @@ BuildRequires:	gphoto2-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	libmpg123-devel
 BuildRequires:	openal-devel
-Provides:	wine-utils = %{epoch}:%{version}-%{release} wine-full = %{epoch}:%{version}-%{release}
+Provides:	%{wine}-utils = %{epoch}:%{version}-%{release} %{wine}-full = %{epoch}:%{version}-%{release}
 Provides:	%{lib_name}-capi = %{epoch}:%{version}-%{release} %{lib_name}-twain = %{epoch}:%{version}-%{release}
-Obsoletes:	wine-utils wine-full %{lib_name}-capi %{lib_name}-twain
+Obsoletes:	%{wine}-utils %{wine}-full %{lib_name}-capi %{lib_name}-twain
 Requires:	xmessage
 # wine dlopen's these, so let's add the dependencies ourself
-%ifarch %{ix86}
-Requires:	libfreetype.so.6 libasound.so.2
-%endif
+Requires:	libfreetype.so.6%{mark64} libasound.so.2%{mark64}
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 Requires(post): desktop-common-data
 Requires(postun): desktop-common-data
 Requires(preun): rpm-helper
 Requires(post):	rpm-helper
-Conflicts:	wine < 1:0.9-3mdk
+Conflicts:	%{wine} < 1:0.9-3mdk
 # (Anssi) If wine-gecko is not installed, wine pops up a dialog on first
 # start proposing to download wine-gecko from sourceforge, while recommending
 # to use distribution packages instead. Therefore suggest wine-gecko here:
@@ -145,8 +153,6 @@ Wine is often updated.
 %patch400 -p1
 %patch401 -p1
 %patch402 -p1
-%if %mdkversion >= 200810
-%endif
 sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
 
 %build
@@ -251,17 +257,13 @@ chrpath -d %{buildroot}%{_bindir}/{wine,wineserver,wmc,wrc} %{buildroot}%{_libdi
 %clean
 rm -fr %{buildroot}
 
-%preun
+%preun -n %{wine}
 %_preun_service %{name}
 
-%post
+%post -n %{wine}
 %_post_service %{name}
 
-%ifarch x86_64
-%files -n wine64
-%else
-%files
-%endif
+%files -n %{wine}
 %defattr(-,root,root)
 %doc ANNOUNCE AUTHORS README
 %{_initrddir}/%{name}
@@ -311,11 +313,6 @@ rm -fr %{buildroot}
 %{_libdir}/%{name}/*.ocx.so
 %ifarch %{ix86}
 %{_libdir}/%{name}/*.vxd.so
-%{_libdir}/%{name}/*16.so
-%endif
-%ifarch x86_64
-%{_libdir}/%{name}/*.vxd.so
-%{_libdir}/%{name}/*16
 %{_libdir}/%{name}/*16.so
 %endif
 %{_libdir}/%{name}/*.tlb.so
