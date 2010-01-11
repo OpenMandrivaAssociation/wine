@@ -111,7 +111,9 @@ Conflicts:	%{wine} < 1:0.9-3mdk
 # (Anssi) If wine-gecko is not installed, wine pops up a dialog on first
 # start proposing to download wine-gecko from sourceforge, while recommending
 # to use distribution packages instead. Therefore suggest wine-gecko here:
+%ifarch %{ix86}
 Suggests:	wine-gecko
+%endif
 
 %ifarch x86_64
 %description -n	%{wine}
