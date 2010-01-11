@@ -1,6 +1,6 @@
 %ifarch x86_64
 %define	wine	wine64
-%define	mark64	(64bit)
+%define	mark64	()(64bit)
 %else
 %define	wine	wine
 %define	mark64	%{nil}
@@ -91,12 +91,13 @@ be used for porting Win32 code into native Unix executables.
 %package -n	%{wine}
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 Group:		Emulators
-
 %endif
 
 Provides:	%{wine}-utils = %{epoch}:%{version}-%{release} %{wine}-full = %{epoch}:%{version}-%{release}
 Provides:	%{lib_name}-capi = %{epoch}:%{version}-%{release} %{lib_name}-twain = %{epoch}:%{version}-%{release}
+Provides:	%{lib_name} = %{epoch}:%{version}-%{release}
 Obsoletes:	%{wine}-utils %{wine}-full %{lib_name}-capi %{lib_name}-twain
+Obsoletes:	%{lib_name} <= %{epoch}:%{version}-%{release}
 Requires:	xmessage
 # wine dlopen's these, so let's add the dependencies ourself
 Requires:	libfreetype.so.6%{mark64} libasound.so.2%{mark64}
@@ -117,35 +118,20 @@ Suggests:	wine-gecko
 %desc
 %endif
 
-%package -n	%{lib_name}
-Summary:	Libraries for %{name}
-Group:		System/Libraries
-Provides:	%{lib_name_orig} = %{epoch}:%{version}-%{release}
-Conflicts:	wine < 1:0.9-3mdk
-Conflicts:	wine-utils < 1:0.9-3mdk
-
-%description -n %{lib_name}
-Wine is a program which allows running Microsoft Windows programs
-(including DOS, Windows 3.x and Win32 executables) on Unix.
-
-This package contains the library needed to run programs dynamically
-linked with %{lib_name_orig}.
-Wine is often updated.
-
-%package -n	%{lib_name_devel}
+%package -n	%{wine}-devel
 Summary:	Static libraries and headers for %{name}
 Group:		Development/C
-Requires:	%{lib_name} = %{epoch}:%{version}
+Requires:	%{wine} = %{epoch}:%{version}
+Provides:	%{lib_name_devel} = %{epoch}:%{version}-%{release}
 Provides:	%{lib_name_orig}-devel = %{epoch}:%{version}-%{release}
-Obsoletes:	wine-devel
-Provides:	wine-devel
+Obsoletes:	%{lib_name_devel} <= %{epoch}:%{version}-%{release}
 Obsoletes:	%{mklibname -d wine 1} < %{epoch}:%{version}
 
-%description -n	%{lib_name_devel}
+%description -n	%{wine}-devel
 Wine is a program which allows running Microsoft Windows programs
 (including DOS, Windows 3.x and Win32 executables) on Unix.
 
-%{lib_name_devel} contains the libraries and header files needed to
+%{wine}-devel contains the libraries and header files needed to
 develop programs which make use of wine.
 
 Wine is often updated.
@@ -304,9 +290,6 @@ rm -fr %{buildroot}
 %{_miconsdir}/%{name}.png
 %{_iconsdir}/%{name}.png
 %{_liconsdir}/%{name}.png
-
-%files -n %{lib_name}
-%defattr(-,root,root)
 %{_libdir}/libwine*.so.%{lib_major}*
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/*.cpl.so
@@ -324,7 +307,7 @@ rm -fr %{buildroot}
 %{_libdir}/%{name}/*.sys.so
 %{_libdir}/%{name}/fakedlls
 
-%files -n %{lib_name_devel}
+%files -n %{wine}-devel
 %defattr(-,root,root)
 %{_libdir}/%{name}/*.a
 %{_libdir}/libwine*.so
