@@ -108,6 +108,11 @@ Requires(postun): desktop-common-data
 Requires(preun): rpm-helper
 Requires(post):	rpm-helper
 Conflicts:	%{wine} < 1:0.9-3mdk
+%ifarch %{ix86}
+Conflicts:	wine64
+%else
+Conflicts:	wine
+%endif
 # (Anssi) If wine-gecko is not installed, wine pops up a dialog on first
 # start proposing to download wine-gecko from sourceforge, while recommending
 # to use distribution packages instead. Therefore suggest wine-gecko here:
@@ -128,6 +133,11 @@ Provides:	%{lib_name_devel} = %{epoch}:%{version}-%{release}
 Provides:	%{lib_name_orig}-devel = %{epoch}:%{version}-%{release}
 Obsoletes:	%{lib_name_devel} <= %{epoch}:%{version}-%{release}
 Obsoletes:	%{mklibname -d wine 1} < %{epoch}:%{version}
+%ifarch %{ix86}
+Conflicts:	wine64-devel
+%else
+Conflicts:	wine-devel
+%endif
 
 %description -n	%{wine}-devel
 Wine is a program which allows running Microsoft Windows programs
