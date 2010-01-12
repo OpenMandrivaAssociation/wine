@@ -14,7 +14,7 @@ Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.1.36
 %define pre	0
-%define rel	2
+%define rel	3
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -84,9 +84,6 @@ Windows binary, and a library (called Winelib) that implements Windows \
 API calls using their Unix or X11 equivalents.  The library may also \
 be used for porting Win32 code into native Unix executables.
 
-%description
-%desc
-
 %ifarch x86_64
 %package -n	%{wine}
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
@@ -120,6 +117,9 @@ Conflicts:	wine
 %ifarch %{ix86}
 Suggests:	wine-gecko
 %endif
+
+%description
+%desc
 
 %ifarch x86_64
 %description -n	%{wine}
