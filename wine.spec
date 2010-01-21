@@ -96,6 +96,7 @@ Provides:	%{lib_name} = %{epoch}:%{version}-%{release}
 Obsoletes:	%{wine}-utils %{wine}-full %{lib_name}-capi %{lib_name}-twain
 Obsoletes:	%{lib_name} <= %{epoch}:%{version}-%{release}
 Requires:	xmessage
+Suggests:	sane-frontends
 # wine dlopen's these, so let's add the dependencies ourself
 Requires:	libfreetype.so.6%{mark64} libasound.so.2%{mark64}
 Requires(post): desktop-file-utils
