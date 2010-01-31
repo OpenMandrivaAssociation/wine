@@ -125,6 +125,9 @@ Suggests:	wine-gecko
 %ifarch x86_64
 %description -n	%{wine}
 %desc
+
+This package contains the Win64 version of Wine, and therefore cannot
+be used to run 32-bit Windows programs.
 %endif
 
 %package -n	%{wine}-devel
@@ -258,6 +261,15 @@ convert programs/winemenubuilder/wine.xpm -size 48x48 %{buildroot}%{_liconsdir}/
 
 chrpath -d %{buildroot}%{_bindir}/{wine,wineserver,wmc,wrc} %{buildroot}%{_libdir}/%{name}/*.so
 
+%ifarch x86_64
+cat > README.install.urpmi <<EOF
+This is the Win64 version of Wine. This version can only be used to run
+64-bit Windows applications. 32-bit Windows applications will not run.
+For running 32-bit Windows applications, you need to install the 'wine'
+package instead.
+EOF
+%endif
+
 %clean
 rm -fr %{buildroot}
 
@@ -270,6 +282,9 @@ rm -fr %{buildroot}
 %files -n %{wine}
 %defattr(-,root,root)
 %doc ANNOUNCE AUTHORS README
+%ifarch x86_64
+%doc README.install.urpmi
+%endif
 %{_initrddir}/%{name}
 %{_bindir}/wine
 %{_bindir}/winecfg
