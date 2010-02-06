@@ -12,7 +12,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.1.37
+Version:	1.1.38
 %define pre	0
 %define rel	1
 %if %pre
