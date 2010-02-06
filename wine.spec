@@ -47,8 +47,8 @@ Patch2:		wine-1.1.23-fix-str-fmt.patch
 Patch108:	wine-mdkconf.patch
 
 #(eandry) add a pulseaudio sound driver (from http://art.ified.ca/downloads/ )
-Patch400:       http://art.ified.ca/downloads/winepulse/winepulse-0.32-configure.ac.patch
-Patch401:       http://art.ified.ca/downloads/winepulse/winepulse-0.33.patch
+Patch400:       http://art.ified.ca/downloads/winepulse/winepulse-0.35-configure.ac.patch
+Patch401:       http://art.ified.ca/downloads/winepulse/winepulse-0.35.patch
 Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-winecfg-0.6.patch
 
 # (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
