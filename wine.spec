@@ -65,7 +65,7 @@ BuildRequires:	gcc >= 4.4
 BuildRequires:	bison flex gpm-devel perl-devel ncurses-devel sgml-tools
 BuildRequires:	X11-devel freetype2-devel autoconf2.5 docbook-utils docbook-dtd-sgml
 BuildRequires:	cups-devel jackit-devel imagemagick isdn4k-utils-devel xpm-devel
-BuildRequires:	sane-devel glibc-static-devel esound-devel ungif-devel chrpath
+BuildRequires:	sane-devel glibc-static-devel ungif-devel chrpath
 BuildRequires:	desktop-file-utils libalsa-devel openldap-devel lcms-devel
 BuildRequires:	libxslt-devel dbus-devel hal-devel
 BuildRequires:	valgrind librsvg pulseaudio-devel
