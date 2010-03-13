@@ -184,8 +184,8 @@ autoreconf
 		--enable-win64
 %endif
 
-%make depend
-%make
+make depend
+make
 
 %install
 rm -rf %{buildroot}
