@@ -162,6 +162,9 @@ Wine is often updated.
 %patch402 -p1
 sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
 
+# make winepule build, otherwise it gives "Makefile:388: *** missing separator.  Stop"
+sed -i 's,@DEPENDENCIES@,\t@DEPENDENCIES@,g' dlls/winepulse.drv/Makefile.in
+
 %build
 %ifarch %ix86
 # (Anssi 04/2008) bug #39604
@@ -180,12 +183,13 @@ autoreconf
 %configure2_5x	--with-x \
 		--with-pulse \
 		--without-nas \
+		--without-esd \
 %ifarch x86_64
 		--enable-win64
 %endif
 
-make depend
-make
+%make depend
+%make
 
 %install
 rm -rf %{buildroot}
