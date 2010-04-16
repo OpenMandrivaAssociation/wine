@@ -12,7 +12,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.1.42
+Version:	1.1.43
 %define pre	0
 %define rel	1
 %if %pre
@@ -309,6 +309,8 @@ rm -fr %{buildroot}
 %{_bindir}/winefile
 %{_mandir}/man1/wine.1*
 %lang(de) %{_mandir}/de.UTF-8/man1/wine.1*
+%lang(de) %{_mandir}/de.UTF-8/man1/winemaker.1*
+%lang(de) %{_mandir}/de.UTF-8/man1/wineserver.1*
 %lang(fr) %{_mandir}/fr.UTF-8/man1/*
 %{_mandir}/man1/wineserver.1*
 %{_mandir}/man1/wineprefixcreate.1*
