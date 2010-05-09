@@ -12,9 +12,9 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.1.43
+Version:	1.1.44
 %define pre	0
-%define rel	2
+%define rel	1
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -52,7 +52,7 @@ Patch108:	wine-mdkconf.patch
 # upstream updates it
 Patch400:	winepulse-0.35-mdv-1.1.42-configure.ac.patch
 Patch401:       http://art.ified.ca/downloads/winepulse/winepulse-0.36.patch
-Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-0.34-winecfg.patch
+Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-0.36-winecfg.patch
 
 # (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
 # 64-bit wine cannot run 32-bit programs, so it should be named differently
@@ -297,7 +297,7 @@ rm -fr %{buildroot}
 %{_bindir}/wineserver
 %{_bindir}/wineboot
 %{_bindir}/function_grep.pl
-%{_bindir}/wineprefixcreate
+#%{_bindir}/wineprefixcreate
 %ifarch %{ix86}
 %{_bindir}/wine-preloader
 %endif
@@ -314,10 +314,11 @@ rm -fr %{buildroot}
 %lang(de) %{_mandir}/de.UTF-8/man1/wineserver.1*
 %lang(fr) %{_mandir}/fr.UTF-8/man1/*
 %{_mandir}/man1/wineserver.1*
-%{_mandir}/man1/wineprefixcreate.1*
+#%{_mandir}/man1/wineprefixcreate.1*
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/generic.ppd
 %{_datadir}/%{name}/%{name}.inf
+%{_datadir}/%{name}/l_intl.nls
 %{_datadir}/applications/*.desktop
 %{_sysconfdir}/xdg/menus/applications-merged/mandriva-%{name}.menu
 %{_datadir}/desktop-directories/mandriva-%{name}.directory
