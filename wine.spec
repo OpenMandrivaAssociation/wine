@@ -12,8 +12,8 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.1.44
-%define pre	0
+Version:	1.2
+%define pre	rc2
 %define rel	1
 %if %pre
 Release:	%mkrel 0.%pre.%rel
@@ -264,7 +264,11 @@ convert programs/winemenubuilder/wine.xpm -size 16x16 %{buildroot}%{_miconsdir}/
 convert programs/winemenubuilder/wine.xpm -size 32x32 %{buildroot}%{_iconsdir}/%{name}.png
 convert programs/winemenubuilder/wine.xpm -size 48x48 %{buildroot}%{_liconsdir}/%{name}.png
 
+%ifarch x86_64
+chrpath -d %{buildroot}%{_bindir}/{wine64,wineserver,wmc,wrc} %{buildroot}%{_libdir}/%{name}/*.so
+%else
 chrpath -d %{buildroot}%{_bindir}/{wine,wineserver,wmc,wrc} %{buildroot}%{_libdir}/%{name}/*.so
+%endif
 
 %ifarch x86_64
 cat > README.install.urpmi <<EOF
@@ -291,7 +295,11 @@ rm -fr %{buildroot}
 %doc README.install.urpmi
 %endif
 %{_initrddir}/%{name}
+%ifarch x86_64
+%{_bindir}/wine64
+%else
 %{_bindir}/wine
+%endif
 %{_bindir}/winecfg
 %{_bindir}/wineconsole*
 %{_bindir}/wineserver
