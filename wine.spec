@@ -13,8 +13,8 @@
 Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.2
-%define pre	rc2
-%define rel	2
+%define pre	rc3
+%define rel	1
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -52,7 +52,7 @@ Patch108:	wine-mdkconf.patch
 # upstream updates it
 Patch400:	winepulse-0.35-mdv-1.1.42-configure.ac.patch
 Patch401:       http://art.ified.ca/downloads/winepulse/winepulse-0.36.patch
-Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-0.36-winecfg.patch
+Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-0.37-winecfg.patch
 
 # (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
 # 64-bit wine cannot run 32-bit programs, so it should be named differently
