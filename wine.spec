@@ -13,7 +13,7 @@
 Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.2
-%define pre	rc4
+%define pre	rc7
 %define rel	1
 %if %pre
 Release:	%mkrel 0.%pre.%rel
@@ -47,12 +47,9 @@ Patch2:		wine-1.1.23-fix-str-fmt.patch
 Patch108:	wine-mdkconf.patch
 
 #(eandry) add a pulseaudio sound driver (from http://art.ified.ca/downloads/ )
-#Patch400:       http://art.ified.ca/downloads/winepulse/winepulse-0.35-configure.ac.patch
-# (ahmad) rediff it to make it work with wine-1.1.42 for now, until winepulse
-# upstream updates it
-Patch400:	winepulse-0.35-mdv-1.1.42-configure.ac.patch
-Patch401:       http://art.ified.ca/downloads/winepulse/winepulse-0.36.patch
-Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-0.37-winecfg.patch
+Patch400:	http://art.ified.ca/downloads/winepulse/winepulse-0.38-configure.ac.patch
+Patch401:	http://art.ified.ca/downloads/winepulse/winepulse-0.38.patch
+Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-0.38-winecfg.patch
 
 # (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
 # 64-bit wine cannot run 32-bit programs, so it should be named differently
@@ -161,7 +158,7 @@ Wine is often updated.
 %setup -q -n %name-%o_ver
 %patch1 -p0 -b .chinese
 %patch108 -p1 -b .conf
-%patch400 -p0
+%patch400 -p1
 %patch401 -p1
 %patch402 -p1
 sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
@@ -260,9 +257,9 @@ desktop-file-install	--vendor="" \
 			--dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/wine.desktop
 
 install -d %{buildroot}{%{_liconsdir},%{_iconsdir},%{_miconsdir}}
-convert programs/winemenubuilder/wine.xpm -size 16x16 %{buildroot}%{_miconsdir}/%{name}.png
-convert programs/winemenubuilder/wine.xpm -size 32x32 %{buildroot}%{_iconsdir}/%{name}.png
-convert programs/winemenubuilder/wine.xpm -size 48x48 %{buildroot}%{_liconsdir}/%{name}.png
+convert dlls/user32/resources/oic_winlogo.ico[8] %{buildroot}%{_miconsdir}/%{name}.png
+convert dlls/user32/resources/oic_winlogo.ico[7] %{buildroot}%{_iconsdir}/%{name}.png
+convert dlls/user32/resources/oic_winlogo.ico[6] %{buildroot}%{_liconsdir}/%{name}.png
 
 %ifarch x86_64
 chrpath -d %{buildroot}%{_bindir}/{wine64,wineserver,wmc,wrc} %{buildroot}%{_libdir}/%{name}/*.so
