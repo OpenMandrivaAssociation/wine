@@ -10,6 +10,13 @@
 %define	lib_name	%mklibname %{name} %{lib_major}
 %define	lib_name_devel	%{mklibname -d wine}
 
+# On 32-bit we have
+# wine32 - those 32-bit binaries that are also used on 64-bit for 32-bit support
+# wine - all other files (requires 'wine32')
+# On 64-bit we have
+# wine64 - all 64-bit files (suggests 'wine32')
+# - Anssi 07/2010
+
 Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.2
@@ -88,11 +95,16 @@ be used for porting Win32 code into native Unix executables.
 %package -n	%{wine}
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 Group:		Emulators
+Suggests:	wine32 = %{epoch}:%{version}-%{release}
+%else
+# on 32-bit we always want wine32 package
+Requires:	wine32 = %{epoch}:%{version}-%{release}
 %endif
 
 Provides:	%{wine}-utils = %{epoch}:%{version}-%{release} %{wine}-full = %{epoch}:%{version}-%{release}
 Provides:	%{lib_name}-capi = %{epoch}:%{version}-%{release} %{lib_name}-twain = %{epoch}:%{version}-%{release}
 Provides:	%{lib_name} = %{epoch}:%{version}-%{release}
+Provides:	wine-bin = %{epoch}:%{version}-%{release}
 Obsoletes:	%{wine}-utils %{wine}-full %{lib_name}-capi %{lib_name}-twain
 Obsoletes:	%{lib_name} <= %{epoch}:%{version}-%{release}
 Requires:	xmessage
@@ -107,17 +119,10 @@ Requires(postun): desktop-common-data
 Requires(preun): rpm-helper
 Requires(post):	rpm-helper
 Conflicts:	%{wine} < 1:0.9-3mdk
-# TODO: Fix ability to exist in parallel...
 %ifarch %{ix86}
 Conflicts:	wine64
 %else
 Conflicts:	wine
-%endif
-# (Anssi) If wine-gecko is not installed, wine pops up a dialog on first
-# start proposing to download wine-gecko from sourceforge, while recommending
-# to use distribution packages instead. Therefore suggest wine-gecko here:
-%ifarch %{ix86}
-Suggests:	wine-gecko
 %endif
 
 %description
@@ -127,8 +132,28 @@ Suggests:	wine-gecko
 %description -n	%{wine}
 %desc
 
-This package contains the Win64 version of Wine, and therefore cannot
-be used to run 32-bit Windows programs.
+This package contains the Win64 version of Wine. You need the wine32
+package from the 32-bit repository to be able to run 32-bit applications.
+%endif
+
+%ifarch %ix86
+%package -n	wine32
+Summary:	32-bit support for Wine
+Group:		Emulators
+Requires:	wine-bin = %{epoch}:%{version}
+Conflicts:	wine < 1:1.2-0.rc7.1
+Conflicts:	wine64 < 1:1.2-0.rc7.1
+# (Anssi) If wine-gecko is not installed, wine pops up a dialog on first
+# start proposing to download wine-gecko from sourceforge, while recommending
+# to use distribution packages instead. Therefore suggest wine-gecko here:
+Suggests:	wine-gecko
+
+%description -n	wine32
+Wine is a program which allows running Microsoft Windows programs
+(including DOS, Windows 3.x and Win32 executables) on Unix.
+
+This package contains the files needed to support 32-bit Windows
+programs.
 %endif
 
 %package -n	%{wine}-devel
@@ -256,6 +281,11 @@ desktop-file-install	--vendor="" \
 			--add-category=Emulator \
 			--dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/wine.desktop
 
+%ifarch x86_64
+# fix the binary name
+sed -i 's,Exec=wine ,Exec=wine64 ,' %{buildroot}%{_datadir}/applications/wine.desktop
+%endif
+
 install -d %{buildroot}{%{_liconsdir},%{_iconsdir},%{_miconsdir}}
 convert dlls/user32/resources/oic_winlogo.ico[8] %{buildroot}%{_miconsdir}/%{name}.png
 convert dlls/user32/resources/oic_winlogo.ico[7] %{buildroot}%{_iconsdir}/%{name}.png
@@ -270,9 +300,8 @@ chrpath -d %{buildroot}%{_bindir}/{wine,wineserver,wmc,wrc} %{buildroot}%{_libdi
 %ifarch x86_64
 cat > README.install.urpmi <<EOF
 This is the Win64 version of Wine. This version can only be used to run
-64-bit Windows applications. 32-bit Windows applications will not run.
-For running 32-bit Windows applications, you need to install the 'wine'
-package instead.
+64-bit Windows applications as is. For running 32-bit Windows applications,
+you need to also install the 'wine32' package from the 32-bit repository.
 EOF
 %endif
 
@@ -290,22 +319,15 @@ rm -fr %{buildroot}
 %doc ANNOUNCE AUTHORS README
 %ifarch x86_64
 %doc README.install.urpmi
+%{_bindir}/wine64
 %endif
 %{_initrddir}/%{name}
-%ifarch x86_64
-%{_bindir}/wine64
-%else
-%{_bindir}/wine
-%endif
 %{_bindir}/winecfg
 %{_bindir}/wineconsole*
 %{_bindir}/wineserver
 %{_bindir}/wineboot
 %{_bindir}/function_grep.pl
 #%{_bindir}/wineprefixcreate
-%ifarch %{ix86}
-%{_bindir}/wine-preloader
-%endif
 %{_bindir}/msiexec
 %{_bindir}/notepad
 %{_bindir}/regedit
@@ -332,6 +354,14 @@ rm -fr %{buildroot}
 %{_miconsdir}/%{name}.png
 %{_iconsdir}/%{name}.png
 %{_liconsdir}/%{name}.png
+
+%ifarch %{ix86}
+%files -n wine32
+%defattr(-,root,root)
+%{_bindir}/wine
+%{_bindir}/wine-preloader
+%endif
+
 %{_libdir}/libwine*.so.%{lib_major}*
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/*.cpl.so
