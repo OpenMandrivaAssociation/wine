@@ -21,7 +21,7 @@ Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.2
 %define pre	0
-%define rel	1
+%define rel	2
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -83,6 +83,7 @@ BuildRequires:	gphoto2-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	libmpg123-devel
 BuildRequires:	openal-devel
+BuildRequires:	gnutls-devel tiff-devel libv4l-devel
 
 %define desc Wine is a program which allows running Microsoft Windows programs \
 (including DOS, Windows 3.x and Win32 executables) on Unix. It \
