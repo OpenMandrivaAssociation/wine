@@ -20,7 +20,7 @@
 Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.2
-%define pre	rc7
+%define pre	0
 %define rel	1
 %if %pre
 Release:	%mkrel 0.%pre.%rel
@@ -287,9 +287,34 @@ sed -i 's,Exec=wine ,Exec=wine64 ,' %{buildroot}%{_datadir}/applications/wine.de
 %endif
 
 install -d %{buildroot}{%{_liconsdir},%{_iconsdir},%{_miconsdir}}
+
+# winecfg icon
 convert dlls/user32/resources/oic_winlogo.ico[8] %{buildroot}%{_miconsdir}/%{name}.png
 convert dlls/user32/resources/oic_winlogo.ico[7] %{buildroot}%{_iconsdir}/%{name}.png
 convert dlls/user32/resources/oic_winlogo.ico[6] %{buildroot}%{_liconsdir}/%{name}.png
+
+# notepad icon
+convert programs/notepad/notepad.ico[2] %{buildroot}%{_miconsdir}/notepad.png
+convert programs/notepad/notepad.ico[7] %{buildroot}%{_iconsdir}/notepad.png
+convert programs/notepad/notepad.ico[8] %{buildroot}%{_liconsdir}/notepad.png
+# winefile icon
+convert programs/winefile/winefile.ico[2] %{buildroot}%{_miconsdir}/winefile.png
+convert programs/winefile/winefile.ico[8] %{buildroot}%{_iconsdir}/winefile.png
+convert programs/winefile/winefile.ico[7] %{buildroot}%{_liconsdir}/winefile.png
+# regedit icon
+convert programs/regedit/regedit.ico[2] %{buildroot}%{_miconsdir}/regedit.png
+convert programs/regedit/regedit.ico[8] %{buildroot}%{_iconsdir}/regedit.png
+convert programs/regedit/regedit.ico[7] %{buildroot}%{_liconsdir}/regedit.png
+# winemine icon
+convert programs/winemine/winemine.ico[2] %{buildroot}%{_miconsdir}/winemine.png
+convert programs/winemine/winemine.ico[8] %{buildroot}%{_iconsdir}/winemine.png
+convert programs/winemine/winemine.ico[7] %{buildroot}%{_liconsdir}/winemine.png
+
+# change the icons in the respective .desktop files, in order:
+sed -i 's,Icon=%{name},Icon=notepad,' %{buildroot}%{_datadir}/applications/mandriva-wine-notepad.desktop
+sed -i 's,Icon=%{name},Icon=winefile,' %{buildroot}%{_datadir}/applications/mandriva-wine-winefile.desktop
+sed -i 's,Icon=%{name},Icon=regedit,' %{buildroot}%{_datadir}/applications/mandriva-wine-regedit.desktop
+sed -i 's,Icon=%{name},Icon=winemine,' %{buildroot}%{_datadir}/applications/mandriva-wine-winemine.desktop
 
 %ifarch x86_64
 chrpath -d %{buildroot}%{_bindir}/{wine64,wineserver,wmc,wrc} %{buildroot}%{_libdir}/%{name}/*.so
@@ -351,9 +376,9 @@ rm -fr %{buildroot}
 %{_datadir}/desktop-directories/mandriva-%{name}.directory
 %dir %{_datadir}/wine/fonts
 %{_datadir}/wine/fonts/*
-%{_miconsdir}/%{name}.png
-%{_iconsdir}/%{name}.png
-%{_liconsdir}/%{name}.png
+%{_miconsdir}/*.png
+%{_iconsdir}/*.png
+%{_liconsdir}/*.png
 
 %ifarch %{ix86}
 %files -n wine32
