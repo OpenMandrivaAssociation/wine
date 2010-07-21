@@ -21,7 +21,7 @@ Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.2
 %define pre	0
-%define rel	2
+%define rel	3
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -262,7 +262,8 @@ for i in	winecfg:Configurator \
 		regedit:Registry\ Editor \
 		winemine:Minesweeper \
 		wineboot:Reboot \
-		"wineconsole cmd":Command\ Line;
+		"wineconsole cmd":Command\ Line \
+		"wine uninstaller:Wine Software Uninstaller";
 do cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}-`echo $i|cut -d: -f1`.desktop << EOF
 [Desktop Entry]
 Name=`echo $i|cut -d: -f2`
@@ -311,11 +312,17 @@ convert programs/winemine/winemine.ico[2] %{buildroot}%{_miconsdir}/winemine.png
 convert programs/winemine/winemine.ico[8] %{buildroot}%{_iconsdir}/winemine.png
 convert programs/winemine/winemine.ico[7] %{buildroot}%{_liconsdir}/winemine.png
 
+# wine uninstaller icon:
+convert programs/msiexec/msiexec.ico[2] %{buildroot}%{_miconsdir}/msiexec.png
+convert programs/msiexec/msiexec.ico[8] %{buildroot}%{_iconsdir}/msiexec.png
+convert programs/msiexec/msiexec.ico[7] %{buildroot}%{_liconsdir}/msiexec.png
+
 # change the icons in the respective .desktop files, in order:
 sed -i 's,Icon=%{name},Icon=notepad,' %{buildroot}%{_datadir}/applications/mandriva-wine-notepad.desktop
 sed -i 's,Icon=%{name},Icon=winefile,' %{buildroot}%{_datadir}/applications/mandriva-wine-winefile.desktop
 sed -i 's,Icon=%{name},Icon=regedit,' %{buildroot}%{_datadir}/applications/mandriva-wine-regedit.desktop
 sed -i 's,Icon=%{name},Icon=winemine,' %{buildroot}%{_datadir}/applications/mandriva-wine-winemine.desktop
+sed -i 's,Icon=%{name},Icon=msiexec,' "%{buildroot}%{_datadir}/applications/mandriva-wine-wine uninstaller.desktop"
 
 %ifarch x86_64
 chrpath -d %{buildroot}%{_bindir}/{wine64,wineserver,wmc,wrc} %{buildroot}%{_libdir}/%{name}/*.so
