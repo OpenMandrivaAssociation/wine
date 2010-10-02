@@ -21,7 +21,7 @@ Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.3.4
 %define pre	0
-%define rel	1
+%define rel	2
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -141,7 +141,10 @@ package from the 32-bit repository to be able to run 32-bit applications.
 %package -n	wine32
 Summary:	32-bit support for Wine
 Group:		Emulators
-Requires:	wine-bin = %{epoch}:%{version}
+# This is not an EVR-specific requirement, as otherwise on x86_64 urpmi could
+# resolve the dependency to wine64 even on upgrades, and therefore replace
+# wine+wine32 installation with a wine32+wine64 installation. - Anssi
+Requires:	wine-bin
 Conflicts:	wine < 1:1.2-0.rc7.1
 Conflicts:	wine64 < 1:1.2-0.rc7.1
 # (Anssi) If wine-gecko is not installed, wine pops up a dialog on first
