@@ -19,9 +19,9 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.3.4
+Version:	1.3.5
 %define pre	0
-%define rel	2
+%define rel	1
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
