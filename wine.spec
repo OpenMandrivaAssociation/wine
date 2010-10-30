@@ -188,6 +188,7 @@ Wine is often updated.
 %prep
 %setup -q -n %name-%o_ver
 %patch1 -p0 -b .chinese
+%patch2 -p0 -b .srt-fmt
 %patch108 -p1 -b .conf
 %patch400 -p1
 %patch401 -p1
