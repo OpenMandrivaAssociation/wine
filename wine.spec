@@ -19,7 +19,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.3.5
+Version:	1.3.6
 %define pre	0
 %define rel	1
 %if %pre
@@ -42,7 +42,7 @@ Source1:	http://ibiblio.org/pub/linux/system/emulators/wine/%{name}-%{o_ver}.tar
 Source2:        wine.init
 Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
-Patch2:		wine-1.1.23-fix-str-fmt.patch
+Patch2:		wine-1.3.6-fix-str-fmt.patch
 # (Anssi 05/2008) Adds:
 # a: => /media/floppy (/mnt/floppy on 2007.1 and older)
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -54,7 +54,9 @@ Patch2:		wine-1.1.23-fix-str-fmt.patch
 Patch108:	wine-mdkconf.patch
 
 #(eandry) add a pulseaudio sound driver (from http://art.ified.ca/downloads/ )
-Patch400:	http://art.ified.ca/downloads/winepulse/winepulse-0.39-configure.ac.patch
+# Patch400:	http://art.ified.ca/downloads/winepulse/winepulse-0.39-configure.ac.patch
+# rediff configure.ac patch manually until winepulse upstream fixes it
+Patch400:	wine-1.3.6-winepulse-configure.ac.patch
 Patch401:	http://art.ified.ca/downloads/winepulse/winepulse-0.39.patch
 Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-0.38-winecfg.patch
 
