@@ -19,7 +19,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.3.6
+Version:	1.3.7
 %define pre	0
 %define rel	1
 %if %pre
@@ -55,7 +55,8 @@ Patch108:	wine-mdkconf.patch
 
 #(eandry) add a pulseaudio sound driver (from http://art.ified.ca/downloads/ )
 # Patch400:	http://art.ified.ca/downloads/winepulse/winepulse-0.39-configure.ac.patch
-# rediff configure.ac patch manually until winepulse upstream fixes it
+#
+# Rediff configure.ac patch manually until winepulse upstream fixes it
 Patch400:	wine-1.3.6-winepulse-configure.ac.patch
 Patch401:	http://art.ified.ca/downloads/winepulse/winepulse-0.39.patch
 Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-0.38-winecfg.patch
