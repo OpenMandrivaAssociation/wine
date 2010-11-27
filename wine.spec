@@ -19,7 +19,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.3.7
+Version:	1.3.8
 %define pre	0
 %define rel	1
 %if %pre
@@ -42,7 +42,6 @@ Source1:	http://ibiblio.org/pub/linux/system/emulators/wine/%{name}-%{o_ver}.tar
 Source2:        wine.init
 Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
-Patch2:		wine-1.3.6-fix-str-fmt.patch
 # (Anssi 05/2008) Adds:
 # a: => /media/floppy (/mnt/floppy on 2007.1 and older)
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -189,7 +188,6 @@ Wine is often updated.
 %prep
 %setup -q -n %name-%o_ver
 %patch1 -p0 -b .chinese
-%patch2 -p0 -b .srt-fmt
 %patch108 -p1 -b .conf
 %patch400 -p1
 %patch401 -p1
