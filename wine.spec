@@ -379,7 +379,17 @@ rm -fr %{buildroot}
 %lang(de) %{_mandir}/de.UTF-8/man1/wineserver.1*
 %lang(fr) %{_mandir}/fr.UTF-8/man1/*
 %{_mandir}/man1/wineserver.1*
-#%{_mandir}/man1/wineprefixcreate.1*
+%{_mandir}/man1/msiexec.1*
+%{_mandir}/man1/notepad.1*
+%{_mandir}/man1/regedit.1*
+%{_mandir}/man1/regsvr32.1*
+%{_mandir}/man1/wineboot.1*
+%{_mandir}/man1/winecfg.1*
+%{_mandir}/man1/wineconsole.1*
+%{_mandir}/man1/winecpp.1*
+%{_mandir}/man1/winefile.1*
+%{_mandir}/man1/winemine.1*
+%{_mandir}/man1/winepath.1*
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/generic.ppd
 %{_datadir}/%{name}/%{name}.inf
