@@ -19,9 +19,9 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.3.8
+Version:	1.3.9
 %define pre	0
-%define rel	2
+%define rel	1
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -56,7 +56,7 @@ Patch108:	wine-mdkconf.patch
 # Patch400:	http://art.ified.ca/downloads/winepulse/winepulse-0.39-configure.ac.patch
 #
 # Rediff configure.ac patch manually until winepulse upstream fixes it
-Patch400:	wine-1.3.6-winepulse-configure.ac.patch
+Patch400:	wine-1.3.9-winepulse-configure.ac.patch
 Patch401:	http://art.ified.ca/downloads/winepulse/winepulse-0.39.patch
 Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-0.38-winecfg.patch
 
@@ -86,6 +86,8 @@ BuildRequires:	unixODBC-devel
 BuildRequires:	libmpg123-devel
 BuildRequires:	openal-devel
 BuildRequires:	gnutls-devel tiff-devel libv4l-devel
+BuildRequires:	gstreamer0.10-devel libgstreamer0.10-plugins-base-devel
+BuildRequires:	prelink
 
 %define desc Wine is a program which allows running Microsoft Windows programs \
 (including DOS, Windows 3.x and Win32 executables) on Unix. It \
