@@ -19,9 +19,9 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.3.9
+Version:	1.3.10
 %define pre	0
-%define rel	2
+%define rel	1
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -56,7 +56,7 @@ Patch108:	wine-mdkconf.patch
 # Patch400:	http://art.ified.ca/downloads/winepulse/winepulse-0.39-configure.ac.patch
 #
 # Rediff configure.ac patch manually until winepulse upstream fixes it
-Patch400:	wine-1.3.9-winepulse-configure.ac.patch
+Patch400:	wine-1.3.10-winepulse-configure.ac.patch
 Patch401:	http://art.ified.ca/downloads/winepulse/winepulse-0.39.patch
 Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-0.38-winecfg.patch
 
@@ -362,6 +362,7 @@ rm -fr %{buildroot}
 %ifarch x86_64
 %doc README.install.urpmi
 %{_bindir}/wine64
+%{_bindir}/wine64-preloader
 %endif
 %{_initrddir}/%{name}
 %{_bindir}/winecfg
