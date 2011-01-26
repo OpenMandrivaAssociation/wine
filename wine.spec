@@ -196,7 +196,7 @@ Wine is often updated.
 %patch108 -p1 -b .conf
 %patch400 -p1
 %patch401 -p1
-%patch402 -p1
+# %patch402 -p1
 sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
 
 %build
