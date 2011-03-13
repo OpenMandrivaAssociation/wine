@@ -19,7 +19,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.3.14
+Version:	1.3.15
 %define pre	0
 %define rel	2
 %if %pre
@@ -58,7 +58,7 @@ Patch108:	wine-mdkconf.patch
 # Rediff configure.ac patch manually until winepulse upstream fixes it
 Patch400:	wine-1.3.10-winepulse-configure.ac.patch
 Patch401:	http://art.ified.ca/downloads/winepulse/winepulse-0.39.patch
-Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-0.38-winecfg.patch
+Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-winecfg-1.3.11.patch
 
 # (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
 # 64-bit wine cannot run 32-bit programs, so it should be named differently
@@ -196,7 +196,7 @@ Wine is often updated.
 %patch108 -p1 -b .conf
 %patch400 -p1
 %patch401 -p1
-# %patch402 -p1
+%patch402 -p1
 sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
 
 %build
