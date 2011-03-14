@@ -78,7 +78,7 @@ BuildRequires:	cups-devel jackit-devel imagemagick isdn4k-utils-devel xpm-devel
 BuildRequires:	sane-devel glibc-static-devel ungif-devel chrpath
 BuildRequires:	desktop-file-utils libalsa-devel openldap-devel lcms-devel
 BuildRequires:	libxslt-devel dbus-devel hal-devel
-BuildRequires:	valgrind librsvg pulseaudio-devel
+BuildRequires:	valgrind librsvg pulseaudio-devel gettext-devel
 BuildRequires:	gsm-devel
 BuildRequires:	mesaglu-devel
 BuildRequires:	fontforge
