@@ -21,7 +21,7 @@ Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.3.15
 %define pre	0
-%define rel	3
+%define rel	4
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -86,7 +86,7 @@ BuildRequires:	gphoto2-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	libmpg123-devel
 BuildRequires:	openal-devel
-BuildRequires:	gnutls-devel tiff-devel libv4l-devel
+BuildRequires:	gnutls-devel tiff-devel libv4l-devel X11-devel
 BuildRequires:	gstreamer0.10-devel libgstreamer0.10-plugins-base-devel
 %if %mdvver >= 201100
 BuildRequires:	prelink
