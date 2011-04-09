@@ -21,7 +21,7 @@ Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.3.17
 %define pre	0
-%define rel	1
+%define rel	2
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -85,7 +85,8 @@ BuildRequires:	fontforge
 BuildRequires:	gphoto2-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	libmpg123-devel
-BuildRequires:	openal-devel
+BuildRequires:	openal-devel libxrandr-devel libxinerama-devel libxcomposite-devel
+BuildRequires:	libxcursor-devel fontconfig-devel
 BuildRequires:	gnutls-devel tiff-devel libv4l-devel
 BuildRequires:	gstreamer0.10-devel libgstreamer0.10-plugins-base-devel
 %if %mdvver >= 201100
