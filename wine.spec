@@ -86,7 +86,7 @@ BuildRequires:	gphoto2-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	libmpg123-devel
 BuildRequires:	openal-devel
-BuildRequires:	gnutls-devel tiff-devel libv4l-devel X11-devel
+BuildRequires:	gnutls-devel tiff-devel libv4l-devel
 BuildRequires:	gstreamer0.10-devel libgstreamer0.10-plugins-base-devel
 %if %mdvver >= 201100
 BuildRequires:	prelink
