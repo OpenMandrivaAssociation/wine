@@ -19,7 +19,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.3.17
+Version:	1.3.18
 %define pre	0
 %define rel	2
 %if %pre
