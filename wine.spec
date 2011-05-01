@@ -56,7 +56,7 @@ Patch108:	wine-mdkconf.patch
 # Patch400:	http://art.ified.ca/downloads/winepulse/winepulse-0.39-configure.ac.patch
 #
 # Rediff configure.ac patch manually until winepulse upstream fixes it
-Patch400:	wine-1.3.17-winepulse-configure.ac.patch
+Patch400:	wine-1.3.19-winepulse-configure.ac.patch
 Patch401:	http://art.ified.ca/downloads/winepulse/winepulse-0.39.patch
 Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-winecfg-1.3.11.patch
 
