@@ -21,7 +21,7 @@ Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.3.19
 %define pre	0
-%define rel	1
+%define rel	2
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -61,9 +61,7 @@ Patch401:	http://art.ified.ca/downloads/winepulse/winepulse-0.39.patch
 Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-winecfg-1.3.11.patch
 
 # (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
-# 64-bit wine cannot run 32-bit programs, so it should be named differently
-# to allow co-installation. Upstream has not yet implemented this
-# co-habitation, so one would need to resolve conflicts manually.
+# 64-bit wine cannot run 32-bit programs without wine32.
 ExclusiveArch:	%{ix86}
 %if %mdkversion >= 201010
 ExclusiveArch:	x86_64
@@ -105,6 +103,7 @@ be used for porting Win32 code into native Unix executables.
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 Group:		Emulators
 Suggests:	wine32 = %{epoch}:%{version}-%{release}
+Suggests:	wine64-gecko
 %else
 # on 32-bit we always want wine32 package
 Requires:	wine32 = %{epoch}:%{version}-%{release}
