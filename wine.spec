@@ -21,7 +21,7 @@ Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.3.22
 %define pre	0
-%define rel	2
+%define rel	2.1
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -459,4 +459,4 @@ rm -fr %{buildroot}
 %{_mandir}/man1/winedbg.1*
 %{_mandir}/man1/wineg++.1*
 %{_mandir}/man1/winegcc.1*
-%{_mandir}/pl.UTF-8/man1/wine.1.xz
+%{_mandir}/pl.UTF-8/man1/wine.1*
