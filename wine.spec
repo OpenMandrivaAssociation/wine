@@ -459,3 +459,4 @@ rm -fr %{buildroot}
 %{_mandir}/man1/winedbg.1*
 %{_mandir}/man1/wineg++.1*
 %{_mandir}/man1/winegcc.1*
+%{_mandir}/pl.UTF-8/man1/wine.1.xz
