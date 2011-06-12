@@ -21,7 +21,7 @@ Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.3.22
 %define pre	0
-%define rel	2.1
+%define rel	2.2
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -69,6 +69,50 @@ ExclusiveArch:	x86_64
 %ifarch x86_64
 BuildRequires:	gcc >= 4.4
 %endif
+
+BuildRequires:  bison flex
+BuildRequires:  gpm-devel 
+BuildRequires:  perl-devel
+BuildRequires:  ncurses-devel
+BuildRequires:  cups-devel   
+BuildRequires:  sane-devel   
+BuildRequires:  lcms-devel   
+BuildRequires:  autoconf     
+BuildRequires:  docbook-utils docbook-dtd-sgml
+BuildRequires:  docbook-utils docbook-dtd-sgml sgml-tools
+BuildRequires:  jackit-devel
+BuildRequires:  pulseaudio-devel
+BuildRequires:  libmpg123-devel 
+BuildRequires:  openal-devel    
+BuildRequires:  libalsa-devel   
+BuildRequires:  gstreamer0.10-devel libgstreamer0.10-plugins-base-devel
+BuildRequires:  isdn4k-utils-devel
+BuildRequires:  glibc-static-devel
+BuildRequires:  chrpath
+BuildRequires:  ungif-devel xpm-devel
+BuildRequires:  tiff-devel
+BuildRequires:  librsvg   
+BuildRequires:  imagemagick
+BuildRequires:  gphoto2-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  openldap-devel    
+BuildRequires:  libxslt-devel     
+BuildRequires:  dbus-devel        
+BuildRequires:  hal-devel         
+BuildRequires:  valgrind          
+BuildRequires:  gsm-devel         
+BuildRequires:  unixODBC-devel    
+BuildRequires:  gnutls-devel      
+BuildRequires:  prelink
+BuildRequires:  gettext-devel
+BuildRequires:  mesaglu-devel
+BuildRequires:  libv4l-devel 
+BuildRequires:  libxcursor-devel libxcomposite-devel
+BuildRequires:  libxinerama-devel libxrandr-devel   
+BuildRequires:  libx11-devel libxrender-devel
+BuildRequires:  libxext-devel libsm-devel
+BuildRequires:  fontforge fontconfig-devel freetype2-devel
+
 BuildRequires:	bison flex gpm-devel perl-devel ncurses-devel sgml-tools
 BuildRequires:	libx11-devel libxrender-devel libxext-devel libsm-devel
 BuildRequires:	freetype2-devel autoconf docbook-utils docbook-dtd-sgml
