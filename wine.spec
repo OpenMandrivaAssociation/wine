@@ -19,9 +19,9 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.3.22
+Version:	1.3.23
 %define pre	0
-%define rel	2.2
+%define rel	1
 %if %pre
 Release:	%mkrel 0.%pre.%rel
 %define o_ver	%version-%pre
@@ -53,10 +53,9 @@ Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch108:	wine-mdkconf.patch
 
 #(eandry) add a pulseaudio sound driver (from http://art.ified.ca/downloads/ )
-# Patch400:	http://art.ified.ca/downloads/winepulse/winepulse-0.39-configure.ac.patch
-#
+
 # Rediff configure.ac patch manually until winepulse upstream fixes it
-Patch400:	wine-1.3.20-winepulse-configure.ac.patch
+Patch400:	winepulse-configure.ac-1.3.22.patch
 Patch401:	http://art.ified.ca/downloads/winepulse/winepulse-0.39.patch
 Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-winecfg-1.3.11.patch
 
@@ -103,7 +102,6 @@ BuildRequires:  valgrind
 BuildRequires:  gsm-devel         
 BuildRequires:  unixODBC-devel    
 BuildRequires:  gnutls-devel      
-BuildRequires:  prelink
 BuildRequires:  gettext-devel
 BuildRequires:  mesaglu-devel
 BuildRequires:  libv4l-devel 
