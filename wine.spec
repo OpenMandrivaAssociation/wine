@@ -19,7 +19,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.3.26
+Version:	1.3.27
 %define pre	0
 %define rel	1
 %if %pre
@@ -55,9 +55,6 @@ Patch108:	wine-mdkconf.patch
 #(eandry) add a pulseaudio sound driver (from http://art.ified.ca/downloads/ )
 
 # Rediff configure.ac patch manually until winepulse upstream fixes it
-# Patch400:	winepulse-configure.ac-1.3.22.patch
-# Patch401:	http://art.ified.ca/downloads/winepulse/winepulse-0.39.patch
-# Patch402:	http://art.ified.ca/downloads/winepulse/winepulse-winecfg-1.3.11.patch
 
 # (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
 # 64-bit wine cannot run 32-bit programs without wine32.
@@ -236,9 +233,6 @@ Wine is often updated.
 %setup -q -n %name-%o_ver
 %patch1 -p0 -b .chinese
 %patch108 -p1 -b .conf
-# %patch400 -p1
-# %patch401 -p1
-# %patch402 -p1
 sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
 
 %build
@@ -256,10 +250,8 @@ export CFLAGS="%{optflags} -fno-omit-frame-pointer"
 export ICOTOOL=false
 
 autoreconf
-%configure2_5x	--with-x \
-		--with-pulse \
-		--without-nas \
-		--without-esd \
+%configure2_5x	--with-x 
+
 %ifarch x86_64
 		--enable-win64
 %endif
