@@ -250,8 +250,7 @@ export CFLAGS="%{optflags} -fno-omit-frame-pointer"
 export ICOTOOL=false
 
 autoreconf
-%configure2_5x	--with-x 
-
+%configure2_5x	--with-x \
 %ifarch x86_64
 		--enable-win64
 %endif
