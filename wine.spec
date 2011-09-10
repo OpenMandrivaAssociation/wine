@@ -23,18 +23,17 @@ Version:	1.3.27
 %define pre	0
 %define rel	1
 %if %pre
-Release:	%mkrel 0.%pre.%rel
-%define o_ver	%version-%pre
+Release:	%mkrel 0.%{pre}.%{rel}
+%define o_ver	%{version}-%{pre}
 %else
-Release:	%mkrel %rel
-%define o_ver	%version
+Release:	%mkrel %{rel}
+%define o_ver	%{version}
 %endif
 Epoch:		1
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 License:	LGPLv2+
 Group:		Emulators
 URL:		http://www.winehq.com/
-BuildRoot:      %_tmppath/%{name}-%{version}-%{release}-buildroot
 Source0:	http://ibiblio.org/pub/linux/system/emulators/wine/%{name}-%{o_ver}.tar.bz2
 Source1:	http://ibiblio.org/pub/linux/system/emulators/wine/%{name}-%{o_ver}.tar.bz2.sign
 
@@ -229,7 +228,7 @@ develop programs which make use of wine.
 Wine is often updated.
 
 %prep
-%setup -q -n %name-%o_ver
+%setup -q -n %{name}-%{o_ver}
 %patch1 -p0 -b .chinese
 %patch108 -p1 -b .conf
 sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
@@ -382,9 +381,6 @@ you need to also install the 'wine32' package from the 32-bit repository.
 EOF
 %endif
 
-%clean
-rm -fr %{buildroot}
-
 %preun -n %{wine}
 %_preun_service %{name}
 
@@ -392,7 +388,6 @@ rm -fr %{buildroot}
 %_post_service %{name}
 
 %files -n %{wine}
-%defattr(-,root,root)
 %doc ANNOUNCE AUTHORS README
 %ifarch x86_64
 %doc README.install.urpmi
@@ -445,7 +440,6 @@ rm -fr %{buildroot}
 
 %ifarch %{ix86}
 %files -n wine32
-%defattr(-,root,root)
 %{_bindir}/wine
 %{_bindir}/wine-preloader
 %endif
@@ -468,7 +462,6 @@ rm -fr %{buildroot}
 %{_libdir}/%{name}/fakedlls
 
 %files -n %{wine}-devel
-%defattr(-,root,root)
 %{_libdir}/%{name}/*.a
 %{_libdir}/libwine*.so
 %{_libdir}/%{name}/*.def
