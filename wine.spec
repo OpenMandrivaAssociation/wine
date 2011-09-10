@@ -141,19 +141,19 @@ be used for porting Win32 code into native Unix executables.
 %package -n	%{wine}
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 Group:		Emulators
-Suggests:	wine32 = %{epoch}:%{version}-%{release}
+Suggests:	wine32 = %{EVRD}
 Suggests:	wine64-gecko
 %else
 # on 32-bit we always want wine32 package
-Requires:	wine32 = %{epoch}:%{version}-%{release}
+Requires:	wine32 = %{EVRD}
 %endif
 
-Provides:	%{wine}-utils = %{epoch}:%{version}-%{release} %{wine}-full = %{epoch}:%{version}-%{release}
-Provides:	%{lib_name}-capi = %{epoch}:%{version}-%{release} %{lib_name}-twain = %{epoch}:%{version}-%{release}
-Provides:	%{lib_name} = %{epoch}:%{version}-%{release}
-Provides:	wine-bin = %{epoch}:%{version}-%{release}
+Provides:	%{wine}-utils = %{EVRD} %{wine}-full = %{EVRD}
+Provides:	%{lib_name}-capi = %{EVRD} %{lib_name}-twain = %{EVRD}
+Provides:	%{lib_name} = %{EVRD}
+Provides:	wine-bin = %{EVRD}
 Obsoletes:	%{wine}-utils %{wine}-full %{lib_name}-capi %{lib_name}-twain
-Obsoletes:	%{lib_name} <= %{epoch}:%{version}-%{release}
+Obsoletes:	%{lib_name} <= %{EVRD}
 Requires:	xmessage
 Suggests:	sane-frontends
 # wine dlopen's these, so let's add the dependencies ourself
@@ -209,11 +209,10 @@ programs.
 %package -n	%{wine}-devel
 Summary:	Static libraries and headers for %{name}
 Group:		Development/C
-Requires:	%{wine} = %{epoch}:%{version}
-Provides:	%{lib_name_devel} = %{epoch}:%{version}-%{release}
-Provides:	%{lib_name_orig}-devel = %{epoch}:%{version}-%{release}
-Obsoletes:	%{lib_name_devel} <= %{epoch}:%{version}-%{release}
-Obsoletes:	%{mklibname -d wine 1} < %{epoch}:%{version}
+Requires:	%{wine} = %{EVRD}
+%rename		%{lib_name_devel}
+Provides:	%{lib_name_orig}-devel = %{EVRD}
+Obsoletes:	%{mklibname -d wine 1} < %{EVRD}
 %ifarch %{ix86}
 Conflicts:	wine64-devel
 %else
