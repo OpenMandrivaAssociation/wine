@@ -19,8 +19,8 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.3.37
-%define pre	0
+Version:	1.4
+%define pre	rc1
 %define rel	1
 %if %pre
 Release:	%mkrel 0.%{pre}.%{rel}
@@ -39,6 +39,7 @@ Source1:	http://ibiblio.org/pub/linux/system/emulators/wine/%{name}-%{o_ver}.tar
 
 # RH stuff
 Source2:        wine.init
+Source10:	wine.rpmlintrc
 Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 # (Anssi 05/2008) Adds:
@@ -157,7 +158,7 @@ Requires:	xmessage
 Suggests:	sane-frontends
 # wine dlopen's these, so let's add the dependencies ourself
 Requires:	libfreetype.so.6%{mark64} libasound.so.2%{mark64}
-Requires:	libXrender.so.1%{mark64} libpng.so.3%{mark64}
+Requires:	libXrender.so.1%{mark64} libpng15.so.15%{mark64}
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 Requires(post): desktop-common-data
