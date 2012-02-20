@@ -21,7 +21,7 @@ Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.4
 %define pre	rc4
-%define rel	1
+%define rel	2
 %if %pre
 Release:	%mkrel 0.%{pre}.%{rel}
 %define o_ver	%{version}-%{pre}
@@ -158,7 +158,12 @@ Requires:	xmessage
 Suggests:	sane-frontends
 # wine dlopen's these, so let's add the dependencies ourself
 Requires:	libfreetype.so.6%{mark64} libasound.so.2%{mark64}
-Requires:	libXrender.so.1%{mark64} libpng
+Requires:	libXrender.so.1%{mark64}
+%if %mdkversion >= 201200
+Requires:	libpng15.so.15%{mark64}
+%else
+Requires:	libpng12.so.0()(64bit)
+%endif
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 Requires(post): desktop-common-data
