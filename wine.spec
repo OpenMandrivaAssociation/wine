@@ -21,7 +21,7 @@ Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.4
 %define pre	rc5
-%define rel	1
+%define rel	2
 %if %pre
 Release:	%mkrel 0.%{pre}.%{rel}
 %define o_ver	%{version}-%{pre}
@@ -162,7 +162,7 @@ Requires:	libXrender.so.1%{mark64}
 %if %mdkversion >= 201200
 Requires:	libpng15.so.15%{mark64}
 %else
-Requires:	libpng12.so.0()(64bit)
+Requires:	libpng12.so.0%{mark64}
 %endif
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
