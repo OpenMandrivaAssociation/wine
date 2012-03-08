@@ -20,15 +20,9 @@
 Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.4
-#define pre	rc6
 %define rel	1
-%if %pre
-Release:	%mkrel 0.%{rel}
-%define o_ver	%{version}
-%else
 Release:	%mkrel %{rel}
 %define o_ver	%{version}
-%endif
 Epoch:		1
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 License:	LGPLv2+
