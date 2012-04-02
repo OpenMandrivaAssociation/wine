@@ -19,7 +19,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.4
+Version:	1.5.1
 %define rel	1
 Release:	%mkrel %{rel}
 %define o_ver	%{version}
@@ -88,7 +88,6 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  openldap-devel    
 BuildRequires:  libxslt-devel     
 BuildRequires:  dbus-devel        
-BuildRequires:  hal-devel         
 BuildRequires:  valgrind          
 BuildRequires:  gsm-devel         
 BuildRequires:  unixODBC-devel    
@@ -108,7 +107,7 @@ BuildRequires:	freetype2-devel autoconf docbook-utils docbook-dtd-sgml
 BuildRequires:	cups-devel jackit-devel imagemagick isdn4k-utils-devel xpm-devel
 BuildRequires:	sane-devel glibc-static-devel ungif-devel chrpath
 BuildRequires:	desktop-file-utils libalsa-devel openldap-devel lcms-devel
-BuildRequires:	libxslt-devel dbus-devel hal-devel
+BuildRequires:	libxslt-devel dbus-devel
 BuildRequires:	valgrind librsvg pulseaudio-devel gettext-devel
 BuildRequires:	gsm-devel
 BuildRequires:	mesaglu-devel
