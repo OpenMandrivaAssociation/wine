@@ -262,7 +262,7 @@ rm -rf %{buildroot}
 %makeinstall_std LDCONFIG=/bin/true 
 
 # Danny: dirty:
-install -m755 tools/fnt2bdf -D %{buildroot}%{_bindir}/fnt2bdf
+# install -m755 tools/fnt2bdf -D %{buildroot}%{_bindir}/fnt2bdf
 
 # Allow users to launch Windows programs by just clicking on the .exe file...
 install -m755 %{SOURCE2} -D %{buildroot}%{_initrddir}/%{name}
@@ -465,7 +465,7 @@ EOF
 %{_libdir}/libwine*.so
 %{_libdir}/%{name}/*.def
 %{_includedir}/*
-%{_bindir}/fnt2bdf
+# %{_bindir}/fnt2bdf
 %{_bindir}/wmc
 %{_bindir}/wrc
 %{_bindir}/winebuild
