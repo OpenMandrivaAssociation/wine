@@ -53,7 +53,7 @@ Patch108:	wine-mdkconf.patch
 # (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
 # 64-bit wine cannot run 32-bit programs without wine32.
 ExclusiveArch:	%{ix86}
-%if %mdkversion >= 201010
+%if %{mdkversion} >= 201010
 ExclusiveArch:	x86_64
 %endif
 %ifarch x86_64
@@ -119,7 +119,7 @@ BuildRequires:	openal-devel libxrandr-devel libxinerama-devel libxcomposite-deve
 BuildRequires:	libxcursor-devel fontconfig-devel
 BuildRequires:	gnutls-devel tiff-devel libv4l-devel
 BuildRequires:	gstreamer0.10-devel libgstreamer0.10-plugins-base-devel
-%if "%{distepoch}" >= 201100
+%if "%{distepoch}" >= "2011.0"
 BuildRequires:	prelink
 %endif
 
@@ -152,7 +152,7 @@ Suggests:	sane-frontends
 # wine dlopen's these, so let's add the dependencies ourself
 Requires:	libfreetype.so.6%{mark64} libasound.so.2%{mark64}
 Requires:	libXrender.so.1%{mark64}
-%if %mdkversion >= 201200
+%if "%{distepoch}" >= "2012.0"
 Requires:	libpng15.so.15%{mark64}
 %else
 Requires:	libpng12.so.0%{mark64}
