@@ -119,7 +119,7 @@ BuildRequires:	openal-devel libxrandr-devel libxinerama-devel libxcomposite-deve
 BuildRequires:	libxcursor-devel fontconfig-devel
 BuildRequires:	gnutls-devel tiff-devel libv4l-devel
 BuildRequires:	gstreamer0.10-devel libgstreamer0.10-plugins-base-devel
-%if %mdvver >= 201100
+%if "%{distepoch}" >= 201100
 BuildRequires:	prelink
 %endif
 
@@ -181,7 +181,7 @@ This package contains the Win64 version of Wine. You need the wine32
 package from the 32-bit repository to be able to run 32-bit applications.
 %endif
 
-%ifarch %ix86
+%ifarch %{ix86}
 %package -n	wine32
 Summary:	32-bit support for Wine
 Group:		Emulators
