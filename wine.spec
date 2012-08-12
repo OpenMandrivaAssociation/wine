@@ -136,6 +136,7 @@ Summary:	WINE Is Not An Emulator - runs MS Windows programs
 Group:		Emulators
 Suggests:	wine32 = %{EVRD}
 Suggests:	wine64-gecko
+Suggests:	libncursesw.so.5%{mark64} libncurses.so.5%{mark64}
 %else
 # on 32-bit we always want wine32 package
 Requires:	wine32 = %{EVRD}
@@ -195,6 +196,7 @@ Conflicts:	wine64 < 1:1.2-0.rc7.1
 # start proposing to download wine-gecko from sourceforge, while recommending
 # to use distribution packages instead. Therefore suggest wine-gecko here:
 Suggests:	wine-gecko
+Suggests:	libncursesw.so.5 libncurses.so.5
 
 %description -n	wine32
 Wine is a program which allows running Microsoft Windows programs
