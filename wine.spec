@@ -20,7 +20,7 @@
 Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.5.11
-%define rel	1
+%define rel	1.1
 Release:	%mkrel %{rel}
 %define o_ver	%{version}
 Epoch:		1
