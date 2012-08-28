@@ -20,7 +20,7 @@
 Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.5.11
-%define rel	1.1
+%define rel	1.2
 Release:	%mkrel %{rel}
 %define o_ver	%{version}
 Epoch:		1
@@ -32,7 +32,7 @@ Source0:	http://mirrors.ibiblio.org/wine/source/1.5//%{name}-%{o_ver}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/1.5//%{name}-%{o_ver}.tar.bz2.sign
 
 # RH stuff
-Source2:        wine.init
+Source2:	wine.init
 Source10:	wine.rpmlintrc
 Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
@@ -60,65 +60,58 @@ ExclusiveArch:	x86_64
 BuildRequires:	gcc >= 4.4
 %endif
 
-BuildRequires:  bison flex
-BuildRequires:  gpm-devel 
-BuildRequires:  perl-devel
-BuildRequires:  ncurses-devel
-BuildRequires:  cups-devel   
-BuildRequires:  sane-devel   
-BuildRequires:  lcms-devel   
-BuildRequires:  autoconf     
-BuildRequires:  docbook-utils docbook-dtd-sgml
-BuildRequires:  docbook-utils docbook-dtd-sgml sgml-tools
-BuildRequires:  jackit-devel
-BuildRequires:  pulseaudio-devel
-BuildRequires:  libmpg123-devel 
-BuildRequires:  openal-devel    
-BuildRequires:  libalsa-devel   
-BuildRequires:  gstreamer0.10-devel libgstreamer0.10-plugins-base-devel
-BuildRequires:  isdn4k-utils-devel
-BuildRequires:  glibc-static-devel
-BuildRequires:  chrpath
-BuildRequires:  ungif-devel xpm-devel
-BuildRequires:  tiff-devel
-BuildRequires:  librsvg   
-BuildRequires:  imagemagick
-BuildRequires:  gphoto2-devel
-BuildRequires:  desktop-file-utils
-BuildRequires:  openldap-devel    
-BuildRequires:  libxslt-devel     
-BuildRequires:  dbus-devel        
-BuildRequires:  valgrind          
-BuildRequires:  gsm-devel         
-BuildRequires:  unixODBC-devel    
-BuildRequires:  gnutls-devel      
-BuildRequires:  gettext-devel
-BuildRequires:  mesaglu-devel
-BuildRequires:  libv4l-devel 
-BuildRequires:  libxcursor-devel libxcomposite-devel
-BuildRequires:  libxinerama-devel libxrandr-devel   
-BuildRequires:  libx11-devel libxrender-devel
-BuildRequires:  libxext-devel libsm-devel
-BuildRequires:  fontforge fontconfig-devel freetype2-devel
-
-BuildRequires:	bison flex gpm-devel perl-devel ncurses-devel sgml-tools
-BuildRequires:	libx11-devel libxrender-devel libxext-devel libsm-devel
-BuildRequires:	freetype2-devel autoconf docbook-utils docbook-dtd-sgml
-BuildRequires:	cups-devel jackit-devel imagemagick isdn4k-utils-devel xpm-devel
-BuildRequires:	sane-devel glibc-static-devel ungif-devel chrpath
-BuildRequires:	desktop-file-utils libalsa-devel openldap-devel lcms-devel
-BuildRequires:	libxslt-devel dbus-devel
-BuildRequires:	valgrind librsvg pulseaudio-devel gettext-devel
-BuildRequires:	gsm-devel
-BuildRequires:	mesaglu-devel
-BuildRequires:	fontforge
-BuildRequires:	gphoto2-devel
-BuildRequires:	unixODBC-devel
+BuildRequires:	bison
+BuildRequires:	flex
+BuildRequires:	gpm-devel
+BuildRequires:	perl-devel
+BuildRequires:	ncurses-devel
+BuildRequires:	cups-devel
+BuildRequires:	sane-devel
+BuildRequires:	lcms-devel
+BuildRequires:	autoconf
+BuildRequires:	docbook-utils
+BuildRequires:	docbook-dtd-sgml
+BuildRequires:	docbook-utils
+BuildRequires:	docbook-dtd-sgml
+BuildRequires:	sgml-tools
+BuildRequires:	jackit-devel
+BuildRequires:	pulseaudio-devel
 BuildRequires:	libmpg123-devel
-BuildRequires:	openal-devel libxrandr-devel libxinerama-devel libxcomposite-devel
-BuildRequires:	libxcursor-devel fontconfig-devel
-BuildRequires:	gnutls-devel tiff-devel libv4l-devel
-BuildRequires:	gstreamer0.10-devel libgstreamer0.10-plugins-base-devel
+BuildRequires:	openal-devel
+BuildRequires:	libalsa-devel
+BuildRequires:	gstreamer0.10-devel
+BuildRequires:	libgstreamer0.10-plugins-base-devel
+BuildRequires:	isdn4k-utils-devel
+BuildRequires:	glibc-static-devel
+BuildRequires:	chrpath
+BuildRequires:	ungif-devel
+BuildRequires:	xpm-devel
+BuildRequires:	tiff-devel
+BuildRequires:	librsvg
+BuildRequires:	imagemagick
+BuildRequires:	libgphoto-devel
+BuildRequires:	desktop-file-utils
+BuildRequires:	openldap-devel
+BuildRequires:	libxslt-devel
+BuildRequires:	dbus-devel
+BuildRequires:	valgrind
+BuildRequires:	gsm-devel
+BuildRequires:	unixODBC-devel
+BuildRequires:	gnutls-devel
+BuildRequires:	gettext-devel
+BuildRequires:	mesaglu-devel
+BuildRequires:	libv4l-devel
+BuildRequires:	libxcursor-devel
+BuildRequires:	libxcomposite-devel
+BuildRequires:	libxinerama-devel
+BuildRequires:	libxrandr-devel
+BuildRequires:	libx11-devel
+BuildRequires:	libxrender-devel
+BuildRequires:	libxext-devel
+BuildRequires:	libsm-devel
+BuildRequires:	fontforge
+BuildRequires:	fontconfig-devel
+BuildRequires:	freetype2-devel
 %if "%{distepoch}" >= "2011.0"
 BuildRequires:	prelink
 %endif
@@ -131,38 +124,44 @@ API calls using their Unix or X11 equivalents.  The library may also \
 be used for porting Win32 code into native Unix executables.
 
 %ifarch x86_64
-%package -n	%{wine}
+%package -n %{wine}
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 Group:		Emulators
 Suggests:	wine32 = %{EVRD}
 Suggests:	wine64-gecko
-Suggests:	libncursesw.so.5%{mark64} libncurses.so.5%{mark64}
+Suggests:	libncursesw.so.5%{mark64}
+Suggests:	libncurses.so.5%{mark64}
 %else
 # on 32-bit we always want wine32 package
 Requires:	wine32 = %{EVRD}
 %endif
 
-Provides:	%{wine}-utils = %{EVRD} %{wine}-full = %{EVRD}
-Provides:	%{lib_name}-capi = %{EVRD} %{lib_name}-twain = %{EVRD}
+Provides:	%{wine}-utils = %{EVRD}
+Provides:	%{wine}-full = %{EVRD}
+Provides:	%{lib_name}-capi = %{EVRD}
+Provides:	%{lib_name}-twain = %{EVRD}
 Provides:	%{lib_name} = %{EVRD}
 Provides:	wine-bin = %{EVRD}
-Obsoletes:	%{wine}-utils %{wine}-full %{lib_name}-capi %{lib_name}-twain
+Obsoletes:	%{wine}-utils %{wine}-full
+Obsoletes:	%{lib_name}-capi
+Obsoletes:	%{lib_name}-twain
 Obsoletes:	%{lib_name} <= %{EVRD}
 Requires:	xmessage
 Suggests:	sane-frontends
 # wine dlopen's these, so let's add the dependencies ourself
-Requires:	libfreetype.so.6%{mark64} libasound.so.2%{mark64}
+Requires:	libfreetype.so.6%{mark64}
+Requires:	libasound.so.2%{mark64}
 Requires:	libXrender.so.1%{mark64}
 %if "%{distepoch}" >= "2012.0"
 Requires:	libpng15.so.15%{mark64}
 %else
 Requires:	libpng12.so.0%{mark64}
 %endif
-Requires(post): desktop-file-utils
-Requires(postun): desktop-file-utils
-Requires(post): desktop-common-data
-Requires(postun): desktop-common-data
-Requires(preun): rpm-helper
+Requires(post):	desktop-file-utils
+Requires(postun):	desktop-file-utils
+Requires(post):	desktop-common-data
+Requires(postun):	desktop-common-data
+Requires(preun):	rpm-helper
 Requires(post):	rpm-helper
 Conflicts:	%{wine} < 1:0.9-3mdk
 %ifarch %{ix86}
@@ -183,7 +182,7 @@ package from the 32-bit repository to be able to run 32-bit applications.
 %endif
 
 %ifarch %{ix86}
-%package -n	wine32
+%package -n wine32
 Summary:	32-bit support for Wine
 Group:		Emulators
 # This is not an EVR-specific requirement, as otherwise on x86_64 urpmi could
@@ -196,7 +195,8 @@ Conflicts:	wine64 < 1:1.2-0.rc7.1
 # start proposing to download wine-gecko from sourceforge, while recommending
 # to use distribution packages instead. Therefore suggest wine-gecko here:
 Suggests:	wine-gecko
-Suggests:	libncursesw.so.5 libncurses.so.5
+Suggests:	libncursesw.so.5
+Suggests:	libncurses.so.5
 
 %description -n	wine32
 Wine is a program which allows running Microsoft Windows programs
@@ -206,7 +206,7 @@ This package contains the files needed to support 32-bit Windows
 programs.
 %endif
 
-%package -n	%{wine}-devel
+%package -n %{wine}-devel
 Summary:	Static libraries and headers for %{name}
 Group:		Development/C
 Requires:	%{wine} = %{EVRD}
@@ -261,7 +261,7 @@ autoreconf
 
 %install
 rm -rf %{buildroot}
-%makeinstall_std LDCONFIG=/bin/true 
+%makeinstall_std LDCONFIG=/bin/true
 
 # Danny: dirty:
 # install -m755 tools/fnt2bdf -D %{buildroot}%{_bindir}/fnt2bdf
