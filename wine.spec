@@ -36,6 +36,7 @@ Source2:	wine.init
 Source10:	wine.rpmlintrc
 Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
+Patch2:         wine-1.3.24-64bit-tools.patch
 # (Anssi 05/2008) Adds:
 # a: => /media/floppy (/mnt/floppy on 2007.1 and older)
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
