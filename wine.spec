@@ -20,7 +20,7 @@
 Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.5.14
-%define rel	1	
+%define rel	1.1	
 Release:	%mkrel %{rel}
 %define o_ver	%{version}
 Epoch:		1
@@ -34,9 +34,9 @@ Source1:	http://mirrors.ibiblio.org/wine/source/1.5//%{name}-%{o_ver}.tar.bz2.si
 # RH stuff
 Source2:	wine.init
 Source10:	wine.rpmlintrc
-Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
-Patch1:		wine-1.1.7-chinese-font-substitutes.patch
-Patch2:         wine-1.3.24-64bit-tools.patch
+# Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
+# Patch1:		wine-1.1.7-chinese-font-substitutes.patch
+# Patch2:         wine-1.3.24-64bit-tools.patch
 # (Anssi 05/2008) Adds:
 # a: => /media/floppy (/mnt/floppy on 2007.1 and older)
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -231,8 +231,8 @@ Wine is often updated.
 
 %prep
 %setup -q -n %{name}-%{o_ver}
-%patch1 -p0 -b .chinese
-%patch2 -p0 -b .tools64
+# %patch1 -p0 -b .chinese
+# %patch2 -p0 -b .tools64
 %patch108 -p1 -b .conf
 sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
 
