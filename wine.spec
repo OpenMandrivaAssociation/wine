@@ -10,8 +10,7 @@
 %define	lib_name	%mklibname %{name} %{lib_major}
 %define	lib_name_devel	%{mklibname -d wine}
 
-#:wq1
- On 32-bit we have
+# On 32-bit we have
 # wine32 - those 32-bit binaries that are also used on 64-bit for 32-bit support
 # wine - all other files (requires 'wine32')
 # On 64-bit we have
