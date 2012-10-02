@@ -10,7 +10,8 @@
 %define	lib_name	%mklibname %{name} %{lib_major}
 %define	lib_name_devel	%{mklibname -d wine}
 
-# On 32-bit we have
+#:wq1
+ On 32-bit we have
 # wine32 - those 32-bit binaries that are also used on 64-bit for 32-bit support
 # wine - all other files (requires 'wine32')
 # On 64-bit we have
@@ -34,8 +35,8 @@ Source1:	http://mirrors.ibiblio.org/wine/source/1.5//%{name}-%{o_ver}.tar.bz2.si
 # RH stuff
 Source2:	wine.init
 Source10:	wine.rpmlintrc
-# Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
-# Patch1:		wine-1.1.7-chinese-font-substitutes.patch
+Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
+Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 # Patch2:         wine-1.3.24-64bit-tools.patch
 # (Anssi 05/2008) Adds:
 # a: => /media/floppy (/mnt/floppy on 2007.1 and older)
@@ -231,7 +232,7 @@ Wine is often updated.
 
 %prep
 %setup -q -n %{name}-%{o_ver}
-# %patch1 -p0 -b .chinese
+%patch1 -p0 -b .chinese
 # %patch2 -p0 -b .tools64
 %patch108 -p1 -b .conf
 sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
