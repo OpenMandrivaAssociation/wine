@@ -26,7 +26,7 @@ Release:	%mkrel %{rel}
 Epoch:		1
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 License:	LGPLv2+
-Group:		Emulators
+Group:		Emulators/System
 URL:		http://www.winehq.com/
 Source0:	http://mirrors.ibiblio.org/wine/source/1.5//%{name}-%{o_ver}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/1.5//%{name}-%{o_ver}.tar.bz2.sign
