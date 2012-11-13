@@ -1,0 +1,5 @@
+sources:
+  "wine-1.5.16.tar.bz2:"	580a3f400ce720e11050e6641573568b4536480a
+  "wine-1.5.16.tar.bz2.sign:"	08ebf6e557c7a977d2efb90eb52f861ea041c492
+  "wine.init:"	d2244f875ab5012b3dfe6015a8631dc18d32ec82
+  "wine.rpmlintrc:"	668b50fcd1b9ca3ed468f183ed141936d31575aa

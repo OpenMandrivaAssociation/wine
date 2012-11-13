@@ -1,0 +1,24 @@
+Index: wine-1.0-rc1/dlls/ntdll/server.c
+===================================================================
+--- wine-1.0-rc1/dlls/ntdll/server.c
++++ wine-1.0-rc1/dlls/ntdll/server.c	2008-05-13 23:02:38.000000000 +0300
+@@ -772,6 +772,19 @@
+     mkdir( "drive_c", 0777 );
+     symlink( "../drive_c", "dosdevices/c:" );
+     symlink( "/", "dosdevices/z:" );
++
++    /* Mandriva specific */
++#if @MDKVERSION@ >= 200810
++    symlink( "/media/floppy", "dosdevices/a:" );
++#elif @MDKVERSION@ >= 200800
++    symlink( "/media/floppy", "dosdevices/a:" );
++    symlink( "/media/cdrom", "dosdevices/e:" );
++#else
++    symlink( "/mnt/floppy", "dosdevices/a:" );
++    symlink( "/mnt/cdrom", "dosdevices/e:" );
++#endif
++    symlink( getenv( "HOME" ), "dosdevices/d:" );
++    symlink( "/dev/ttyUSB0", "dosdevices/com4" );
+ }
+ 
+ 
