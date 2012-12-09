@@ -1,0 +1,2 @@
+addFilter("E: executable-in-library-package")
+addFilter("E: non-versioned-file-in-library-package")
