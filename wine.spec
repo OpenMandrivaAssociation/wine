@@ -19,8 +19,8 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.5.13
-%define rel	3
+Version:	1.5.20
+%define rel	1
 Release:	%{rel}
 %define o_ver	%{version}
 Epoch:		2
@@ -28,8 +28,8 @@ Summary:	WINE Is Not An Emulator - runs MS Windows programs
 License:	LGPLv2+
 Group:		Emulators
 URL:		http://www.winehq.com/
-Source0:	http://mirrors.ibiblio.org/wine/source/1.5//%{name}-%{o_ver}.tar.bz2
-Source1:	http://mirrors.ibiblio.org/wine/source/1.5//%{name}-%{o_ver}.tar.bz2.sign
+Source0:	http://mirrors.ibiblio.org/wine/source/1.5/%{name}-%{o_ver}.tar.bz2
+Source1:	http://mirrors.ibiblio.org/wine/source/1.5/%{name}-%{o_ver}.tar.bz2.sign
 
 # RH stuff
 Source2:	wine.init
@@ -111,7 +111,7 @@ BuildRequires:	libxext-devel
 BuildRequires:	libsm-devel
 BuildRequires:	fontforge
 BuildRequires:	fontconfig-devel
-BuildRequires:	freetype2-devel
+BuildRequires:	pkgconfig(freetype2)
 %if "%{distepoch}" >= "2011.0"
 BuildRequires:	prelink
 %endif
