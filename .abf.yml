@@ -1,5 +1,7 @@
 removed_sources:
   wine-1.5.13.tar.bz2: aee941aacbc748fc93fd0a49b76520586cdc304d
-sources:
   wine-1.5.20.tar.bz2: d1d0ac60d7fe3a710fe886a76cd407e135a47072
+sources:
   wine-1.5.20.tar.bz2.sign: 0b3adeec1708a1b9d9230dd66d10f1997be4617c
+  wine-1.5.21.tar.bz2: 4b0efcab84019af6b408adf3d579a945d1787914
+  wine-1.5.21.tar.bz2.sign: 97453f7e0b509a8bf578b8152207982bc13084c7
