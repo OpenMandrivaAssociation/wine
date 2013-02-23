@@ -1,9 +1,7 @@
 %ifarch x86_64
 %define	wine	wine64
-%define	mark64	()(64bit)
 %else
 %define	wine	wine
-%define	mark64	%{nil}
 %endif
 %define	lib_name_orig	lib%{name}
 %define	lib_major	1
@@ -129,8 +127,8 @@ Summary:	WINE Is Not An Emulator - runs MS Windows programs
 Group:		Emulators
 Suggests:	wine32 = %{EVRD}
 Suggests:	wine64-gecko
-Suggests:	libncursesw.so.5%{mark64}
-Suggests:	libncurses.so.5%{mark64}
+Suggests:	libncursesw.so.5%{_arch_tag_suffix}
+Suggests:	libncurses.so.5%{_arch_tag_suffix}
 %else
 # on 32-bit we always want wine32 package
 Requires:	wine32 = %{EVRD}
@@ -149,13 +147,13 @@ Obsoletes:	%{lib_name} <= %{EVRD}
 Requires:	xmessage
 Suggests:	sane-frontends
 # wine dlopen's these, so let's add the dependencies ourself
-Requires:	libfreetype.so.6%{mark64}
-Requires:	libasound.so.2%{mark64}
-Requires:	libXrender.so.1%{mark64}
+Requires:	libfreetype.so.6%{_arch_tag_suffix}
+Requires:	libasound.so.2%{_arch_tag_suffix}
+Requires:	libXrender.so.1%{_arch_tag_suffix}
 %if "%{distepoch}" >= "2012.0"
-Requires:      libpng15.so.15%{mark64}
+Requires:      libpng15.so.15%{_arch_tag_suffix}
 %else
-Requires:      libpng12.so.0%{mark64}
+Requires:      libpng12.so.0%{_arch_tag_suffix}
 %endif
 Requires(post):	desktop-file-utils
 Requires(postun):	desktop-file-utils
