@@ -3,9 +3,9 @@
 %else
 %define	wine	wine
 %endif
-%define	lib_major	1
-%define	lib_name	%mklibname %{name} %{lib_major}
-%define	lib_name_devel	%{mklibname -d wine}
+%define	major	1
+%define	libname	%mklibname %{name} %{major}
+%define	devname	%{mklibname -d wine}
 
 # On 32-bit we have
 # wine32 - those 32-bit binaries that are also used on 64-bit for 32-bit support
@@ -121,7 +121,7 @@ API calls using their Unix or X11 equivalents.  The library may also \
 be used for porting Win32 code into native Unix executables.
 
 %ifarch x86_64
-%package -n %{wine}
+%package -n	%{wine}
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 Group:		Emulators
 Suggests:	wine32 = %{EVRD}
@@ -133,16 +133,12 @@ Suggests:	libncurses.so.5%{_arch_tag_suffix}
 Requires:	wine32 = %{EVRD}
 %endif
 
-Provides:	%{wine}-utils = %{EVRD}
-Provides:	%{wine}-full = %{EVRD}
-Provides:	%{lib_name}-capi = %{EVRD}
-Provides:	%{lib_name}-twain = %{EVRD}
-Provides:	%{lib_name} = %{EVRD}
+%rename		%{wine}-utils
+%rename		%{wine}-full
+%rename		%{libname}-capi
+%rename		%{libname}-twain
+%rename		%{libname}
 Provides:	wine-bin = %{EVRD}
-Obsoletes:	%{wine}-utils %{wine}-full
-Obsoletes:	%{lib_name}-capi
-Obsoletes:	%{lib_name}-twain
-Obsoletes:	%{lib_name} <= %{EVRD}
 Requires:	xmessage
 Suggests:	sane-frontends
 # wine dlopen's these, so let's add the dependencies ourself
@@ -179,7 +175,7 @@ package from the 32-bit repository to be able to run 32-bit applications.
 %endif
 
 %ifarch %{ix86}
-%package -n wine32
+%package -n	wine32
 Summary:	32-bit support for Wine
 Group:		Emulators
 # This is not an EVR-specific requirement, as otherwise on x86_64 urpmi could
@@ -203,11 +199,11 @@ This package contains the files needed to support 32-bit Windows
 programs.
 %endif
 
-%package -n %{wine}-devel
+%package -n	%{wine}-devel
 Summary:	Static libraries and headers for %{name}
 Group:		Development/C
 Requires:	%{wine} = %{EVRD}
-%rename		%{lib_name_devel}
+%rename		%{devname}
 Obsoletes:	%{mklibname -d wine 1} < %{EVRD}
 %ifarch %{ix86}
 Conflicts:	wine64-devel
@@ -442,7 +438,7 @@ EOF
 %{_bindir}/wine-preloader
 %endif
 
-%{_libdir}/libwine*.so.%{lib_major}*
+%{_libdir}/libwine*.so.%{major}*
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/*.cpl.so
 %{_libdir}/%{name}/*.drv.so
@@ -485,7 +481,6 @@ EOF
 %{_mandir}/man1/wineg++.1*
 %{_mandir}/man1/winegcc.1*
 %{_mandir}/pl.UTF-8/man1/wine.1*
-
 
 %changelog
 * Sat Sep 01 2012 Zombie Ryushu <ryushu@mandriva.org> 1:1.5.12-1mdv2012.0
