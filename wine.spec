@@ -152,7 +152,11 @@ Suggests:	sane-frontends
 Requires:	libfreetype.so.6%{mark64}
 Requires:	libasound.so.2%{mark64}
 Requires:	libXrender.so.1%{mark64}
-Requires:	libpng15.so.15%{mark64}
+%if "%{distepoch}" >= "2012.0"
+Requires:      libpng15.so.15%{mark64}
+%else
+Requires:      libpng12.so.0%{mark64}
+%endif
 Requires(post):	desktop-file-utils
 Requires(postun):	desktop-file-utils
 Requires(post):	desktop-common-data
