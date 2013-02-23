@@ -63,7 +63,7 @@ BuildRequires:	gpm-devel
 BuildRequires:	perl-devel
 BuildRequires:	pkgconfig(ncursesw)
 BuildRequires:	cups-devel
-BuildRequires:	pkgconfig(sane-backends
+BuildRequires:	pkgconfig(sane-backends)
 BuildRequires:	pkgconfig(lcms)
 BuildRequires:	autoconf
 BuildRequires:	docbook-utils
