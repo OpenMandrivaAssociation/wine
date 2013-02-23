@@ -3,7 +3,6 @@
 %else
 %define	wine	wine
 %endif
-%define	lib_name_orig	lib%{name}
 %define	lib_major	1
 %define	lib_name	%mklibname %{name} %{lib_major}
 %define	lib_name_devel	%{mklibname -d wine}
@@ -209,7 +208,6 @@ Summary:	Static libraries and headers for %{name}
 Group:		Development/C
 Requires:	%{wine} = %{EVRD}
 %rename		%{lib_name_devel}
-Provides:	%{lib_name_orig}-devel = %{EVRD}
 Obsoletes:	%{mklibname -d wine 1} < %{EVRD}
 %ifarch %{ix86}
 Conflicts:	wine64-devel
