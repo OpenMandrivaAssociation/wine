@@ -1,3 +1,5 @@
 addFilter("E: executable-in-library-package")
 addFilter("E: non-versioned-file-in-library-package")
 addFilter("E: incoherent-version-in-name")
+# Intentional - linking to Linux libc would cause symbol clashes with MS libc
+addFilter("E: library-not-linked-against-libc")
