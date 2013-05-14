@@ -16,7 +16,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.5.29
+Version:	1.5.30
 Release:	1
 %define o_ver	%{version}
 Epoch:		2
