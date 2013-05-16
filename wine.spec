@@ -254,6 +254,9 @@ autoreconf
 %install
 rm -rf %{buildroot}
 %makeinstall_std LDCONFIG=/bin/true
+# FIXME this is a workaround for 1.5.30 "forgetting" this
+# will probably not be needed for future versions
+%makeinstall_std -C libs/wine LDCONFIG=/bin/true
 
 # Danny: dirty:
 # install -m755 tools/fnt2bdf -D %{buildroot}%{_bindir}/fnt2bdf
