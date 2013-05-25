@@ -1,8 +1,2 @@
-removed_sources:
-  wine-1.5.24.tar.bz2: d96ad506e115659520ad24f30c87c7d04a810154
 sources:
-  wine-1.5.24.tar.bz2.sign: 160b55d9521dcaae7802e3645c11c12819725134
-  wine-1.5.29.tar.bz2: 19c2ee4e44d9ef4db32cb2c16e5603c195c8f42d
-  wine-1.5.29.tar.bz2.sign: a20c045d54848fd2e63868dc1066aba8e4b30f65
-  wine-1.5.30.tar.bz2: 4a2810982794606c3d6d3dde8e0b41432a8d6a90
-  wine-1.5.30.tar.bz2.sign: fef4164fae34c4d3479616b1e3da79dfe2a54fe0
+  wine-1.5.31.tar.bz2: 37a647c9f2448bb756f2e1fb4a431dcc370e14ec

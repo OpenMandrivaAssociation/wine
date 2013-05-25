@@ -16,7 +16,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.5.30
+Version:	1.5.31
 Release:	1
 %define o_ver	%{version}
 Epoch:		2
@@ -241,8 +241,7 @@ export CFLAGS="%{optflags} -fno-omit-frame-pointer"
 export ICOTOOL=false
 
 autoreconf
-%configure2_5x	--with-x \
-		--with-pulse \
+%configure2_5x	--with-pulse \
 		--without-nas \
 %ifarch x86_64
 		--enable-win64
@@ -254,9 +253,6 @@ autoreconf
 %install
 rm -rf %{buildroot}
 %makeinstall_std LDCONFIG=/bin/true
-# FIXME this is a workaround for 1.5.30 "forgetting" this
-# will probably not be needed for future versions
-%makeinstall_std -C libs/wine LDCONFIG=/bin/true
 
 # Danny: dirty:
 # install -m755 tools/fnt2bdf -D %{buildroot}%{_bindir}/fnt2bdf
