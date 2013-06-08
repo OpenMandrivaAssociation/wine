@@ -6,6 +6,7 @@
 %define	major	1
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%{mklibname -d wine}
+%define beta rc1
 
 # On 32-bit we have
 # wine32 - those 32-bit binaries that are also used on 64-bit for 32-bit support
@@ -16,16 +17,21 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.5.31
+Version:	1.6
+%if "%beta" != ""
+Release:	0.%beta.1
+Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2
+Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2.sign
+%else
 Release:	1
-%define o_ver	%{version}
+Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2
+Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2.sign
+%endif
 Epoch:		2
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 License:	LGPLv2+
 Group:		Emulators
 URL:		http://www.winehq.com/
-Source0:	http://mirrors.ibiblio.org/wine/source/1.5/%{name}-%{o_ver}.tar.bz2
-Source1:	http://mirrors.ibiblio.org/wine/source/1.5/%{name}-%{o_ver}.tar.bz2.sign
 
 # RH stuff
 Source2:	wine.init
@@ -220,7 +226,11 @@ develop programs which make use of wine.
 Wine is often updated.
 
 %prep
-%setup -q -n %{name}-%{o_ver}
+%if "%beta" != ""
+%setup -q -n %name-%version-%beta
+%else
+%setup -q
+%endif
 %patch1 -p0 -b .chinese
 %patch108 -p1 -b .conf
 %patch200 -p1
