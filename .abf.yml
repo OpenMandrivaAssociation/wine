@@ -1,6 +1,5 @@
 sources:
-  wine-1.5.31.tar.bz2: 37a647c9f2448bb756f2e1fb4a431dcc370e14ec
-  wine-1.6-rc1.tar.bz2: 9b04de409e2602b6cf45ce2d69db2f7c968323d2
-  wine-1.6-rc1.tar.bz2.sign: ee751f08623027241dd20a0ae8334ea03cb6bae4
   wine-1.6-rc2.tar.bz2: b4bf142b956d62da68a9babfc9385781e7dcff6d
   wine-1.6-rc2.tar.bz2.sign: 849a973c258fc73945ed508201b8e394ef5181f1
+  wine-1.6-rc3.tar.bz2: 9533d9e6da23d69c6e5b22b45e1507c721d66ebf
+  wine-1.6-rc3.tar.bz2.sign: a3d69347e38aca4b285d8802e153d5c9faf80913
