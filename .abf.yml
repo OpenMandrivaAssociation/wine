@@ -1,4 +1,7 @@
+removed_sources:
+  wine-1.6.tar.bz2: f0feb6b5314d0f638fc6d4bdc43cabc028776a9c
 sources:
   wine-1.6-rc4.tar.bz2: 8980040f6c27df4e4fd54eb7b29cdac93635b68f
-  wine-1.6.tar.bz2: f0feb6b5314d0f638fc6d4bdc43cabc028776a9c
   wine-1.6.tar.bz2.sign: 23702d18e40d3ca5659bcff982144551f3b34c94
+  wine-1.7.3.tar.bz2: fbcd70cbe7e0163fb69544c668a860b82c73d22f
+  wine-1.7.3.tar.bz2.sign: bbba5e59425b7a8239fe2018af27bf8b1f165c3c
