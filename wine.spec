@@ -17,7 +17,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.7.3
+Version:	1.7.7
 %if "%beta" != ""
 Release:	0.%beta.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2
@@ -428,7 +428,6 @@ EOF
 %{_mandir}/man1/winemine.1*
 %{_mandir}/man1/winepath.1*
 %dir %{_datadir}/%{name}
-%{_datadir}/%{name}/generic.ppd
 %{_datadir}/%{name}/%{name}.inf
 %{_datadir}/%{name}/l_intl.nls
 %{_datadir}/applications/*.desktop
