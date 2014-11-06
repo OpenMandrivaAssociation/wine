@@ -23,7 +23,7 @@ Release:	0.%beta.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2.sign
 %else
-Release:	1
+Release:	2
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2.sign
 %endif
@@ -38,6 +38,9 @@ Source2:	wine.init
 Source10:	wine.rpmlintrc
 Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
+# Support the Gallium Direct3D state tracker without the need for
+# the D3D-OGL converter
+Patch20:	http://download.ixit.cz/d3d9/wine-1.7.30-d3d9-86f195e.patch
 # (Anssi 05/2008) Adds:
 # a: => /media/floppy (/mnt/floppy on 2007.1 and older)
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -101,6 +104,7 @@ BuildRequires:	gsm-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	pkgconfig(gnutls)
 BuildRequires:	gettext-devel
+BuildRequires:	d3d-devel
 BuildRequires:	pkgconfig(glu)
 BuildRequires:	pkgconfig(libv4l2)
 BuildRequires:	pkgconfig(xcursor)
@@ -232,6 +236,7 @@ Wine is often updated.
 %setup -q
 %endif
 %patch1 -p0 -b .chinese
+%patch20 -p1 -b .d3d9~
 %patch108 -p1 -b .conf
 %patch200 -p1
 sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
