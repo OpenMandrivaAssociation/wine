@@ -1,7 +1,62 @@
-diff --git a/configure b/configure
-index f5446a0..324fadf 100755
---- a/configure
-+++ b/configure
+--- wine-1.7.31/configure.ac.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/configure.ac	2014-11-15 15:53:51.115224741 +0100
+@@ -65,6 +65,7 @@ AC_ARG_WITH(openal,    AS_HELP_STRING([-
+ AC_ARG_WITH(opencl,    AS_HELP_STRING([--without-opencl],[do not use OpenCL]),
+             [if test "x$withval" = "xno"; then ac_cv_header_CL_cl_h=no; ac_cv_header_OpenCL_opencl_h=no; fi])
+ AC_ARG_WITH(opengl,    AS_HELP_STRING([--without-opengl],[do not use OpenGL]))
++AC_ARG_WITH(d3dadapter,AS_HELP_STRING([--without-d3dadapter],[do not use native Direct3D]))
+ AC_ARG_WITH(osmesa,     AS_HELP_STRING([--without-osmesa],[do not use the OSMesa library]))
+ AC_ARG_WITH(oss,       AS_HELP_STRING([--without-oss],[do not use the OSS sound support]))
+ AC_ARG_WITH(pcap,      AS_HELP_STRING([--without-pcap],[do not use the Packet Capture library]),
+@@ -79,6 +80,8 @@ AC_ARG_WITH(xcomposite,AS_HELP_STRING([-
+             [if test "x$withval" = "xno"; then ac_cv_header_X11_extensions_Xcomposite_h=no; fi])
+ AC_ARG_WITH(xcursor,   AS_HELP_STRING([--without-xcursor],[do not use the Xcursor extension]),
+             [if test "x$withval" = "xno"; then ac_cv_header_X11_Xcursor_Xcursor_h=no; fi])
++AC_ARG_WITH(xfixes,    AS_HELP_STRING([--without-xfixes],[do not use the Xfixes extension]),
++            [if test "x$withval" = "xno"; then ac_cv_header_X11_extensions_Xfixes_h=no; fi])
+ AC_ARG_WITH(xinerama,  AS_HELP_STRING([--without-xinerama],[do not use Xinerama (multi-monitor support)]),
+             [if test "x$withval" = "xno"; then ac_cv_header_X11_extensions_Xinerama_h=no; fi])
+ AC_ARG_WITH(xinput,    AS_HELP_STRING([--without-xinput],[do not use the Xinput extension]),
+@@ -1092,6 +1095,7 @@ then
+                       X11/extensions/XInput2.h \
+                       X11/extensions/XShm.h \
+                       X11/extensions/Xcomposite.h \
++                      X11/extensions/Xfixes.h \
+                       X11/extensions/Xinerama.h \
+                       X11/extensions/Xrandr.h \
+                       X11/extensions/Xrender.h \
+@@ -1207,6 +1211,14 @@ then
+         WINE_NOTICE_WITH(xcomposite,[test "x$ac_cv_lib_soname_Xcomposite" = "x"],
+                          [libxcomposite ${notice_platform}development files not found, Xcomposite won't be supported.])
+ 
++        dnl *** Check for X Fixes extension
++        if test "$ac_cv_header_X11_extensions_Xfixes_h" = "yes"
++        then
++            WINE_CHECK_SONAME(Xfixes,XFixesCreateRegion,,,[$X_LIBS $XLIB $X_EXTRA_LIBS])
++        fi
++        WINE_NOTICE_WITH(xfixes,[test "x$ac_cv_lib_soname_Xfixes" = "x"],
++                         [libxfixes ${notice_platform}development files not found, Xfixes won't be supported.])
++
+         dnl *** Check for XICCallback struct
+         AC_CHECK_MEMBERS([XICCallback.callback, XEvent.xcookie],,,
+ [#ifdef HAVE_X11_XLIB_H
+@@ -1249,6 +1261,14 @@ This probably prevents linking to OpenGL
+     WINE_WARNING_WITH(opengl,[test -n "$opengl_msg"],[$opengl_msg
+ OpenGL and Direct3D won't be supported.])
+ 
++    dnl Check for libd3dadapter9
++    if test "x$with_d3dadapter" != "xno"
++    then
++        WINE_CHECK_SONAME(d3dadapter9,D3DAdapter9GetProc)
++        WINE_NOTICE_WITH(d3dadapter9,[test "x$ac_cv_lib_soname_d3dadapter9" = "x"],
++                         [libd3dadapter9 ${notice_platform}development files not found. Native Direct3D9 won't be supported.])
++    fi
++
+     CPPFLAGS="$ac_save_CPPFLAGS"
+ else
+     X_CFLAGS=""
+--- wine-1.7.31/configure.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/configure	2014-11-15 15:53:51.114224754 +0100
 @@ -821,6 +821,7 @@ with_netapi
  with_openal
  with_opencl
@@ -18,7 +73,7 @@ index f5446a0..324fadf 100755
  with_xinerama
  with_xinput
  with_xinput2
-@@ -2097,6 +2099,7 @@ Optional Packages:
+@@ -2099,6 +2101,7 @@ Optional Packages:
    --without-openal        do not use OpenAL
    --without-opencl        do not use OpenCL
    --without-opengl        do not use OpenGL
@@ -26,7 +81,7 @@ index f5446a0..324fadf 100755
    --without-osmesa        do not use the OSMesa library
    --without-oss           do not use the OSS sound support
    --without-pcap          do not use the Packet Capture library
-@@ -2107,6 +2110,7 @@ Optional Packages:
+@@ -2109,6 +2112,7 @@ Optional Packages:
    --without-v4l           do not use v4l1 (v4l support)
    --without-xcomposite    do not use the Xcomposite extension
    --without-xcursor       do not use the Xcursor extension
@@ -34,7 +89,7 @@ index f5446a0..324fadf 100755
    --without-xinerama      do not use Xinerama (multi-monitor support)
    --without-xinput        do not use the Xinput extension
    --without-xinput2       do not use the Xinput 2 extension
-@@ -3319,6 +3323,12 @@ if test "${with_opengl+set}" = set; then :
+@@ -3321,6 +3325,12 @@ if test "${with_opengl+set}" = set; then
  fi
  
  
@@ -47,7 +102,7 @@ index f5446a0..324fadf 100755
  # Check whether --with-osmesa was given.
  if test "${with_osmesa+set}" = set; then :
    withval=$with_osmesa;
-@@ -3379,6 +3389,12 @@ if test "${with_xcursor+set}" = set; then :
+@@ -3381,6 +3391,12 @@ if test "${with_xcursor+set}" = set; the
  fi
  
  
@@ -60,7 +115,7 @@ index f5446a0..324fadf 100755
  # Check whether --with-xinerama was given.
  if test "${with_xinerama+set}" = set; then :
    withval=$with_xinerama; if test "x$withval" = "xno"; then ac_cv_header_X11_extensions_Xinerama_h=no; fi
-@@ -9431,6 +9447,7 @@ fi
+@@ -9433,6 +9449,7 @@ fi
                        X11/extensions/XInput2.h \
                        X11/extensions/XShm.h \
                        X11/extensions/Xcomposite.h \
@@ -68,7 +123,7 @@ index f5446a0..324fadf 100755
                        X11/extensions/Xinerama.h \
                        X11/extensions/Xrandr.h \
                        X11/extensions/Xrender.h \
-@@ -10207,6 +10224,71 @@ This is an error since --with-xcomposite was requested." "$LINENO" 5 ;;
+@@ -10209,6 +10226,71 @@ This is an error since --with-xcomposite
  esac
  fi
  
@@ -140,7 +195,7 @@ index f5446a0..324fadf 100755
                  ac_fn_c_check_member "$LINENO" "XICCallback" "callback" "ac_cv_member_XICCallback_callback" "#ifdef HAVE_X11_XLIB_H
  #include <X11/Xlib.h>
  #endif
-@@ -10476,6 +10558,71 @@ This is an error since --with-opengl was requested." "$LINENO" 5 ;;
+@@ -10478,6 +10560,71 @@ This is an error since --with-opengl was
  esac
  fi
  
@@ -212,86 +267,8 @@ index f5446a0..324fadf 100755
      CPPFLAGS="$ac_save_CPPFLAGS"
  else
      X_CFLAGS=""
-diff --git a/configure.ac b/configure.ac
-index 0bf5731..977806f 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -65,6 +65,7 @@ AC_ARG_WITH(openal,    AS_HELP_STRING([--without-openal],[do not use OpenAL]),
- AC_ARG_WITH(opencl,    AS_HELP_STRING([--without-opencl],[do not use OpenCL]),
-             [if test "x$withval" = "xno"; then ac_cv_header_CL_cl_h=no; ac_cv_header_OpenCL_opencl_h=no; fi])
- AC_ARG_WITH(opengl,    AS_HELP_STRING([--without-opengl],[do not use OpenGL]))
-+AC_ARG_WITH(d3dadapter,AS_HELP_STRING([--without-d3dadapter],[do not use native Direct3D]))
- AC_ARG_WITH(osmesa,     AS_HELP_STRING([--without-osmesa],[do not use the OSMesa library]))
- AC_ARG_WITH(oss,       AS_HELP_STRING([--without-oss],[do not use the OSS sound support]))
- AC_ARG_WITH(pcap,      AS_HELP_STRING([--without-pcap],[do not use the Packet Capture library]),
-@@ -79,6 +80,8 @@ AC_ARG_WITH(xcomposite,AS_HELP_STRING([--without-xcomposite],[do not use the Xco
-             [if test "x$withval" = "xno"; then ac_cv_header_X11_extensions_Xcomposite_h=no; fi])
- AC_ARG_WITH(xcursor,   AS_HELP_STRING([--without-xcursor],[do not use the Xcursor extension]),
-             [if test "x$withval" = "xno"; then ac_cv_header_X11_Xcursor_Xcursor_h=no; fi])
-+AC_ARG_WITH(xfixes,    AS_HELP_STRING([--without-xfixes],[do not use the Xfixes extension]),
-+            [if test "x$withval" = "xno"; then ac_cv_header_X11_extensions_Xfixes_h=no; fi])
- AC_ARG_WITH(xinerama,  AS_HELP_STRING([--without-xinerama],[do not use Xinerama (multi-monitor support)]),
-             [if test "x$withval" = "xno"; then ac_cv_header_X11_extensions_Xinerama_h=no; fi])
- AC_ARG_WITH(xinput,    AS_HELP_STRING([--without-xinput],[do not use the Xinput extension]),
-@@ -1092,6 +1095,7 @@ then
-                       X11/extensions/XInput2.h \
-                       X11/extensions/XShm.h \
-                       X11/extensions/Xcomposite.h \
-+                      X11/extensions/Xfixes.h \
-                       X11/extensions/Xinerama.h \
-                       X11/extensions/Xrandr.h \
-                       X11/extensions/Xrender.h \
-@@ -1207,6 +1211,14 @@ then
-         WINE_NOTICE_WITH(xcomposite,[test "x$ac_cv_lib_soname_Xcomposite" = "x"],
-                          [libxcomposite ${notice_platform}development files not found, Xcomposite won't be supported.])
- 
-+        dnl *** Check for X Fixes extension
-+        if test "$ac_cv_header_X11_extensions_Xfixes_h" = "yes"
-+        then
-+            WINE_CHECK_SONAME(Xfixes,XFixesCreateRegion,,,[$X_LIBS $XLIB $X_EXTRA_LIBS])
-+        fi
-+        WINE_NOTICE_WITH(xfixes,[test "x$ac_cv_lib_soname_Xfixes" = "x"],
-+                         [libxfixes ${notice_platform}development files not found, Xfixes won't be supported.])
-+
-         dnl *** Check for XICCallback struct
-         AC_CHECK_MEMBERS([XICCallback.callback, XEvent.xcookie],,,
- [#ifdef HAVE_X11_XLIB_H
-@@ -1249,6 +1261,14 @@ This probably prevents linking to OpenGL. Try deleting the file and restarting c
-     WINE_WARNING_WITH(opengl,[test -n "$opengl_msg"],[$opengl_msg
- OpenGL and Direct3D won't be supported.])
- 
-+    dnl Check for libd3dadapter9
-+    if test "x$with_d3dadapter" != "xno"
-+    then
-+        WINE_CHECK_SONAME(d3dadapter9,D3DAdapter9GetProc)
-+        WINE_NOTICE_WITH(d3dadapter9,[test "x$ac_cv_lib_soname_d3dadapter9" = "x"],
-+                         [libd3dadapter9 ${notice_platform}development files not found. Native Direct3D9 won't be supported.])
-+    fi
-+
-     CPPFLAGS="$ac_save_CPPFLAGS"
- else
-     X_CFLAGS=""
-diff --git a/dlls/d3d9/Makefile.in b/dlls/d3d9/Makefile.in
-index 1c05f5a..92b458d 100644
---- a/dlls/d3d9/Makefile.in
-+++ b/dlls/d3d9/Makefile.in
-@@ -1,10 +1,11 @@
- MODULE    = d3d9.dll
- IMPORTLIB = d3d9
--IMPORTS   = dxguid uuid wined3d
-+IMPORTS   = dxguid uuid advapi32 gdi32 user32 wined3d
- 
- C_SRCS = \
- 	buffer.c \
- 	d3d9_main.c \
-+	d3dadapter9.c \
- 	device.c \
- 	directx.c \
- 	query.c \
-diff --git a/dlls/d3d9/d3d9_main.c b/dlls/d3d9/d3d9_main.c
-index 0afdc04..72f980b 100644
---- a/dlls/d3d9/d3d9_main.c
-+++ b/dlls/d3d9/d3d9_main.c
+--- wine-1.7.31/dlls/d3d9/d3d9_main.c.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/d3d9/d3d9_main.c	2014-11-15 15:53:51.115224741 +0100
 @@ -33,12 +33,63 @@ void WINAPI DebugSetMute(void) {
      /* nothing to do */
  }
@@ -356,7 +333,7 @@ index 0afdc04..72f980b 100644
      if (!(object = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*object))))
          return NULL;
  
-@@ -60,6 +111,10 @@ HRESULT WINAPI DECLSPEC_HOTPATCH Direct3DCreate9Ex(UINT sdk_version, IDirect3D9E
+@@ -60,6 +111,10 @@ HRESULT WINAPI DECLSPEC_HOTPATCH Direct3
  
      TRACE("sdk_version %#x, d3d9ex %p.\n", sdk_version, d3d9ex);
  
@@ -367,7 +344,7 @@ index 0afdc04..72f980b 100644
      if (!(object = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*object))))
          return E_OUTOFMEMORY;
  
-@@ -90,6 +145,25 @@ void* WINAPI Direct3DShaderValidatorCreate9(void)
+@@ -90,6 +145,25 @@ void* WINAPI Direct3DShaderValidatorCrea
      return NULL;
  }
  
@@ -393,10 +370,8 @@ index 0afdc04..72f980b 100644
  /***********************************************************************
   *              D3DPERF_BeginEvent (D3D9.@)
   */
-diff --git a/dlls/d3d9/d3d9_private.h b/dlls/d3d9/d3d9_private.h
-index d12805f..cdc1f07 100644
---- a/dlls/d3d9/d3d9_private.h
-+++ b/dlls/d3d9/d3d9_private.h
+--- wine-1.7.31/dlls/d3d9/d3d9_private.h.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/d3d9/d3d9_private.h	2014-11-15 15:53:51.115224741 +0100
 @@ -39,6 +39,9 @@
  #include "d3d9.h"
  #include "wine/wined3d.h"
@@ -415,11 +390,8 @@ index d12805f..cdc1f07 100644
  
  struct fvf_declaration
  {
-diff --git a/dlls/d3d9/d3dadapter9.c b/dlls/d3d9/d3dadapter9.c
-new file mode 100644
-index 0000000..f4c03fa
---- /dev/null
-+++ b/dlls/d3d9/d3dadapter9.c
+--- wine-1.7.31/dlls/d3d9/d3dadapter9.c.d3d9~	2014-11-15 15:53:51.115224741 +0100
++++ wine-1.7.31/dlls/d3d9/d3dadapter9.c	2014-11-15 15:53:51.115224741 +0100
 @@ -0,0 +1,935 @@
 +/*
 + * X11DRV IDirect3D9 interface using ID3DAdapter9
@@ -1356,11 +1328,24 @@ index 0000000..f4c03fa
 +}
 +
 +#endif /* SONAME_LIBD3DADAPTER9 */
-diff --git a/dlls/d3d9/tests/visual.c b/dlls/d3d9/tests/visual.c
-index 117c8eb..459ca76 100644
---- a/dlls/d3d9/tests/visual.c
-+++ b/dlls/d3d9/tests/visual.c
-@@ -16687,7 +16687,7 @@ START_TEST(visual)
+--- wine-1.7.31/dlls/d3d9/Makefile.in.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/d3d9/Makefile.in	2014-11-15 15:53:51.115224741 +0100
+@@ -1,10 +1,11 @@
+ MODULE    = d3d9.dll
+ IMPORTLIB = d3d9
+-IMPORTS   = dxguid uuid wined3d
++IMPORTS   = dxguid uuid advapi32 gdi32 user32 wined3d
+ 
+ C_SRCS = \
+ 	buffer.c \
+ 	d3d9_main.c \
++	d3dadapter9.c \
+ 	device.c \
+ 	directx.c \
+ 	query.c \
+--- wine-1.7.31/dlls/d3d9/tests/visual.c.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/d3d9/tests/visual.c	2014-11-15 17:50:02.360072187 +0100
+@@ -16991,7 +16991,7 @@ START_TEST(visual)
  
      IDirect3D9_Release(d3d);
  
@@ -1369,7 +1354,7 @@ index 117c8eb..459ca76 100644
      depth_clamp_test();
      stretchrect_test();
      lighting_test();
-@@ -16728,9 +16728,9 @@ START_TEST(visual)
+@@ -17032,9 +17032,9 @@ START_TEST(visual)
      clip_planes_test();
      test_vshader_input();
      test_vshader_float16();
@@ -1381,18 +1366,16 @@ index 117c8eb..459ca76 100644
      texdepth_test();
      texkill_test();
      x8l8v8u8_test();
-@@ -16766,5 +16766,5 @@ START_TEST(visual)
-     multisampled_depth_buffer_test();
-     resz_test();
+@@ -17072,5 +17072,5 @@ START_TEST(visual)
      stencil_cull_test();
--    test_per_stage_constant();
-+    test_per_stage_constant();*/
+     test_per_stage_constant();
+     test_3dc_formats();
+-    fog_interpolation_test();
++    fog_interpolation_test();*/
  }
-diff --git a/dlls/dbghelp/dwarf.c b/dlls/dbghelp/dwarf.c
-index f1bd6cb..e1b16fc 100644
---- a/dlls/dbghelp/dwarf.c
-+++ b/dlls/dbghelp/dwarf.c
-@@ -1337,6 +1337,28 @@ static struct symt* dwarf2_parse_volatile_type(dwarf2_parse_context_t* ctx,
+--- wine-1.7.31/dlls/dbghelp/dwarf.c.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/dbghelp/dwarf.c	2014-11-15 15:53:51.118224704 +0100
+@@ -1337,6 +1337,28 @@ static struct symt* dwarf2_parse_volatil
      return ref_type;
  }
  
@@ -1421,7 +1404,7 @@ index f1bd6cb..e1b16fc 100644
  static struct symt* dwarf2_parse_reference_type(dwarf2_parse_context_t* ctx,
                                                  dwarf2_debug_info_t* di)
  {
-@@ -2084,6 +2106,9 @@ static void dwarf2_load_one_entry(dwarf2_parse_context_t* ctx,
+@@ -2084,6 +2106,9 @@ static void dwarf2_load_one_entry(dwarf2
      case DW_TAG_volatile_type:
          dwarf2_parse_volatile_type(ctx, di);
          break;
@@ -1431,23 +1414,8 @@ index f1bd6cb..e1b16fc 100644
      case DW_TAG_reference_type:
          dwarf2_parse_reference_type(ctx, di);
          break;
-diff --git a/dlls/gdi32/Makefile.in b/dlls/gdi32/Makefile.in
-index 6cc026c..703968d 100644
---- a/dlls/gdi32/Makefile.in
-+++ b/dlls/gdi32/Makefile.in
-@@ -12,6 +12,7 @@ C_SRCS = \
- 	bitmap.c \
- 	brush.c \
- 	clipping.c \
-+	d3dadapter.c \
- 	dc.c \
- 	dib.c \
- 	dibdrv/bitblt.c \
-diff --git a/dlls/gdi32/d3dadapter.c b/dlls/gdi32/d3dadapter.c
-new file mode 100644
-index 0000000..fbf2cd0
---- /dev/null
-+++ b/dlls/gdi32/d3dadapter.c
+--- wine-1.7.31/dlls/gdi32/d3dadapter.c.d3d9~	2014-11-15 15:53:51.118224704 +0100
++++ wine-1.7.31/dlls/gdi32/d3dadapter.c	2014-11-15 15:53:51.118224704 +0100
 @@ -0,0 +1,41 @@
 +/*
 + * d3dadapter function forwarding to the display driver
@@ -1490,10 +1458,8 @@ index 0000000..fbf2cd0
 +    }
 +    return ret;
 +}
-diff --git a/dlls/gdi32/dibdrv/dc.c b/dlls/gdi32/dibdrv/dc.c
-index 5ee1bd5..0a9e732 100644
---- a/dlls/gdi32/dibdrv/dc.c
-+++ b/dlls/gdi32/dibdrv/dc.c
+--- wine-1.7.31/dlls/gdi32/dibdrv/dc.c.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/gdi32/dibdrv/dc.c	2014-11-15 15:53:51.118224704 +0100
 @@ -523,6 +523,7 @@ const struct gdi_dc_funcs dib_driver =
      NULL,                               /* pUnrealizePalette */
      NULL,                               /* pWidenPath */
@@ -1502,18 +1468,16 @@ index 5ee1bd5..0a9e732 100644
      GDI_PRIORITY_DIB_DRV                /* priority */
  };
  
-@@ -1143,5 +1144,6 @@ static const struct gdi_dc_funcs window_driver =
+@@ -1143,5 +1144,6 @@ static const struct gdi_dc_funcs window_
      NULL,                               /* pUnrealizePalette */
      NULL,                               /* pWidenPath */
      windrv_wine_get_wgl_driver,         /* wine_get_wgl_driver */
 +    NULL,                               /* wine_get_d3dadapter_driver */
      GDI_PRIORITY_DIB_DRV + 10           /* priority */
  };
-diff --git a/dlls/gdi32/driver.c b/dlls/gdi32/driver.c
-index 4529562..85151fe 100644
---- a/dlls/gdi32/driver.c
-+++ b/dlls/gdi32/driver.c
-@@ -632,6 +632,11 @@ static struct opengl_funcs *nulldrv_wine_get_wgl_driver( PHYSDEV dev, UINT versi
+--- wine-1.7.31/dlls/gdi32/driver.c.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/gdi32/driver.c	2014-11-15 15:53:51.118224704 +0100
+@@ -632,6 +632,11 @@ static struct opengl_funcs *nulldrv_wine
      return (void *)-1;
  }
  
@@ -1533,11 +1497,9 @@ index 4529562..85151fe 100644
  
      GDI_PRIORITY_NULL_DRV               /* priority */
  };
-diff --git a/dlls/gdi32/enhmfdrv/init.c b/dlls/gdi32/enhmfdrv/init.c
-index 682f412..6e467cc 100644
---- a/dlls/gdi32/enhmfdrv/init.c
-+++ b/dlls/gdi32/enhmfdrv/init.c
-@@ -163,6 +163,7 @@ static const struct gdi_dc_funcs EMFDRV_Funcs =
+--- wine-1.7.31/dlls/gdi32/enhmfdrv/init.c.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/gdi32/enhmfdrv/init.c	2014-11-15 15:53:51.118224704 +0100
+@@ -163,6 +163,7 @@ static const struct gdi_dc_funcs EMFDRV_
      NULL,                            /* pUnrealizePalette */
      EMFDRV_WidenPath,                /* pWidenPath */
      NULL,                            /* wine_get_wgl_driver */
@@ -1545,11 +1507,9 @@ index 682f412..6e467cc 100644
      GDI_PRIORITY_GRAPHICS_DRV        /* priority */
  };
  
-diff --git a/dlls/gdi32/freetype.c b/dlls/gdi32/freetype.c
-index d49a3f8..b8d9eca 100644
---- a/dlls/gdi32/freetype.c
-+++ b/dlls/gdi32/freetype.c
-@@ -8499,6 +8499,7 @@ static const struct gdi_dc_funcs freetype_funcs =
+--- wine-1.7.31/dlls/gdi32/freetype.c.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/gdi32/freetype.c	2014-11-15 15:53:51.119224691 +0100
+@@ -8495,6 +8495,7 @@ static const struct gdi_dc_funcs freetyp
      NULL,                               /* pUnrealizePalette */
      NULL,                               /* pWidenPath */
      NULL,                               /* wine_get_wgl_driver */
@@ -1557,10 +1517,8 @@ index d49a3f8..b8d9eca 100644
      GDI_PRIORITY_FONT_DRV               /* priority */
  };
  
-diff --git a/dlls/gdi32/gdi32.spec b/dlls/gdi32/gdi32.spec
-index 6ebad3c..1a38c53 100644
---- a/dlls/gdi32/gdi32.spec
-+++ b/dlls/gdi32/gdi32.spec
+--- wine-1.7.31/dlls/gdi32/gdi32.spec.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/gdi32/gdi32.spec	2014-11-15 15:53:51.119224691 +0100
 @@ -518,3 +518,6 @@
  
  # OpenGL
@@ -1568,11 +1526,19 @@ index 6ebad3c..1a38c53 100644
 +
 +# Native Direct3D
 +@ cdecl __wine_get_d3dadapter_driver(long long)
-diff --git a/dlls/gdi32/mfdrv/init.c b/dlls/gdi32/mfdrv/init.c
-index 7b53244..574773c 100644
---- a/dlls/gdi32/mfdrv/init.c
-+++ b/dlls/gdi32/mfdrv/init.c
-@@ -226,6 +226,7 @@ static const struct gdi_dc_funcs MFDRV_Funcs =
+--- wine-1.7.31/dlls/gdi32/Makefile.in.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/gdi32/Makefile.in	2014-11-15 15:53:51.118224704 +0100
+@@ -12,6 +12,7 @@ C_SRCS = \
+ 	bitmap.c \
+ 	brush.c \
+ 	clipping.c \
++	d3dadapter.c \
+ 	dc.c \
+ 	dib.c \
+ 	dibdrv/bitblt.c \
+--- wine-1.7.31/dlls/gdi32/mfdrv/init.c.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/gdi32/mfdrv/init.c	2014-11-15 15:53:51.119224691 +0100
+@@ -226,6 +226,7 @@ static const struct gdi_dc_funcs MFDRV_F
      NULL,                            /* pUnrealizePalette */
      MFDRV_WidenPath,                 /* pWidenPath */
      NULL,                            /* wine_get_wgl_driver */
@@ -1580,10 +1546,8 @@ index 7b53244..574773c 100644
      GDI_PRIORITY_GRAPHICS_DRV        /* priority */
  };
  
-diff --git a/dlls/gdi32/path.c b/dlls/gdi32/path.c
-index 2c54e94..839e508 100644
---- a/dlls/gdi32/path.c
-+++ b/dlls/gdi32/path.c
+--- wine-1.7.31/dlls/gdi32/path.c.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/gdi32/path.c	2014-11-15 15:53:51.120224679 +0100
 @@ -2345,5 +2345,6 @@ const struct gdi_dc_funcs path_driver =
      NULL,                               /* pUnrealizePalette */
      NULL,                               /* pWidenPath */
@@ -1591,11 +1555,9 @@ index 2c54e94..839e508 100644
 +    NULL,                               /* wine_get_d3dadapter_driver */
      GDI_PRIORITY_PATH_DRV               /* priority */
  };
-diff --git a/dlls/winemac.drv/gdi.c b/dlls/winemac.drv/gdi.c
-index 951b569..f38da8c 100644
---- a/dlls/winemac.drv/gdi.c
-+++ b/dlls/winemac.drv/gdi.c
-@@ -538,6 +538,7 @@ static const struct gdi_dc_funcs macdrv_funcs =
+--- wine-1.7.31/dlls/winemac.drv/gdi.c.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/winemac.drv/gdi.c	2014-11-15 15:53:51.120224679 +0100
+@@ -538,6 +538,7 @@ static const struct gdi_dc_funcs macdrv_
      NULL,                                   /* pUnrealizePalette */
      NULL,                                   /* pWidenPath */
      macdrv_wine_get_wgl_driver,             /* wine_get_wgl_driver */
@@ -1603,11 +1565,9 @@ index 951b569..f38da8c 100644
      GDI_PRIORITY_GRAPHICS_DRV               /* priority */
  };
  
-diff --git a/dlls/wineps.drv/init.c b/dlls/wineps.drv/init.c
-index fde65c2..22b7994 100644
---- a/dlls/wineps.drv/init.c
-+++ b/dlls/wineps.drv/init.c
-@@ -950,6 +950,7 @@ static const struct gdi_dc_funcs psdrv_funcs =
+--- wine-1.7.31/dlls/wineps.drv/init.c.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/wineps.drv/init.c	2014-11-15 15:53:51.120224679 +0100
+@@ -950,6 +950,7 @@ static const struct gdi_dc_funcs psdrv_f
      NULL,                               /* pUnrealizePalette */
      NULL,                               /* pWidenPath */
      NULL,                               /* wine_get_wgl_driver */
@@ -1615,32 +1575,8 @@ index fde65c2..22b7994 100644
      GDI_PRIORITY_GRAPHICS_DRV           /* priority */
  };
  
-diff --git a/dlls/winex11.drv/Makefile.in b/dlls/winex11.drv/Makefile.in
-index 463eefd..41cced8 100644
---- a/dlls/winex11.drv/Makefile.in
-+++ b/dlls/winex11.drv/Makefile.in
-@@ -2,13 +2,15 @@ MODULE    = winex11.drv
- IMPORTS   = uuid user32 gdi32 advapi32
- DELAYIMPORTS = comctl32 ole32 shell32 imm32
- EXTRAINCL = $(X_CFLAGS)
--EXTRALIBS = $(X_LIBS) $(X_EXTRA_LIBS)
-+EXTRALIBS = $(X_LIBS) $(X_EXTRA_LIBS) -lxcb -lxcb-dri3 -lxcb-present -lX11-xcb -lxcb-xfixes -lpthread
- 
- C_SRCS = \
- 	bitblt.c \
- 	brush.c \
- 	clipboard.c \
-+	d3dadapter.c \
- 	desktop.c \
-+	dri3.c \
- 	event.c \
- 	graphics.c \
- 	ime.c \
-diff --git a/dlls/winex11.drv/d3dadapter.c b/dlls/winex11.drv/d3dadapter.c
-new file mode 100644
-index 0000000..eec42bd
---- /dev/null
-+++ b/dlls/winex11.drv/d3dadapter.c
+--- wine-1.7.31/dlls/winex11.drv/d3dadapter.c.d3d9~	2014-11-15 15:53:51.120224679 +0100
++++ wine-1.7.31/dlls/winex11.drv/d3dadapter.c	2014-11-15 15:53:51.120224679 +0100
 @@ -0,0 +1,961 @@
 +/*
 + * X11DRV ID3DAdapter9 support functions
@@ -2603,11 +2539,8 @@ index 0000000..eec42bd
 +#endif /* defined(SONAME_LIBXEXT) && \
 +          defined(SONAME_LIBXFIXES) && \
 +          defined(SONAME_LIBD3DADAPTER9) */
-diff --git a/dlls/winex11.drv/dri3.c b/dlls/winex11.drv/dri3.c
-new file mode 100644
-index 0000000..17eb114
---- /dev/null
-+++ b/dlls/winex11.drv/dri3.c
+--- wine-1.7.31/dlls/winex11.drv/dri3.c.d3d9~	2014-11-15 15:53:51.121224666 +0100
++++ wine-1.7.31/dlls/winex11.drv/dri3.c	2014-11-15 15:53:51.121224666 +0100
 @@ -0,0 +1,738 @@
 +/*
 + * Wine X11DRV DRI3 interface
@@ -3347,11 +3280,8 @@ index 0000000..17eb114
 +}
 +
 +#endif /* defined(SONAME_LIBXEXT) && defined(SONAME_LIBXFIXES) */
-diff --git a/dlls/winex11.drv/dri3.h b/dlls/winex11.drv/dri3.h
-new file mode 100644
-index 0000000..cfea9db
---- /dev/null
-+++ b/dlls/winex11.drv/dri3.h
+--- wine-1.7.31/dlls/winex11.drv/dri3.h.d3d9~	2014-11-15 15:53:51.121224666 +0100
++++ wine-1.7.31/dlls/winex11.drv/dri3.h	2014-11-15 15:53:51.121224666 +0100
 @@ -0,0 +1,85 @@
 +/*
 + * Wine X11DRV DRI3 interface
@@ -3438,11 +3368,9 @@ index 0000000..cfea9db
 +#endif /* defined(SONAME_LIBXEXT) && defined(SONAME_LIBXFIXES) */
 +
 +#endif /* __WINE_DRI3_H */
-diff --git a/dlls/winex11.drv/init.c b/dlls/winex11.drv/init.c
-index 5a7d316..17b1776 100644
---- a/dlls/winex11.drv/init.c
-+++ b/dlls/winex11.drv/init.c
-@@ -365,6 +365,7 @@ static INT X11DRV_ExtEscape( PHYSDEV dev, INT escape, INT in_count, LPCVOID in_d
+--- wine-1.7.31/dlls/winex11.drv/init.c.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/winex11.drv/init.c	2014-11-15 15:53:51.121224666 +0100
+@@ -365,6 +365,7 @@ static INT X11DRV_ExtEscape( PHYSDEV dev
                  {
                      struct x11drv_escape_get_drawable *data = out_data;
                      data->drawable = physDev->drawable;
@@ -3450,7 +3378,7 @@ index 5a7d316..17b1776 100644
                      return TRUE;
                  }
                  break;
-@@ -464,6 +465,21 @@ static struct opengl_funcs * X11DRV_wine_get_wgl_driver( PHYSDEV dev, UINT versi
+@@ -464,6 +465,21 @@ static struct opengl_funcs * X11DRV_wine
      return ret;
  }
  
@@ -3472,7 +3400,7 @@ index 5a7d316..17b1776 100644
  
  static const struct gdi_dc_funcs x11drv_funcs =
  {
-@@ -594,6 +610,7 @@ static const struct gdi_dc_funcs x11drv_funcs =
+@@ -594,6 +610,7 @@ static const struct gdi_dc_funcs x11drv_
      X11DRV_UnrealizePalette,            /* pUnrealizePalette */
      NULL,                               /* pWidenPath */
      X11DRV_wine_get_wgl_driver,         /* wine_get_wgl_driver */
@@ -3480,11 +3408,28 @@ index 5a7d316..17b1776 100644
      GDI_PRIORITY_GRAPHICS_DRV           /* priority */
  };
  
-diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
-index 06e2294..547e99c 100644
---- a/dlls/winex11.drv/window.c
-+++ b/dlls/winex11.drv/window.c
-@@ -1609,6 +1609,7 @@ void CDECL X11DRV_DestroyWindow( HWND hwnd )
+--- wine-1.7.31/dlls/winex11.drv/Makefile.in.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/winex11.drv/Makefile.in	2014-11-15 15:53:51.120224679 +0100
+@@ -2,13 +2,15 @@ MODULE    = winex11.drv
+ IMPORTS   = uuid user32 gdi32 advapi32
+ DELAYIMPORTS = comctl32 ole32 shell32 imm32
+ EXTRAINCL = $(X_CFLAGS)
+-EXTRALIBS = $(X_LIBS) $(X_EXTRA_LIBS)
++EXTRALIBS = $(X_LIBS) $(X_EXTRA_LIBS) -lxcb -lxcb-dri3 -lxcb-present -lX11-xcb -lxcb-xfixes -lpthread
+ 
+ C_SRCS = \
+ 	bitblt.c \
+ 	brush.c \
+ 	clipboard.c \
++	d3dadapter.c \
+ 	desktop.c \
++	dri3.c \
+ 	event.c \
+ 	graphics.c \
+ 	ime.c \
+--- wine-1.7.31/dlls/winex11.drv/window.c.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/winex11.drv/window.c	2014-11-15 15:53:51.121224666 +0100
+@@ -1609,6 +1609,7 @@ void CDECL X11DRV_DestroyWindow( HWND hw
      struct x11drv_win_data *data;
  
      destroy_gl_drawable( hwnd );
@@ -3492,11 +3437,9 @@ index 06e2294..547e99c 100644
  
      if (!(data = get_win_data( hwnd ))) return;
  
-diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
-index bcbfe14..68308b0 100644
---- a/dlls/winex11.drv/x11drv.h
-+++ b/dlls/winex11.drv/x11drv.h
-@@ -222,6 +222,7 @@ extern BOOL shape_layered_windows DECLSPEC_HIDDEN;
+--- wine-1.7.31/dlls/winex11.drv/x11drv.h.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/winex11.drv/x11drv.h	2014-11-15 15:53:51.121224666 +0100
+@@ -222,6 +222,7 @@ extern BOOL shape_layered_windows DECLSP
  extern const struct gdi_dc_funcs *X11DRV_XRender_Init(void) DECLSPEC_HIDDEN;
  
  extern struct opengl_funcs *get_glx_driver(UINT) DECLSPEC_HIDDEN;
@@ -3512,7 +3455,7 @@ index bcbfe14..68308b0 100644
  };
  
  struct x11drv_escape_flush_gl_drawable
-@@ -375,6 +377,7 @@ extern BOOL show_systray DECLSPEC_HIDDEN;
+@@ -375,6 +377,7 @@ extern BOOL show_systray DECLSPEC_HIDDEN
  extern BOOL grab_pointer DECLSPEC_HIDDEN;
  extern BOOL grab_fullscreen DECLSPEC_HIDDEN;
  extern BOOL usexcomposite DECLSPEC_HIDDEN;
@@ -3520,7 +3463,7 @@ index bcbfe14..68308b0 100644
  extern BOOL managed_mode DECLSPEC_HIDDEN;
  extern BOOL decorated_mode DECLSPEC_HIDDEN;
  extern BOOL private_color_map DECLSPEC_HIDDEN;
-@@ -576,6 +579,8 @@ extern void sync_gl_drawable( HWND hwnd, const RECT *visible_rect, const RECT *c
+@@ -576,6 +579,8 @@ extern void sync_gl_drawable( HWND hwnd,
  extern void set_gl_drawable_parent( HWND hwnd, HWND parent ) DECLSPEC_HIDDEN;
  extern void destroy_gl_drawable( HWND hwnd ) DECLSPEC_HIDDEN;
  
@@ -3529,10 +3472,8 @@ index bcbfe14..68308b0 100644
  extern void wait_for_withdrawn_state( HWND hwnd, BOOL set ) DECLSPEC_HIDDEN;
  extern Window init_clip_window(void) DECLSPEC_HIDDEN;
  extern void update_user_time( Time time ) DECLSPEC_HIDDEN;
-diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
-index 85c69bf..3a8c3a1 100644
---- a/dlls/winex11.drv/x11drv_main.c
-+++ b/dlls/winex11.drv/x11drv_main.c
+--- wine-1.7.31/dlls/winex11.drv/x11drv_main.c.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/winex11.drv/x11drv_main.c	2014-11-15 15:53:51.121224666 +0100
 @@ -48,6 +48,7 @@
  
  #include "x11drv.h"
@@ -3614,11 +3555,8 @@ index 85c69bf..3a8c3a1 100644
      X11DRV_XInput2_Init();
  
  #ifdef HAVE_XKB
-diff --git a/dlls/winex11.drv/xfixes.h b/dlls/winex11.drv/xfixes.h
-new file mode 100644
-index 0000000..cc7e287
---- /dev/null
-+++ b/dlls/winex11.drv/xfixes.h
+--- wine-1.7.31/dlls/winex11.drv/xfixes.h.d3d9~	2014-11-15 15:53:51.121224666 +0100
++++ wine-1.7.31/dlls/winex11.drv/xfixes.h	2014-11-15 15:53:51.121224666 +0100
 @@ -0,0 +1,39 @@
 +/*
 + * Wine X11DRV XFixes interface
@@ -3659,11 +3597,9 @@ index 0000000..cc7e287
 +
 +#endif /* defined(SONAME_LIBXFIXES) */
 +#endif /* __WINE_XFIXES_H */
-diff --git a/dlls/winex11.drv/xrender.c b/dlls/winex11.drv/xrender.c
-index d2a1c45..e630b82 100644
---- a/dlls/winex11.drv/xrender.c
-+++ b/dlls/winex11.drv/xrender.c
-@@ -2275,6 +2275,7 @@ static const struct gdi_dc_funcs xrender_funcs =
+--- wine-1.7.31/dlls/winex11.drv/xrender.c.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/dlls/winex11.drv/xrender.c	2014-11-15 15:53:51.122224654 +0100
+@@ -2275,6 +2275,7 @@ static const struct gdi_dc_funcs xrender
      NULL,                               /* pUnrealizePalette */
      NULL,                               /* pWidenPath */
      NULL,                               /* wine_get_wgl_driver */
@@ -3671,10 +3607,8 @@ index d2a1c45..e630b82 100644
      GDI_PRIORITY_GRAPHICS_DRV + 10      /* priority */
  };
  
-diff --git a/include/config.h.in b/include/config.h.in
-index a58c0b5..922b75f 100644
---- a/include/config.h.in
-+++ b/include/config.h.in
+--- wine-1.7.31/include/config.h.in.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/include/config.h.in	2014-11-15 15:53:51.122224654 +0100
 @@ -1113,6 +1113,9 @@
  /* Define to 1 if you have the <X11/extensions/xf86vmproto.h> header file. */
  #undef HAVE_X11_EXTENSIONS_XF86VMPROTO_H
@@ -3705,11 +3639,8 @@ index a58c0b5..922b75f 100644
  /* Define to the soname of the libXi library. */
  #undef SONAME_LIBXI
  
-diff --git a/include/wine/d3dadapter.h b/include/wine/d3dadapter.h
-new file mode 100644
-index 0000000..126dd58
---- /dev/null
-+++ b/include/wine/d3dadapter.h
+--- wine-1.7.31/include/wine/d3dadapter.h.d3d9~	2014-11-15 15:53:51.122224654 +0100
++++ wine-1.7.31/include/wine/d3dadapter.h	2014-11-15 15:53:51.122224654 +0100
 @@ -0,0 +1,42 @@
 +/*
 + * d3dadapter display driver definitions
@@ -3753,10 +3684,8 @@ index 0000000..126dd58
 +#endif /* SONAME_LIBD3DADAPTER9 */
 +
 +#endif /* __WINE_D3DADAPTER_H */
-diff --git a/include/wine/gdi_driver.h b/include/wine/gdi_driver.h
-index 06e4caa..d5ed856 100644
---- a/include/wine/gdi_driver.h
-+++ b/include/wine/gdi_driver.h
+--- wine-1.7.31/include/wine/gdi_driver.h.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/include/wine/gdi_driver.h	2014-11-15 15:53:51.122224654 +0100
 @@ -25,6 +25,7 @@
  
  struct gdi_dc_funcs;
@@ -3773,17 +3702,15 @@ index 06e4caa..d5ed856 100644
  
      /* priority order for the driver on the stack */
      UINT       priority;
-@@ -278,5 +280,6 @@ extern void CDECL __wine_set_visible_region( HDC hdc, HRGN hrgn, const RECT *vis
+@@ -278,5 +280,6 @@ extern void CDECL __wine_set_visible_reg
                                               const RECT *device_rect, struct window_surface *surface );
  extern void CDECL __wine_set_display_driver( HMODULE module );
  extern struct opengl_funcs * CDECL __wine_get_wgl_driver( HDC hdc, UINT version );
 +extern struct d3dadapter_funcs * CDECL __wine_get_d3dadapter_driver( HDC hdc, UINT version );
  
  #endif /* __WINE_WINE_GDI_DRIVER_H */
-diff --git a/programs/winecfg/resource.h b/programs/winecfg/resource.h
-index fffc4da..e752834 100644
---- a/programs/winecfg/resource.h
-+++ b/programs/winecfg/resource.h
+--- wine-1.7.31/programs/winecfg/resource.h.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/programs/winecfg/resource.h	2014-11-15 15:53:51.122224654 +0100
 @@ -59,6 +59,7 @@
  #define IDC_DESKTOP_HEIGHT              1024
  #define IDC_DESKTOP_SIZE                1025
@@ -3792,10 +3719,8 @@ index fffc4da..e752834 100644
  
  /* dll editing  */
  #define IDC_RAD_BUILTIN                 1029
-diff --git a/programs/winecfg/winecfg.rc b/programs/winecfg/winecfg.rc
-index 9f763a7..7e71b60 100644
---- a/programs/winecfg/winecfg.rc
-+++ b/programs/winecfg/winecfg.rc
+--- wine-1.7.31/programs/winecfg/winecfg.rc.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/programs/winecfg/winecfg.rc	2014-11-15 15:53:51.122224654 +0100
 @@ -170,6 +170,9 @@ BEGIN
      EDITTEXT    IDC_DESKTOP_WIDTH,84,68,40,12,ES_AUTOHSCROLL | ES_NUMBER | WS_DISABLED
      EDITTEXT    IDC_DESKTOP_HEIGHT,137,68,40,12,ES_AUTOHSCROLL | ES_NUMBER | WS_DISABLED
@@ -3806,10 +3731,8 @@ index 9f763a7..7e71b60 100644
      GROUPBOX    "Screen resolution",IDC_STATIC,8,95,244,84
      CONTROL     "", IDC_RES_TRACKBAR, "msctls_trackbar32",WS_TABSTOP,12,105,171,15
      EDITTEXT    IDC_RES_DPIEDIT,188,105,23,13,ES_NUMBER|WS_TABSTOP
-diff --git a/programs/winecfg/x11drvdlg.c b/programs/winecfg/x11drvdlg.c
-index 8d914ad..96f040f 100644
---- a/programs/winecfg/x11drvdlg.c
-+++ b/programs/winecfg/x11drvdlg.c
+--- wine-1.7.31/programs/winecfg/x11drvdlg.c.d3d9~	2014-11-14 14:28:17.000000000 +0100
++++ wine-1.7.31/programs/winecfg/x11drvdlg.c	2014-11-15 15:53:51.122224654 +0100
 @@ -46,6 +46,9 @@ WINE_DEFAULT_DEBUG_CHANNEL(winecfg);
  static const WCHAR logpixels_reg[] = {'S','y','s','t','e','m','\\','C','u','r','r','e','n','t','C','o','n','t','r','o','l','S','e','t','\\','H','a','r','d','w','a','r','e',' ','P','r','o','f','i','l','e','s','\\','C','u','r','r','e','n','t','\\','S','o','f','t','w','a','r','e','\\','F','o','n','t','s',0};
  static const WCHAR logpixels[] = {'L','o','g','P','i','x','e','l','s',0};
@@ -3820,7 +3743,7 @@ index 8d914ad..96f040f 100644
  static const WCHAR desktopW[] = {'D','e','s','k','t','o','p',0};
  static const WCHAR defaultW[] = {'D','e','f','a','u','l','t',0};
  static const WCHAR explorerW[] = {'E','x','p','l','o','r','e','r',0};
-@@ -69,6 +72,15 @@ static void convert_x11_desktop_key(void)
+@@ -69,6 +72,15 @@ static void convert_x11_desktop_key(void
      HeapFree(GetProcessHeap(), 0, buf);
  }
  
@@ -3848,7 +3771,7 @@ index 8d914ad..96f040f 100644
      updating_ui = FALSE;
  }
  
-@@ -235,6 +252,14 @@ static void on_fullscreen_grab_clicked(HWND dialog)
+@@ -235,6 +252,14 @@ static void on_fullscreen_grab_clicked(H
          set_reg_key(config_key, keypath("X11 Driver"), "GrabFullscreen", "N");
  }
  
@@ -3863,7 +3786,7 @@ index 8d914ad..96f040f 100644
  static INT read_logpixels_reg(void)
  {
      DWORD dwLogPixels;
-@@ -387,6 +412,7 @@ GraphDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+@@ -387,6 +412,7 @@ GraphDlgProc(HWND hDlg, UINT uMsg, WPARA
                          case IDC_ENABLE_MANAGED: on_enable_managed_clicked(hDlg); break;
                          case IDC_ENABLE_DECORATED: on_enable_decorated_clicked(hDlg); break;
  			case IDC_FULLSCREEN_GRAB:  on_fullscreen_grab_clicked(hDlg); break;
