@@ -17,13 +17,13 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.7.31
+Version:	1.7.33
 %if "%beta" != ""
 Release:	0.%beta.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2.sign
 %else
-Release:	2
+Release:	1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2.sign
 %endif
@@ -40,7 +40,7 @@ Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 # Support the Gallium Direct3D state tracker without the need for
 # the D3D-OGL converter
-Patch20:	http://download.ixit.cz/d3d9/wine-1.7.30-d3d9-86f195e.patch
+Patch20:	http://download.ixit.cz/d3d9/wine-1.7.31-d3d9-d6d23a8.patch
 # (Anssi 05/2008) Adds:
 # a: => /media/floppy (/mnt/floppy on 2007.1 and older)
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -104,7 +104,7 @@ BuildRequires:	gsm-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	pkgconfig(gnutls)
 BuildRequires:	gettext-devel
-BuildRequires:	d3d-devel
+BuildRequires:	d3d-devel >= 10.4.0-1
 BuildRequires:	pkgconfig(glu)
 BuildRequires:	pkgconfig(libv4l2)
 BuildRequires:	pkgconfig(xcursor)
