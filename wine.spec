@@ -3,6 +3,7 @@
 %else
 %define	wine	wine
 %endif
+
 %define	major	1
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%{mklibname -d wine}
@@ -23,7 +24,7 @@ Release:	0.%beta.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2.sign
 %else
-Release:	2
+Release:	3
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2.sign
 %endif
@@ -35,7 +36,10 @@ URL:		http://www.winehq.com/
 
 # RH stuff
 Source2:	wine.init
+Source3:	wine-staging-%{version}.tar.gz
 Source10:	wine.rpmlintrc
+Source11:	http://kegel.com/wine/winetricks
+Source12:	http://kegel.com/wine/wisotool
 Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 # Support the Gallium Direct3D state tracker without the need for
@@ -166,6 +170,14 @@ Requires(postun):	desktop-common-data
 Requires(preun):	rpm-helper
 Requires(post):	rpm-helper
 Conflicts:	%{wine} < 1:0.9-3mdk
+
+#for winetricks
+Requires:	cabextract
+Requires:	unzip
+
+Suggests:	webcore-fonts
+%rename		winetricks
+
 %ifarch %{ix86}
 Conflicts:	wine64
 %else
@@ -239,6 +251,11 @@ Wine is often updated.
 %patch20 -p1 -b .d3d9~
 %patch108 -p1 -b .conf
 %patch200 -p1
+
+# wine-staging
+gzip -dc "%{SOURCE3}" | /bin/tar -xf - --strip-components=1
+make -C "patches" DESTDIR="%{_builddir}/wine-%{version}" install
+
 sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
 
 %build
@@ -270,6 +287,9 @@ export CXX=g++
 
 %install
 %makeinstall_std LDCONFIG=/bin/true
+
+install -m 0755 %{SOURCE11} %{buildroot}%{_bindir}/
+install -m 0755 %{SOURCE12} %{buildroot}%{_bindir}/
 
 # Danny: dirty:
 # install -m755 tools/fnt2bdf -D %{buildroot}%{_bindir}/fnt2bdf
@@ -417,6 +437,8 @@ EOF
 %{_bindir}/winepath
 %{_bindir}/regsvr32
 %{_bindir}/winefile
+%{_bindir}/winetricks
+%{_bindir}/wisotool
 %{_mandir}/man1/wine.1*
 %lang(de) %{_mandir}/de.UTF-8/man1/wine.1*
 %lang(de) %{_mandir}/de.UTF-8/man1/winemaker.1*
