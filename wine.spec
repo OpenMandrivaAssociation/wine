@@ -142,8 +142,9 @@ Suggests:	webcore-fonts
 %ifarch %{ix86}
 Conflicts:	wine64
 Conflicts:	wine-compholio64
+Conflicts:	wine-compholio
 %else
-Conflicts:	wine
+Conflicts:	wine-compholio64
 Conflicts:	wine-compholio
 %endif
 
