@@ -139,14 +139,6 @@ Requires:	unzip
 Suggests:	webcore-fonts
 %rename		winetricks
 
-%ifarch %{ix86}
-Conflicts:	wine64
-Conflicts:	wine-compholio64
-Conflicts:	wine-compholio
-%else
-Conflicts:	wine-compholio64
-Conflicts:	wine-compholio
-%endif
 
 %description
 Wine is a program which allows running Microsoft Windows programs
