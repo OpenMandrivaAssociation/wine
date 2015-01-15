@@ -20,7 +20,7 @@
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 Name:		wine
 Version:	1.7.34
-Release:	5
+Release:	6
 Epoch:		2
 License:	LGPLv2+
 Group:		Emulators
@@ -139,6 +139,12 @@ Requires:	unzip
 Suggests:	webcore-fonts
 %rename		winetricks
 
+#remove compholio
+%ifarch x86_64
+Obsoletes:	wine-compholio64 <= %{EVRD}
+%else
+Obsoletes:	wine-compholio <= %{EVRD}
+%endif
 
 %description
 Wine is a program which allows running Microsoft Windows programs
@@ -197,6 +203,13 @@ Requires:	%{wine} = %{EVRD}
 Conflicts:	wine64-devel
 %else
 Conflicts:	wine-devel
+%endif
+
+#remove compholio devel
+%ifarch x86_64
+Obsoletes:	wine-compholio64-devel <= %{EVRD}
+%else
+Obsoletes:	wine-compholio-devel <= %{EVRD}
 %endif
 
 %description -n %{wine}-devel
