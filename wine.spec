@@ -128,7 +128,7 @@ Suggests:	sane-frontends
 Requires:	libfreetype.so.6%{mark64}
 Requires:	libasound.so.2%{mark64}
 Requires:	libXrender.so.1%{mark64}
-Requires:	libpng16.so.16%{mark64}
+Requires:	libpng15.so.15%{mark64}
 Requires(post,postun):	desktop-common-data
 Requires(post,preun):	rpm-helper
 
@@ -141,13 +141,9 @@ Suggests:	webcore-fonts
 
 %ifarch %{ix86}
 Conflicts:	wine64
-%else
-Conflicts:	wine
-%endif
-
-%ifarch %{ix86}
 Conflicts:	wine-compholio64
 %else
+Conflicts:	wine
 Conflicts:	wine-compholio
 %endif
 
