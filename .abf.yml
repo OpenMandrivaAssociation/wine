@@ -1,3 +1,4 @@
 sources:
-  wine-1.7.33.tar.bz2: 6f58557bd0150161098ca486fd79e738f1641bd9
-  wine-1.7.33.tar.bz2.sign: c893b3aa47fb00ab89e2bd5170fa6fcd1b139533
+  wine-1.7.34.tar.bz2: 1c8981df189421a26c447ef6a2da4f8f0a874653
+  wine-1.7.34.tar.bz2.sign: 454f937773b56ddc8ac89ffded2ebf749928479b
+  wine-staging-1.7.34.tar.gz: 629ae69ff94f044d40b67e617e068cf997c6b7e1
