@@ -20,7 +20,7 @@
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 Name:		wine
 Version:	1.7.34
-Release:	4
+Release:	5
 Epoch:		2
 License:	LGPLv2+
 Group:		Emulators
