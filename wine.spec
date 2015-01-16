@@ -24,7 +24,7 @@ Release:	0.%beta.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2.sign
 %else
-Release:	3
+Release:	4
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2.sign
 %endif
@@ -178,10 +178,11 @@ Requires:	unzip
 Suggests:	webcore-fonts
 %rename		winetricks
 
-%ifarch %{ix86}
-Conflicts:	wine64
+#remove compholio
+%ifarch x86_64
+Obsoletes:	wine-compholio64 <= %{EVRD}
 %else
-Conflicts:	wine
+Obsoletes:	wine-compholio <= %{EVRD}
 %endif
 
 %description
@@ -230,6 +231,13 @@ Obsoletes:	%{mklibname -d wine 1} < %{EVRD}
 Conflicts:	wine64-devel
 %else
 Conflicts:	wine-devel
+%endif
+
+#remove compholio devel
+%ifarch x86_64
+Obsoletes:	wine-compholio64-devel <= %{EVRD}
+%else
+Obsoletes:	wine-compholio-devel <= %{EVRD}
 %endif
 
 %description -n	%{wine}-devel
