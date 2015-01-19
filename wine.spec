@@ -24,7 +24,7 @@ Release:	0.%beta.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2.sign
 %else
-Release:	4
+Release:	5
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2.sign
 %endif
@@ -209,6 +209,7 @@ Conflicts:	wine64 < 1:1.2-0.rc7.1
 # (Anssi) If wine-gecko is not installed, wine pops up a dialog on first
 # start proposing to download wine-gecko from sourceforge, while recommending
 # to use distribution packages instead. Therefore suggest wine-gecko here:
+Requires:	libfreetype.so.6
 Suggests:	wine-gecko
 Suggests:	libncursesw.so.5
 Suggests:	libncurses.so.5
