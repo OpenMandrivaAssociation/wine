@@ -20,7 +20,7 @@
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 Name:		wine
 Version:	1.7.34
-Release:	6
+Release:	7
 Epoch:		2
 License:	LGPLv2+
 Group:		Emulators
@@ -77,7 +77,7 @@ BuildRequires:	pkgconfig(gnutls)
 BuildRequires:	pkgconfig(gstreamer-0.10)
 BuildRequires:	pkgconfig(gstreamer-plugins-base-0.10)
 BuildRequires:	pkgconfig(jack)
-BuildRequires:	pkgconfig(lcms)
+BuildRequires:	pkgconfig(lcms2)
 BuildRequires:	pkgconfig(libgphoto2)
 BuildRequires:	pkgconfig(libmpg123)
 BuildRequires:	pkgconfig(libpulse)
