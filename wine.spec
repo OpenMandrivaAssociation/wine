@@ -24,7 +24,7 @@ Release:	0.%beta.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2.sign
 %else
-Release:	5
+Release:	10
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2.sign
 %endif
@@ -169,7 +169,14 @@ Requires(post):	desktop-common-data
 Requires(postun):	desktop-common-data
 Requires(preun):	rpm-helper
 Requires(post):	rpm-helper
-Conflicts:	%{wine} < 1:0.9-3mdk
+Conflicts:	%{wine} < %{EVRD}
+
+%ifarch %{ix86}
+Conflicts:	wine64
+%else
+Conflicts:	wine
+%endif
+
 
 #for winetricks
 Requires:	cabextract
@@ -204,8 +211,8 @@ Group:		Emulators
 # resolve the dependency to wine64 even on upgrades, and therefore replace
 # wine+wine32 installation with a wine32+wine64 installation. - Anssi
 Requires:	wine-bin
-Conflicts:	wine < 1:1.2-0.rc7.1
-Conflicts:	wine64 < 1:1.2-0.rc7.1
+Conflicts:	wine < %{EVRD}
+Conflicts:	wine64 < %{EVRD}
 # (Anssi) If wine-gecko is not installed, wine pops up a dialog on first
 # start proposing to download wine-gecko from sourceforge, while recommending
 # to use distribution packages instead. Therefore suggest wine-gecko here:
