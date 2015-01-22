@@ -159,11 +159,8 @@ Requires:	libfreetype.so.6%{_arch_tag_suffix}
 Requires:	libgnutls.so.28%{_arch_tag_suffix}
 Requires:	libasound.so.2%{_arch_tag_suffix}
 Requires:	libXrender.so.1%{_arch_tag_suffix}
-%if "%{distepoch}" >= "2012.0"
-Requires:      libpng15.so.15%{_arch_tag_suffix}
-%else
-Requires:      libpng12.so.0%{_arch_tag_suffix}
-%endif
+Requires:   libpng15.so.15%{_arch_tag_suffix}
+
 Requires(post):	desktop-file-utils
 Requires(postun):	desktop-file-utils
 Requires(post):	desktop-common-data
@@ -219,6 +216,9 @@ Conflicts:	wine64 < %{EVRD}
 # to use distribution packages instead. Therefore suggest wine-gecko here:
 Requires:	libfreetype.so.6
 Requires:	libgnutls.so.28
+Requires:	libasound.so.2
+Requires:	libXrender.so.1
+Requires:   libpng15.so.15
 Suggests:	wine-gecko
 Suggests:	libncursesw.so.5
 Suggests:	libncurses.so.5
