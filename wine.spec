@@ -20,7 +20,7 @@
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 Name:		wine
 Version:	1.7.34
-Release:	8
+Release:	9
 Epoch:		2
 License:	LGPLv2+
 Group:		Emulators
@@ -132,6 +132,13 @@ Requires:	libXrender.so.1%{mark64}
 Requires:	libpng15.so.15%{mark64}
 Requires(post,postun):	desktop-common-data
 Requires(post,preun):	rpm-helper
+Conflicts:	%{wine} < %{EVRD}
+
+%ifarch %{ix86}
+Conflicts:	wine64
+%else
+Conflicts:	wine
+%endif
 
 # for winetricks:
 Requires:	cabextract
@@ -178,6 +185,8 @@ Group:		Emulators
 # resolve the dependency to wine64 even on upgrades, and therefore replace
 # wine+wine32 installation with a wine32+wine64 installation. - Anssi
 Requires:	wine-bin
+Conflicts:	wine < %{EVRD}
+Conflicts:	wine64 < %{EVRD}
 # (Anssi) If wine-gecko is not installed, wine pops up a dialog on first
 # start proposing to download wine-gecko from sourceforge, while recommending
 # to use distribution packages instead. Therefore suggest wine-gecko here:
