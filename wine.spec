@@ -156,6 +156,7 @@ Requires:	xmessage
 Suggests:	sane-frontends
 # wine dlopen's these, so let's add the dependencies ourself
 Requires:	libfreetype.so.6%{_arch_tag_suffix}
+Requires:	libgnutls.so.28%{_arch_tag_suffix}
 Requires:	libasound.so.2%{_arch_tag_suffix}
 Requires:	libXrender.so.1%{_arch_tag_suffix}
 %if "%{distepoch}" >= "2012.0"
@@ -217,6 +218,7 @@ Conflicts:	wine64 < %{EVRD}
 # start proposing to download wine-gecko from sourceforge, while recommending
 # to use distribution packages instead. Therefore suggest wine-gecko here:
 Requires:	libfreetype.so.6
+Requires:	libgnutls.so.28
 Suggests:	wine-gecko
 Suggests:	libncursesw.so.5
 Suggests:	libncurses.so.5
