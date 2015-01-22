@@ -126,10 +126,11 @@ Provides:	wine-bin = %{EVRD}
 Requires:	xmessage
 Suggests:	sane-frontends
 # wine dlopen's these, so let's add the dependencies ourself
-Requires:	libfreetype.so.6%{mark64}
-Requires:	libasound.so.2%{mark64}
-Requires:	libXrender.so.1%{mark64}
-Requires:	libpng15.so.15%{mark64}
+Requires:	libfreetype.so.6%{_arch_tag_suffix}
+Requires:	libgnutls.so.28%{_arch_tag_suffix}
+Requires:	libasound.so.2%{_arch_tag_suffix}
+Requires:	libXrender.so.1%{_arch_tag_suffix}
+Requires:	libpng15.so.15%{_arch_tag_suffix}
 Requires(post,postun):	desktop-common-data
 Requires(post,preun):	rpm-helper
 Conflicts:	%{wine} < %{EVRD}
@@ -190,6 +191,11 @@ Conflicts:	wine64 < %{EVRD}
 # (Anssi) If wine-gecko is not installed, wine pops up a dialog on first
 # start proposing to download wine-gecko from sourceforge, while recommending
 # to use distribution packages instead. Therefore suggest wine-gecko here:
+Requires:	libfreetype.so.6
+Requires:	libgnutls.so.28
+Requires:	libasound.so.2
+Requires:	libXrender.so.1
+Requires:	libpng15.so.15
 Suggests:	wine-gecko
 Suggests:	libncursesw.so.5
 Suggests:	libncurses.so.5
