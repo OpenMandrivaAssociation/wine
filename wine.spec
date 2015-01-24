@@ -24,7 +24,7 @@ Release:	0.%beta.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2.sign
 %else
-Release:	11
+Release:	12
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2.sign
 %endif
@@ -122,6 +122,8 @@ BuildRequires:	pkgconfig(sm)
 BuildRequires:	fontforge
 BuildRequires:	pkgconfig(fontconfig)
 BuildRequires:	pkgconfig(freetype2)
+BuildRequires:	devel(libattr)
+BuildRequires:	libtxc_dxtn-devel
 %if "%{distepoch}" >= "2011.0"
 BuildRequires:	prelink
 %endif
@@ -296,6 +298,7 @@ export CC=gcc
 export CXX=g++
 %configure	--with-pulse \
 		--without-nas \
+        --with-xattr \
 %ifarch x86_64
 		--enable-win64
 %endif
