@@ -294,6 +294,7 @@ export ICOTOOL=false
 autoreconf
 %configure2_5x	--with-pulse \
 		--without-nas \
+        --with-xattr \
 %ifarch x86_64
 		--enable-win64
 %endif
