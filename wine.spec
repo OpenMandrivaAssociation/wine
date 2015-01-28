@@ -18,13 +18,13 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.7.34
+Version:	1.7.35
 %if "%beta" != ""
 Release:	0.%beta.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2.sign
 %else
-Release:	13
+Release:	1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2.sign
 %endif
@@ -218,7 +218,7 @@ Requires:	libfreetype.so.6
 Requires:	libgnutls.so.28
 Requires:	libasound.so.2
 Requires:	libXrender.so.1
-Requires:   libpng15.so.15
+Requires:   	libpng15.so.15
 Suggests:	wine-gecko
 Suggests:	libncursesw.so.5
 Suggests:	libncurses.so.5
@@ -296,7 +296,7 @@ export CC=gcc
 export CXX=g++
 %configure	--with-pulse \
 		--without-nas \
-        --with-xattr \
+    		--with-xattr \
 %ifarch x86_64
 		--enable-win64
 %endif
