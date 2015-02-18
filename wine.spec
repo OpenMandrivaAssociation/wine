@@ -292,6 +292,7 @@ export CFLAGS="%{optflags} -fno-omit-frame-pointer"
 export CC=gcc
 export CXX=g++
 %configure	--with-pulse \
+		--without-hal \
 		--without-nas \
     		--with-xattr \
 %ifarch x86_64
