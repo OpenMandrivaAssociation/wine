@@ -272,6 +272,10 @@ sed -e 's,@MDKVERSION@,%{mdkversion},' -i dlls/ntdll/server.c
 autoreconf
 
 %build
+# disable fortify as it breaks wine
+# http://bugs.winehq.org/show_bug.cgi?id=24606
+# http://bugs.winehq.org/show_bug.cgi?id=25073
+%undefine _fortify_cflags
 %ifarch %{ix86}
 # (Anssi 04/2008) bug #39604
 # Some protection systems complain "debugger detected" with our
