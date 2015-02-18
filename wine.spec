@@ -29,7 +29,7 @@ Group:		Emulators
 URL:		http://www.winehq.com/
 
 # RH stuff
-Source2:	wine.init
+Source2:	wine.binfmt
 Source10:	wine.rpmlintrc
 Source11:	http://kegel.com/wine/winetricks
 Source12:	http://kegel.com/wine/wisotool
@@ -164,8 +164,6 @@ Requires(post):	desktop-file-utils
 Requires(postun):	desktop-file-utils
 Requires(post):	desktop-common-data
 Requires(postun):	desktop-common-data
-Requires(preun):	rpm-helper
-Requires(post):	rpm-helper
 Conflicts:	%{wine} < %{EVRD}
 
 %ifarch %{ix86}
@@ -311,7 +309,7 @@ install -m 0755 %{SOURCE12} %{buildroot}%{_bindir}/
 # install -m755 tools/fnt2bdf -D %{buildroot}%{_bindir}/fnt2bdf
 
 # Allow users to launch Windows programs by just clicking on the .exe file...
-install -m755 %{SOURCE2} -D %{buildroot}%{_initrddir}/%{name}
+install -m755 %{SOURCE2} -D %{buildroot}%{_binfmtdir}/wine.conf
 
 mkdir -p %{buildroot}%{_sysconfdir}/xdg/menus/applications-merged
 cat > %{buildroot}%{_sysconfdir}/xdg/menus/applications-merged/mandriva-%{name}.menu <<EOF
@@ -426,12 +424,6 @@ you need to also install the 'wine32' package from the 32-bit repository.
 EOF
 %endif
 
-%preun -n %{wine}
-%_preun_service %{name}
-
-%post -n %{wine}
-%_post_service %{name}
-
 %files -n %{wine}
 %doc ANNOUNCE AUTHORS README
 %ifarch x86_64
@@ -439,7 +431,7 @@ EOF
 %{_bindir}/wine64
 %{_bindir}/wine64-preloader
 %endif
-%{_initrddir}/%{name}
+%config %{_binfmtdir}/wine.conf
 %{_bindir}/winecfg
 %{_bindir}/wineconsole*
 %{_bindir}/wineserver
