@@ -30,12 +30,13 @@ URL:		http://www.winehq.com/
 
 # RH stuff
 Source2:	wine.init
-Source3:	https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
 Source10:	wine.rpmlintrc
 Source11:	http://kegel.com/wine/winetricks
 Source12:	http://kegel.com/wine/wisotool
 Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
+
+Source900:	https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
 # Support the Gallium Direct3D state tracker without the need for
 # the D3D-OGL converter
 Patch20:	http://download.ixit.cz/d3d9/wine-1.7.31-d3d9-d6d23a8.patch
@@ -50,6 +51,9 @@ Patch20:	http://download.ixit.cz/d3d9/wine-1.7.31-d3d9-d6d23a8.patch
 Patch108:	wine-mdkconf.patch
 Patch200:	wine-1.3.24-64bit-tools.patch
 #(eandry) add a pulseaudio sound driver (from http://art.ified.ca/downloads/ )
+
+# https://bugs.wine-staging.com/show_bug.cgi?id=68
+Patch900:	wine-staging-rtlunwindex.patch
 
 # Rediff configure.ac patch manually until winepulse upstream fixes it
 
@@ -153,7 +157,7 @@ Requires:	libfreetype.so.6%{_arch_tag_suffix}
 Requires:	libgnutls.so.28%{_arch_tag_suffix}
 Requires:	libasound.so.2%{_arch_tag_suffix}
 Requires:	libXrender.so.1%{_arch_tag_suffix}
-Requires:   libpng15.so.15%{_arch_tag_suffix}
+Requires:	libpng15.so.15%{_arch_tag_suffix}
 
 Requires(post):	desktop-file-utils
 Requires(postun):	desktop-file-utils
@@ -254,24 +258,21 @@ develop programs which make use of wine.
 Wine is often updated.
 
 %prep
-%if "%beta" != ""
-%setup -q -n %name-%version-%beta
-%else
-%setup -q
-%endif
+%setup -q -n %{name}-%{version}%{?beta:-%{beta}}
 %patch1 -p0 -b .chinese
 %patch20 -p1 -b .d3d9~
 %patch108 -p1 -b .conf
 %patch200 -p1
 
 # wine-staging
-gzip -dc "%{SOURCE3}" | /bin/tar -xf - --strip-components=1
+tar --strip-components=1 -zxf "%{SOURCE900}"
+%patch900 -p1 -b .rtlunwindex~
 make -C "patches" DESTDIR="%{_builddir}/wine-%{version}" install
 
-sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
+sed -e 's,@MDKVERSION@,%{mdkversion},' -i dlls/ntdll/server.c
 
 %build
-%ifarch %ix86
+%ifarch %{ix86}
 # (Anssi 04/2008) bug #39604
 # Some protection systems complain "debugger detected" with our
 # -fomit-frame-pointer flag, so disable it.
