@@ -1,4 +1,4 @@
-%ifarch x86_64
+%ifarch x86_6
 %define	wine	wine64
 %else
 %define	wine	wine
@@ -7,7 +7,7 @@
 %define	major	1
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%{mklibname -d wine}
-%define beta %nil
+#define beta	%{nil}
 
 # On 32-bit we have
 # wine32 - those 32-bit binaries that are also used on 64-bit for 32-bit support
@@ -18,16 +18,10 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.7.35
-%if "%beta" != ""
-Release:	0.%beta.1
-Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2
-Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%beta.tar.bz2.sign
-%else
-Release:	1
-Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2
-Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2.sign
-%endif
+Version:	1.7.36
+Release:	%{?beta:0.%{beta}.}1
+Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?beta:-%{beta}}.tar.bz2
+Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?beta:-%{beta}}.tar.bz2.sign
 Epoch:		2
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 License:	LGPLv2+
@@ -36,7 +30,7 @@ URL:		http://www.winehq.com/
 
 # RH stuff
 Source2:	wine.init
-Source3:	wine-staging-%{version}.tar.gz
+Source3:	https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
 Source10:	wine.rpmlintrc
 Source11:	http://kegel.com/wine/winetricks
 Source12:	http://kegel.com/wine/wisotool
