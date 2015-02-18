@@ -51,12 +51,9 @@ Patch20:	http://download.ixit.cz/d3d9/wine-1.7.31-d3d9-d6d23a8.patch
 # have to substitute @MDKVERSION@ in dlls/ntdll/server.c
 Patch108:	wine-mdkconf.patch
 Patch200:	wine-1.3.24-64bit-tools.patch
-#(eandry) add a pulseaudio sound driver (from http://art.ified.ca/downloads/ )
 
 # https://bugs.wine-staging.com/show_bug.cgi?id=68
 Patch900:	wine-staging-rtlunwindex.patch
-
-# Rediff configure.ac patch manually until winepulse upstream fixes it
 
 # (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
 # 64-bit wine cannot run 32-bit programs without wine32.
@@ -96,6 +93,7 @@ BuildRequires:	ungif-devel
 BuildRequires:	pkgconfig(xpm)
 BuildRequires:	pkgconfig(libtiff-4)
 BuildRequires:	pkgconfig(librsvg-2.0)
+BuildRequires:	icoutils
 BuildRequires:	imagemagick
 BuildRequires:	pkgconfig(libgphoto2)
 BuildRequires:	desktop-file-utils
@@ -278,12 +276,6 @@ sed -e 's,@MDKVERSION@,%{mdkversion},' -i dlls/ntdll/server.c
 # -fomit-frame-pointer flag, so disable it.
 export CFLAGS="%{optflags} -fno-omit-frame-pointer"
 %endif
-
-# (Anssi 04/2008)
-# If icotool is present, it is used to rebuild icon files. It is in contrib
-# so we do not do that; this is here to ensure that installed icoutils does
-# not change build behaviour.
-export ICOTOOL=false
 
 autoreconf
 # Clang doesn't support M$ ABI on 64bit
