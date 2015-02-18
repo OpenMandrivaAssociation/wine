@@ -269,6 +269,8 @@ make -C "patches" DESTDIR="%{_builddir}/wine-%{version}" install
 
 sed -e 's,@MDKVERSION@,%{mdkversion},' -i dlls/ntdll/server.c
 
+autoreconf
+
 %build
 %ifarch %{ix86}
 # (Anssi 04/2008) bug #39604
@@ -277,7 +279,6 @@ sed -e 's,@MDKVERSION@,%{mdkversion},' -i dlls/ntdll/server.c
 export CFLAGS="%{optflags} -fno-omit-frame-pointer"
 %endif
 
-autoreconf
 # Clang doesn't support M$ ABI on 64bit
 export CC=gcc
 export CXX=g++
