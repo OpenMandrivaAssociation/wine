@@ -69,6 +69,8 @@ BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	gpm-devel
 BuildRequires:	perl-devel
+BuildRequires:	pcap-devel
+BuildRequires:	opencl-devel
 BuildRequires:	pkgconfig(ncursesw)
 BuildRequires:	cups-devel
 BuildRequires:	pkgconfig(sane-backends)
@@ -106,10 +108,13 @@ BuildRequires:	unixODBC-devel
 BuildRequires:	pkgconfig(gnutls)
 BuildRequires:	gettext-devel
 BuildRequires:	d3d-devel >= 10.4.0-1
+BuildRequires:	pkgconfig(lcms2)
+BuildRequires:	pkgconfig(osmesa)
 BuildRequires:	pkgconfig(glu)
 BuildRequires:	pkgconfig(libv4l2)
 BuildRequires:	pkgconfig(xcursor)
 BuildRequires:	pkgconfig(xcomposite)
+BuildRequires:	pkgconfig(xi)
 BuildRequires:	pkgconfig(xinerama) 
 BuildRequires:	pkgconfig(xrandr)
 BuildRequires:	pkgconfig(x11)
