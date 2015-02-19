@@ -1,0 +1,11 @@
+--- wine-1.7.36/tools/wineapploader.in.exists~	2015-02-19 16:35:39.933755514 +0100
++++ wine-1.7.36/tools/wineapploader.in	2015-02-19 16:35:49.104744403 +0100
+@@ -28,7 +28,7 @@ if [ -x "$WINELOADER" ]; then exec "$WIN
+ 
+ # then default bin directory
+ if [ -x "@bindir@/wine" ]; then 
+- if [[ $compbit = "x86_64" ]]
++ if [[ $compbit = "x86_64" && "@bindir@/wine64" ]]
+ 	then 
+ 		exec "@bindir@/wine64" "$appname" "$@"
+ 	else
