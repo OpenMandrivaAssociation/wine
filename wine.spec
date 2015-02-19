@@ -36,7 +36,6 @@ Source12:	http://kegel.com/wine/wisotool
 Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
-Patch3:		wine-1.7.36-check-for-presence-of-wine64-before-using.patch
 
 Source900:	https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
 # Support the Gallium Direct3D state tracker without the need for
@@ -273,7 +272,6 @@ Wine is often updated.
 %setup -q -n %{name}-%{version}%{?beta:-%{beta}}
 %patch1 -p0 -b .chinese~
 %patch2 -p1 -b .cjk~
-%patch3 -p1 -b .exists~
 %patch20 -p1 -b .d3d9~
 %patch108 -p1 -b .conf
 %patch200 -p1
