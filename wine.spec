@@ -141,8 +141,7 @@ Summary:	WINE Is Not An Emulator - runs MS Windows programs
 Group:		Emulators
 Suggests:	wine32 = %{EVRD}
 Suggests:	wine64-gecko
-Suggests:	libncursesw.so.5%{_arch_tag_suffix}
-Suggests:	libncurses.so.5%{_arch_tag_suffix}
+Suggests:	%{dlopen_req ncursesw}
 %else
 # on 32-bit we always want wine32 package
 Requires:	wine32 = %{EVRD}
@@ -157,12 +156,17 @@ Provides:	wine-bin = %{EVRD}
 Requires:	xmessage
 Suggests:	sane-frontends
 # wine dlopen's these, so let's add the dependencies ourself
-Requires:	libfreetype.so.6%{_arch_tag_suffix}
-Requires:	libgnutls.so.28%{_arch_tag_suffix}
-Requires:	libasound.so.2%{_arch_tag_suffix}
-Requires:	libXrender.so.1%{_arch_tag_suffix}
-Requires:	libpng15.so.15%{_arch_tag_suffix}
-
+Requires:	%{dlopen_req freetype}
+Requires:	%{dlopen_req gnutls}
+Requires:	%{dlopen_req asound}
+Requires:	%{dlopen_req png}
+Requires:	%{dlopen_req OSMesa}
+Requires:	%{dlopen_req Xcomposite}
+Requires:	%{dlopen_req Xcursor}
+Requires:	%{dlopen_req Xinerama}
+Requires:	%{dlopen_req Xrandr}
+Requires:	%{dlopen_req Xrender}
+Requires:	%{dlopen_req v4l2}
 Requires(post):	desktop-file-utils
 Requires(postun):	desktop-file-utils
 Requires(post):	desktop-common-data
@@ -211,17 +215,22 @@ Group:		Emulators
 Requires:	wine-bin
 Conflicts:	wine < %{EVRD}
 Conflicts:	wine64 < %{EVRD}
+Requires:	%{dlopen_req freetype}
+Requires:	%{dlopen_req gnutls}
+Requires:	%{dlopen_req asound}
+Requires:   	%{dlopen_req png}
+Requires:	%{dlopen_req OSMesa}
+Requires:	%{dlopen_req Xcomposite}
+Requires:	%{dlopen_req Xcursor}
+Requires:	%{dlopen_req Xinerama}
+Requires:	%{dlopen_req Xrandr}
+Requires:	%{dlopen_req Xrender}
+Requires:	%{dlopen_req v4l2}
 # (Anssi) If wine-gecko is not installed, wine pops up a dialog on first
 # start proposing to download wine-gecko from sourceforge, while recommending
 # to use distribution packages instead. Therefore suggest wine-gecko here:
-Requires:	libfreetype.so.6
-Requires:	libgnutls.so.28
-Requires:	libasound.so.2
-Requires:	libXrender.so.1
-Requires:   	libpng15.so.15
 Suggests:	wine-gecko
-Suggests:	libncursesw.so.5
-Suggests:	libncurses.so.5
+Suggests:	%{dlopen_req ncursesw}
 
 %description -n	wine32
 Wine is a program which allows running Microsoft Windows programs
