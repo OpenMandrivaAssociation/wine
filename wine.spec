@@ -1,4 +1,4 @@
-%ifarch x86_6
+%ifarch x86_64
 %define	wine	wine64
 %else
 %define	wine	wine
