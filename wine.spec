@@ -18,8 +18,8 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.7.36
-Release:	%{?beta:0.%{beta}.}2
+Version:	1.7.40
+Release:	%{?beta:0.%{beta}.}1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?beta:-%{beta}}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?beta:-%{beta}}.tar.bz2.sign
 Epoch:		2
@@ -38,9 +38,6 @@ Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
 
 Source900:	https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
-# Support the Gallium Direct3D state tracker without the need for
-# the D3D-OGL converter
-Patch20:	http://download.ixit.cz/d3d9/wine-1.7.31-d3d9-d6d23a8.patch
 # (Anssi 05/2008) Adds:
 # a: => /media/floppy (/mnt/floppy on 2007.1 and older)
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -51,9 +48,6 @@ Patch20:	http://download.ixit.cz/d3d9/wine-1.7.31-d3d9-d6d23a8.patch
 # have to substitute @MDKVERSION@ in dlls/ntdll/server.c
 Patch108:	wine-mdkconf.patch
 Patch200:	wine-1.3.24-64bit-tools.patch
-
-# https://bugs.wine-staging.com/show_bug.cgi?id=68
-Patch900:	wine-staging-rtlunwindex.patch
 
 # (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
 # 64-bit wine cannot run 32-bit programs without wine32.
@@ -272,13 +266,11 @@ Wine is often updated.
 %setup -q -n %{name}-%{version}%{?beta:-%{beta}}
 %patch1 -p0 -b .chinese~
 %patch2 -p1 -b .cjk~
-%patch20 -p1 -b .d3d9~
 %patch108 -p1 -b .conf
 %patch200 -p1
 
 # wine-staging
 tar --strip-components=1 -zxf "%{SOURCE900}"
-%patch900 -p1 -b .rtlunwindex~
 make -C "patches" DESTDIR="%{_builddir}/wine-%{version}" install
 
 sed -e 's,@MDKVERSION@,%{mdkversion},' -i dlls/ntdll/server.c
