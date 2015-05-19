@@ -19,7 +19,7 @@
 Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	1.7.42
-Release:	%{?beta:0.%{beta}.}1
+Release:	%{?beta:0.%{beta}.}2
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?beta:-%{beta}}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?beta:-%{beta}}.tar.bz2.sign
 Epoch:		2
@@ -80,8 +80,6 @@ BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	pkgconfig(libmpg123)
 BuildRequires:	pkgconfig(openal)
 BuildRequires:	pkgconfig(alsa)
-BuildRequires:	pkgconfig(gstreamer-0.10)
-BuildRequires:	pkgconfig(gstreamer-plugins-base-0.10)
 BuildRequires:	isdn4k-utils-devel
 BuildRequires:	glibc-static-devel
 BuildRequires:	chrpath
@@ -292,10 +290,14 @@ export CFLAGS="%{optflags} -fno-omit-frame-pointer"
 # Clang doesn't support M$ ABI on 64bit
 export CC=gcc
 export CXX=g++
+
+# gstreamer is broken on glib > 2.32 and causes a lot of crashes
+# https://bugs.winehq.org/show_bug.cgi?id=30557
 %configure	--with-pulse \
 		--without-hal \
 		--without-nas \
     		--with-xattr \
+		--without-gstreamer \
 %ifarch x86_64
 		--enable-win64
 %endif
