@@ -73,7 +73,11 @@ BuildRequires:	flex
 BuildRequires:	gpm-devel
 BuildRequires:	perl-devel
 BuildRequires:	pcap-devel
+%if %mdvver >= 201500
 BuildRequires:	opencl-devel
+%else
+BuildRequires:	%{_lib}opencl-devel
+%endif
 BuildRequires:	pkgconfig(ncursesw)
 BuildRequires:	cups-devel
 BuildRequires:	pkgconfig(sane-backends)
