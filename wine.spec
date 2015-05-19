@@ -1,3 +1,12 @@
+
+%if %mdvver < 201500
+# defined to allow backport
+%define dlopen_req() %{shrink:\
+  %([ -e %{?!2:%{_libdir}}%{?2}/lib%{1}.so ] && \
+   rpm -qf --fileprovide $(readlink -f %{?!2:%{_libdir}}%{?2}/lib%{1}.so) 2>/dev/null | \
+    grep $(readlink -f %{?!2:%{_libdir}}%{?2}/lib%{1}.so) | cut -f2 || echo %{name})}
+%endif
+
 %ifarch x86_64
 %define	wine	wine64
 %define	mark64	()(64bit)
@@ -6,9 +15,10 @@
 %define	mark64	%{nil}
 %endif
 
-%define major 1
-%define libname %mklibname %{name} %{major}
-%define devname %mklibname %{name} -d
+%define	major	1
+%define	libname	%mklibname %{name} %{major}
+%define	devname	%{mklibname -d wine}
+#define beta	%{nil}
 
 # On 32-bit we have
 # wine32 - those 32-bit binaries that are also used on 64-bit for 32-bit support
@@ -19,8 +29,11 @@
 
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 Name:		wine
-Version:	1.7.35
-Release:	1
+#(peroyvind): please do backports for new versions
+Version:	1.7.42
+Release:	%{?beta:0.%{beta}.}2
+Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?beta:-%{beta}}.tar.bz2
+Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?beta:-%{beta}}.tar.bz2.sign
 Epoch:		2
 License:	LGPLv2+
 Group:		Emulators
@@ -28,14 +41,15 @@ Url:		http://www.winehq.com/
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %{version} |cut -d. -f1-2)/%{name}-%{version}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %{version} |cut -d. -f1-2)/%{name}-%{version}.tar.bz2.sign
 # RH stuff
-Source2:	wine.init
-# Wine-Compholio, from github by tag
-# https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz
-Source3:	wine-staging-%{version}.tar.gz
+Source2:	wine.binfmt
 Source10:	wine.rpmlintrc
 Source11:	http://kegel.com/wine/winetricks
 Source12:	http://kegel.com/wine/wisotool
+Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
+Patch1:		wine-1.1.7-chinese-font-substitutes.patch
+Patch2:		wine-cjk.patch
 
+Source900:	https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
 # (Anssi 05/2008) Adds:
 # a: => /media/floppy (/mnt/floppy on 2007.1 and older)
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -43,17 +57,38 @@ Source12:	http://kegel.com/wine/wisotool
 # only on 2008.0: e: => /media/cdrom (does not exist on 2008.1+)
 # com4 => /dev/ttyUSB0 (replaces /dev/ttyS3)
 # have to substitute @MDKVERSION@ in dlls/ntdll/server.c
-Patch0:		wine-mdkconf.patch
-Patch1:		wine-1.3.24-64bit-tools.patch
+Patch108:	wine-mdkconf.patch
+Patch200:	wine-1.3.24-64bit-tools.patch
 
 
 BuildRequires:	bison
-BuildRequires:	chrpath
-BuildRequires:	desktop-file-utils
+BuildRequires:	flex
+BuildRequires:	gpm-devel
+BuildRequires:	perl-devel
+BuildRequires:	pcap-devel
+BuildRequires:	opencl-devel
+BuildRequires:	pkgconfig(ncursesw)
+BuildRequires:	cups-devel
+BuildRequires:	pkgconfig(sane-backends)
+BuildRequires:	autoconf
+BuildRequires:	docbook-utils
 BuildRequires:	docbook-dtd-sgml
 BuildRequires:	docbook-utils
-BuildRequires:	flex
-BuildRequires:	fontforge
+BuildRequires:	docbook-dtd-sgml
+BuildRequires:	sgml-tools
+BuildRequires:	pkgconfig(jack)
+BuildRequires:	pkgconfig(libpulse)
+BuildRequires:	pkgconfig(libmpg123)
+BuildRequires:	pkgconfig(openal)
+BuildRequires:	pkgconfig(alsa)
+BuildRequires:	isdn4k-utils-devel
+BuildRequires:	glibc-static-devel
+BuildRequires:	chrpath
+BuildRequires:	ungif-devel
+BuildRequires:	pkgconfig(xpm)
+BuildRequires:	pkgconfig(libtiff-4)
+BuildRequires:	pkgconfig(librsvg-2.0)
+BuildRequires:	icoutils
 BuildRequires:	imagemagick
 BuildRequires:	prelink
 BuildRequires:	sgml-tools
@@ -68,10 +103,11 @@ BuildRequires:	openldap-devel
 BuildRequires:	perl-devel
 BuildRequires:	ungif-devel
 BuildRequires:	unixODBC-devel
-BuildRequires:	pkgconfig(alsa)
-BuildRequires:	pkgconfig(dbus-1)
-BuildRequires:	pkgconfig(fontconfig)
-BuildRequires:	pkgconfig(freetype2)
+BuildRequires:	pkgconfig(gnutls)
+BuildRequires:	gettext-devel
+BuildRequires:	d3d-devel >= 10.4.0-1
+BuildRequires:	pkgconfig(lcms2)
+BuildRequires:	pkgconfig(osmesa)
 BuildRequires:	pkgconfig(glu)
 BuildRequires:	pkgconfig(gnutls)
 BuildRequires:	pkgconfig(gstreamer-0.10)
@@ -91,11 +127,8 @@ BuildRequires:	pkgconfig(sane-backends)
 BuildRequires:	pkgconfig(sm)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xcomposite)
-BuildRequires:	pkgconfig(xcursor)
-BuildRequires:	pkgconfig(xext)
-BuildRequires:	pkgconfig(xinerama)
 BuildRequires:	pkgconfig(xi)
-BuildRequires:	pkgconfig(xpm)
+BuildRequires:	pkgconfig(xinerama) 
 BuildRequires:	pkgconfig(xrandr)
 BuildRequires:	pkgconfig(xrender)
 
@@ -110,8 +143,7 @@ Summary:	WINE Is Not An Emulator - runs MS Windows programs
 Group:		Emulators
 Suggests:	wine32 = %{EVRD}
 Suggests:	wine64-gecko
-Suggests:	libncursesw.so.5%{mark64}
-Suggests:	libncurses.so.5%{mark64}
+Suggests:	%{dlopen_req ncursesw}
 %else
 # on 32-bit we always want wine32 package
 Requires:	wine32 = %{EVRD}
@@ -126,13 +158,21 @@ Provides:	wine-bin = %{EVRD}
 Requires:	xmessage
 Suggests:	sane-frontends
 # wine dlopen's these, so let's add the dependencies ourself
-Requires:	libfreetype.so.6%{_arch_tag_suffix}
-Requires:	libgnutls.so.28%{_arch_tag_suffix}
-Requires:	libasound.so.2%{_arch_tag_suffix}
-Requires:	libXrender.so.1%{_arch_tag_suffix}
-Requires:	libpng15.so.15%{_arch_tag_suffix}
-Requires(post,postun):	desktop-common-data
-Requires(post,preun):	rpm-helper
+Requires:	%{dlopen_req freetype}
+Requires:	%{dlopen_req gnutls}
+Requires:	%{dlopen_req asound}
+Requires:	%{dlopen_req png}
+Requires:	%{dlopen_req OSMesa}
+Requires:	%{dlopen_req Xcomposite}
+Requires:	%{dlopen_req Xcursor}
+Requires:	%{dlopen_req Xinerama}
+Requires:	%{dlopen_req Xrandr}
+Requires:	%{dlopen_req Xrender}
+Requires:	%{dlopen_req v4l2}
+Requires(post):	desktop-file-utils
+Requires(postun):	desktop-file-utils
+Requires(post):	desktop-common-data
+Requires(postun):	desktop-common-data
 Conflicts:	%{wine} < %{EVRD}
 
 %ifarch %{ix86}
@@ -141,7 +181,7 @@ Conflicts:	wine64
 Conflicts:	wine
 %endif
 
-# for winetricks:
+#for winetricks
 Requires:	cabextract
 Requires:	unzip
 
@@ -188,6 +228,17 @@ Group:		Emulators
 Requires:	wine-bin
 Conflicts:	wine < %{EVRD}
 Conflicts:	wine64 < %{EVRD}
+Requires:	%{dlopen_req freetype}
+Requires:	%{dlopen_req gnutls}
+Requires:	%{dlopen_req asound}
+Requires:   	%{dlopen_req png}
+Requires:	%{dlopen_req OSMesa}
+Requires:	%{dlopen_req Xcomposite}
+Requires:	%{dlopen_req Xcursor}
+Requires:	%{dlopen_req Xinerama}
+Requires:	%{dlopen_req Xrandr}
+Requires:	%{dlopen_req Xrender}
+Requires:	%{dlopen_req v4l2}
 # (Anssi) If wine-gecko is not installed, wine pops up a dialog on first
 # start proposing to download wine-gecko from sourceforge, while recommending
 # to use distribution packages instead. Therefore suggest wine-gecko here:
@@ -197,8 +248,7 @@ Requires:	libasound.so.2
 Requires:	libXrender.so.1
 Requires:	libpng15.so.15
 Suggests:	wine-gecko
-Suggests:	libncursesw.so.5
-Suggests:	libncurses.so.5
+Suggests:	%{dlopen_req ncursesw}
 
 %description -n wine32
 Wine is a program which allows running Microsoft Windows programs
@@ -228,7 +278,7 @@ Obsoletes:	wine-compholio64-devel <= %{EVRD}
 Obsoletes:	wine-compholio-devel <= %{EVRD}
 %endif
 
-%description -n %{wine}-devel
+%description -n	%{wine}-devel
 Wine is a program which allows running Microsoft Windows programs
 (including DOS, Windows 3.x and Win32 executables) on Unix.
 
@@ -267,17 +317,25 @@ Wine is often updated.
 #----------------------------------------------------------------------------
 
 %prep
-%setup -q
-%patch0 -p1 -b .conf
-%patch1 -p1
+%setup -q -n %{name}-%{version}%{?beta:-%{beta}}
+%patch1 -p0 -b .chinese~
+%patch2 -p1 -b .cjk~
+%patch108 -p1 -b .conf
+%patch200 -p1
 
-# Wine-Compholio
-gzip -dc "%{SOURCE3}" | /bin/tar -xf - --strip-components=1
+# wine-staging
+tar --strip-components=1 -zxf "%{SOURCE900}"
 make -C "patches" DESTDIR="%{_builddir}/wine-%{version}" install
 
-sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
+sed -e 's,@MDKVERSION@,%{mdkversion},' -i dlls/ntdll/server.c
+
+autoreconf
 
 %build
+# disable fortify as it breaks wine
+# http://bugs.winehq.org/show_bug.cgi?id=24606
+# http://bugs.winehq.org/show_bug.cgi?id=25073
+%undefine _fortify_cflags
 %ifarch %{ix86}
 # (Anssi 04/2008) bug #39604
 # Some protection systems complain "debugger detected" with our
@@ -285,16 +343,17 @@ sed -i 's,@MDKVERSION@,%{mdkversion},' dlls/ntdll/server.c
 export CFLAGS="%{optflags} -fno-omit-frame-pointer"
 %endif
 
-# (Anssi 04/2008)
-# If icotool is present, it is used to rebuild icon files. It is in contrib
-# so we do not do that; this is here to ensure that installed icoutils does
-# not change build behaviour.
-export ICOTOOL=false
+# Clang doesn't support M$ ABI on 64bit
+export CC=gcc
+export CXX=g++
 
-autoreconf
-%configure2_5x	--with-pulse \
+# gstreamer is broken on glib > 2.32 and causes a lot of crashes
+# https://bugs.winehq.org/show_bug.cgi?id=30557
+%configure	--with-pulse \
+		--without-hal \
 		--without-nas \
-        --with-xattr \
+    		--with-xattr \
+		--without-gstreamer \
 %ifarch x86_64
 		--enable-win64
 %endif
@@ -312,7 +371,7 @@ install -m 0755 %{SOURCE12} %{buildroot}%{_bindir}/
 # install -m755 tools/fnt2bdf -D %{buildroot}%{_bindir}/fnt2bdf
 
 # Allow users to launch Windows programs by just clicking on the .exe file...
-install -m755 %{SOURCE2} -D %{buildroot}%{_initrddir}/%{name}
+install -m755 %{SOURCE2} -D %{buildroot}%{_binfmtdir}/wine.conf
 
 mkdir -p %{buildroot}%{_sysconfdir}/xdg/menus/applications-merged
 cat > %{buildroot}%{_sysconfdir}/xdg/menus/applications-merged/mandriva-%{name}.menu <<EOF
@@ -427,12 +486,6 @@ you need to also install the 'wine32' package from the 32-bit repository.
 EOF
 %endif
 
-%preun -n %{wine}
-%_preun_service %{name}
-
-%post -n %{wine}
-%_post_service %{name}
-
 %files -n %{wine}
 %doc ANNOUNCE AUTHORS README
 %ifarch x86_64
@@ -440,7 +493,7 @@ EOF
 %{_bindir}/wine64
 %{_bindir}/wine64-preloader
 %endif
-%{_initrddir}/%{name}
+%config %{_binfmtdir}/wine.conf
 %{_bindir}/winecfg
 %{_bindir}/wineconsole*
 %{_bindir}/wineserver
