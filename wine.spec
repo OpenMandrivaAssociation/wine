@@ -95,7 +95,9 @@ BuildRequires:	ungif-devel
 BuildRequires:	pkgconfig(xpm)
 BuildRequires:	pkgconfig(libtiff-4)
 BuildRequires:	pkgconfig(librsvg-2.0)
+%if %mdvver >= 201500
 BuildRequires:	icoutils
+%endif
 BuildRequires:	imagemagick
 BuildRequires:	pkgconfig(libgphoto2)
 BuildRequires:	desktop-file-utils
