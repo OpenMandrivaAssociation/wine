@@ -1,3 +1,12 @@
+
+%if %mdvver < 201500
+# defined to allow backport
+%define dlopen_req() %{shrink:\
+  %([ -e %{?!2:%{_libdir}}%{?2}/lib%{1}.so ] && \
+   rpm -qf --fileprovide $(readlink -f %{?!2:%{_libdir}}%{?2}/lib%{1}.so) 2>/dev/null | \
+    grep $(readlink -f %{?!2:%{_libdir}}%{?2}/lib%{1}.so) | cut -f2 || echo %{name})}
+%endif
+
 %ifarch x86_64
 %define	wine	wine64
 %else
@@ -68,7 +77,6 @@ BuildRequires:	opencl-devel
 BuildRequires:	pkgconfig(ncursesw)
 BuildRequires:	cups-devel
 BuildRequires:	pkgconfig(sane-backends)
-BuildRequires:	pkgconfig(lcms)
 BuildRequires:	autoconf
 BuildRequires:	docbook-utils
 BuildRequires:	docbook-dtd-sgml
