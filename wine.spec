@@ -5,6 +5,7 @@
   %([ -e %{?!2:%{_libdir}}%{?2}/lib%{1}.so ] && \
    rpm -qf --fileprovide $(readlink -f %{?!2:%{_libdir}}%{?2}/lib%{1}.so) 2>/dev/null | \
     grep $(readlink -f %{?!2:%{_libdir}}%{?2}/lib%{1}.so) | cut -f2 || echo %{name})}
+%define _binfmtdir %_prefix/lib/binfmt.d
 %endif
 
 %ifarch x86_64
