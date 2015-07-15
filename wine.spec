@@ -1,3 +1,8 @@
+# FIXME
+# gcc -o wine64-preloader -static -nostartfiles -nodefaultlibs -Wl,-Ttext=0x7c400000 preloader.o ../libs/port/libwine_port.a -Oz -gdwarf-4 -Wstrict-aliasing=2 -pipe -Wformat -Werror=format-security  -fstack-protector --param=ssp-buffer-size=4  -fPIC -flto -Wl,-O2  -Wl,--no-undefined -flto
+# /tmp/ccHA1ZYg.ltrans0.ltrans.o(.text+0x12): error: undefined reference to 'thread_data'
+# /tmp/ccHA1ZYg.ltrans0.ltrans.o(.text+0x2a): error: undefined reference to 'wld_start'
+%define _disable_lto 1
 
 %if %mdvver < 201500
 # defined to allow backport
@@ -27,11 +32,11 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.7.45
+Version:	1.7.47
 Release:	%{?beta:0.%{beta}.}1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?beta:-%{beta}}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?beta:-%{beta}}.tar.bz2.sign
-Epoch:		2
+Epoch:		1
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 License:	LGPLv2+
 Group:		Emulators
