@@ -1,3 +1,5 @@
-sources:
+removed_sources:
   wine-1.7.47.tar.bz2: 08cbca1ac32e7250e9e9512ac9cbacecb54a2ff4
-  v1.7.47.tar.gz: e2b2c4b69f65eae0b24cd868b94d5d20a348eb6f
+sources:
+  v1.7.49.tar.gz: b21fb4152fff57297d4b450a1225733412be982f
+  wine-1.7.49.tar.bz2: 1d481104b13a207e6719d584b1fa2287199cba15
