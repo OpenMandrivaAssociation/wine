@@ -28,8 +28,8 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.7.42
-Release:	%{?beta:0.%{beta}.}2
+Version:	1.7.50
+Release:	%{?beta:0.%{beta}.}1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?beta:-%{beta}}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?beta:-%{beta}}.tar.bz2.sign
 Epoch:		2
@@ -47,7 +47,8 @@ Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
 
-Source900:	https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
+# from https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
+Source900:	wine-staging-%{version}.tar.gz
 # (Anssi 05/2008) Adds:
 # a: => /media/floppy (/mnt/floppy on 2007.1 and older)
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
