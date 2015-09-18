@@ -1,8 +1,3 @@
-removed_sources:
-  wine-1.7.47.tar.bz2: 08cbca1ac32e7250e9e9512ac9cbacecb54a2ff4
-  wine-1.7.49.tar.bz2: 1d481104b13a207e6719d584b1fa2287199cba15
 sources:
-  v1.7.49.tar.gz: b21fb4152fff57297d4b450a1225733412be982f
-  wine-1.7.50.tar.bz2: fef9e2e54dca8fe783ece06f153a62d7a5d48ce3
-  wine-1.7.50.tar.bz2.sign: c722f278401bbb67d94ac40c46705138307acd0f
-  wine-staging-1.7.50.tar.gz: f784c343c3ba43fff20f8c02c723f8e2f44d48a1
+  wine-1.7.51.tar.bz2: ab034fb73cf8628a9def648e7712d3db75393716
+  v1.7.51.tar.gz: 9bead94e8a5c7e876f06e32f5119cd451ea3a5ad
