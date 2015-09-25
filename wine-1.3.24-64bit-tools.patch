@@ -12,7 +12,7 @@
  # then default bin directory
 -if [ -x "@bindir@/wine" ]; then exec "@bindir@/wine" "$appname" "$@"; fi
 +if [ -x "@bindir@/wine" ]; then 
-+ if [[ $compbit = "x86_64" && "@bindir@/wine64" ]]
++ if [[ $compbit = "x86_64" && -x "@bindir@/wine64" ]]
 +	then 
 +		exec "@bindir@/wine64" "$appname" "$@"
 +	else
