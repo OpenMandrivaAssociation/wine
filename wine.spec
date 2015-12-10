@@ -21,7 +21,7 @@
 %define	major	1
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%{mklibname -d wine}
-#define beta	%{nil}
+%define beta	rc3
 
 # On 32-bit we have
 # wine32 - those 32-bit binaries that are also used on 64-bit for 32-bit support
@@ -32,7 +32,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.7.52
+Version:	1.8
 Release:	%{?beta:0.%{beta}.}1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?beta:-%{beta}}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?beta:-%{beta}}.tar.bz2.sign
@@ -52,7 +52,7 @@ Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
 
 # from https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
-Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{version}.tar.gz
+Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{version}%{?beta:-%{beta}}.tar.gz
 # (Anssi 05/2008) Adds:
 # a: => /media/floppy (/mnt/floppy on 2007.1 and older)
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -62,7 +62,6 @@ Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{version}.ta
 # com4 => /dev/ttyUSB0 (replaces /dev/ttyS3)
 # have to substitute @MDKVERSION@ in dlls/ntdll/server.c
 Patch108:	wine-mdkconf.patch
-Patch200:	wine-1.3.24-64bit-tools.patch
 
 # (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
 # 64-bit wine cannot run 32-bit programs without wine32.
@@ -278,12 +277,11 @@ Wine is often updated.
 %setup -q -n %{name}-%{version}%{?beta:-%{beta}}
 %patch1 -p0 -b .chinese~
 %patch2 -p1 -b .cjk~
-%patch108 -p1 -b .conf
-%patch200 -p1
+%patch108 -p1 -b .conf~
 
 # wine-staging
 tar --strip-components=1 -zxf "%{SOURCE900}"
-make -C "patches" DESTDIR="%{_builddir}/wine-%{version}" install
+make -C "patches" DESTDIR="%{_builddir}/wine-%{version}%{?beta:-%{beta}}" install
 
 sed -e 's,@MDKVERSION@,%{mdkversion},' -i dlls/ntdll/server.c
 
