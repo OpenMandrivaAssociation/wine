@@ -23,7 +23,7 @@
 %define	devname	%{mklibname -d wine}
 %define beta	%{nil}
 # Sometimes -staging patches are released late...
-%define sbeta	rc4
+%define sbeta	%{nil}
 
 # On 32-bit we have
 # wine32 - those 32-bit binaries that are also used on 64-bit for 32-bit support
@@ -34,11 +34,11 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.8
+Version:	1.9.2
 Release:	%{?%{beta}:0.%{beta}.}1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?%{beta}:-%{beta}}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?%{beta}:-%{beta}}.tar.bz2.sign
-Epoch:		2
+Epoch:		1
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 License:	LGPLv2+
 Group:		Emulators
@@ -54,7 +54,7 @@ Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
 
 # from https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
-Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{version}-%{sbeta}.tar.gz
+Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{version}%{?%{sbeta}:-}%{sbeta}.tar.gz
 # (Anssi 05/2008) Adds:
 # a: => /media/floppy (/mnt/floppy on 2007.1 and older)
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -468,8 +468,8 @@ EOF
 %{_bindir}/winefile
 %{_bindir}/winetricks
 %{_bindir}/wisotool
-%{_mandir}/man1/wine.1*
-%lang(de) %{_mandir}/de.UTF-8/man1/wine.1*
+#{_mandir}/man1/wine.1*
+#lang(de) %{_mandir}/de.UTF-8/man1/wine.1*
 %lang(de) %{_mandir}/de.UTF-8/man1/winemaker.1*
 %lang(de) %{_mandir}/de.UTF-8/man1/wineserver.1*
 %lang(fr) %{_mandir}/fr.UTF-8/man1/*
@@ -545,5 +545,5 @@ EOF
 %{_mandir}/man1/winedbg.1*
 %{_mandir}/man1/wineg++.1*
 %{_mandir}/man1/winegcc.1*
-%{_mandir}/pl.UTF-8/man1/wine.1*
+#{_mandir}/pl.UTF-8/man1/wine.1*
 
