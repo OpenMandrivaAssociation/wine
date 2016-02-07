@@ -468,8 +468,9 @@ EOF
 %{_bindir}/winefile
 %{_bindir}/winetricks
 %{_bindir}/wisotool
-#{_mandir}/man1/wine.1*
-#lang(de) %{_mandir}/de.UTF-8/man1/wine.1*
+%optional %{_mandir}/man1/wine.1*
+%optional %lang(de) %{_mandir}/de.UTF-8/man1/wine.1*
+%optional %lang(pl) %{_mandir}/pl.UTF-8/man1/wine.1*
 %lang(de) %{_mandir}/de.UTF-8/man1/winemaker.1*
 %lang(de) %{_mandir}/de.UTF-8/man1/wineserver.1*
 %lang(fr) %{_mandir}/fr.UTF-8/man1/*
@@ -545,5 +546,3 @@ EOF
 %{_mandir}/man1/winedbg.1*
 %{_mandir}/man1/wineg++.1*
 %{_mandir}/man1/winegcc.1*
-#{_mandir}/pl.UTF-8/man1/wine.1*
-
