@@ -1,3 +1,4 @@
 sources:
-  wine-1.7.51.tar.bz2: ab034fb73cf8628a9def648e7712d3db75393716
-  v1.7.51.tar.gz: 9bead94e8a5c7e876f06e32f5119cd451ea3a5ad
+  v1.8.1-unofficial.tar.gz: 714dea0e373e92476fc4904f898f964161fff88e
+  wine-1.8.1.tar.bz2: a341d11ec6756972772dc2b76ebf17ffeea94703
+  wine-1.8.1.tar.bz2.sign: 913853990b7cb0ba31b3cd22ceae54031f51aea2

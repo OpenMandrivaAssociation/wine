@@ -33,7 +33,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.7.51
+Version:	1.8.1
 Release:	%{?beta:0.%{beta}.}1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?beta:-%{beta}}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?beta:-%{beta}}.tar.bz2.sign
@@ -53,7 +53,7 @@ Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
 
 # from https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
-Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{version}.tar.gz
+Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{version}-unofficial.tar.gz
 # (Anssi 05/2008) Adds:
 # a: => /media/floppy (/mnt/floppy on 2007.1 and older)
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -63,7 +63,6 @@ Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{version}.ta
 # com4 => /dev/ttyUSB0 (replaces /dev/ttyS3)
 # have to substitute @MDKVERSION@ in dlls/ntdll/server.c
 Patch108:	wine-mdkconf.patch
-Patch200:	wine-1.3.24-64bit-tools.patch
 
 # (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
 # 64-bit wine cannot run 32-bit programs without wine32.
@@ -286,7 +285,6 @@ Wine is often updated.
 %patch1 -p0 -b .chinese~
 %patch2 -p1 -b .cjk~
 %patch108 -p1 -b .conf
-%patch200 -p1
 
 # wine-staging
 tar --strip-components=1 -zxf "%{SOURCE900}"
@@ -465,6 +463,7 @@ EOF
 %{_bindir}/wineboot
 %{_bindir}/function_grep.pl
 #%{_bindir}/wineprefixcreate
+%{_bindir}/msidb
 %{_bindir}/msiexec
 %{_bindir}/notepad
 %{_bindir}/regedit
@@ -474,8 +473,9 @@ EOF
 %{_bindir}/winefile
 %{_bindir}/winetricks
 %{_bindir}/wisotool
-%{_mandir}/man1/wine.1*
-%lang(de) %{_mandir}/de.UTF-8/man1/wine.1*
+%optional %{_mandir}/man1/wine.1*
+%optional %lang(de) %{_mandir}/de.UTF-8/man1/wine.1*
+%optional %lang(pl) %{_mandir}/pl.UTF-8/man1/wine.1*
 %lang(de) %{_mandir}/de.UTF-8/man1/winemaker.1*
 %lang(de) %{_mandir}/de.UTF-8/man1/wineserver.1*
 %lang(fr) %{_mandir}/fr.UTF-8/man1/*
@@ -551,5 +551,4 @@ EOF
 %{_mandir}/man1/winedbg.1*
 %{_mandir}/man1/wineg++.1*
 %{_mandir}/man1/winegcc.1*
-%{_mandir}/pl.UTF-8/man1/wine.1*
 
