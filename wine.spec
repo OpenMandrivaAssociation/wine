@@ -4,14 +4,6 @@
 # /tmp/ccHA1ZYg.ltrans0.ltrans.o(.text+0x2a): error: undefined reference to 'wld_start'
 %define _disable_lto 1
 
-%if %mdvver < 201500
-# defined to allow backport
-%define dlopen_req() %{shrink:\
-  %([ -e %{?!2:%{_libdir}}%{?2}/lib%{1}.so ] && \
-   rpm -qf --fileprovide $(readlink -f %{?!2:%{_libdir}}%{?2}/lib%{1}.so) 2>/dev/null | \
-    grep $(readlink -f %{?!2:%{_libdir}}%{?2}/lib%{1}.so) | cut -f2 || echo %{name})}
-%endif
-
 %ifarch x86_64
 %define	wine	wine64
 %else
@@ -55,14 +47,10 @@ Patch2:		wine-cjk.patch
 
 # from https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
 Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{version}%{?%{sbeta}:-}%{sbeta}.tar.gz
-# (Anssi 05/2008) Adds:
-# a: => /media/floppy (/mnt/floppy on 2007.1 and older)
+# a: => /media/floppy
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
 #              note that Wine also provides $HOME in My Documents)
-# only on 2008.0: e: => /media/cdrom (does not exist on 2008.1+)
-# only on 2007.1 and older: e: => /mnt/cdrom
 # com4 => /dev/ttyUSB0 (replaces /dev/ttyS3)
-# have to substitute @MDKVERSION@ in dlls/ntdll/server.c
 Patch108:	wine-mdkconf.patch
 
 # (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
@@ -281,8 +269,6 @@ Wine is often updated.
 # wine-staging
 tar --strip-components=1 -zxf "%{SOURCE900}"
 make -C "patches" DESTDIR="%{_builddir}/wine-%{version}%{?%{beta}:-%{beta}}" install
-
-sed -e 's,@MDKVERSION@,%{mdkversion},' -i dlls/ntdll/server.c
 
 autoreconf
 
