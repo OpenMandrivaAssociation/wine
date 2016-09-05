@@ -1,3 +1,4 @@
 sources:
-  wine-1.9.17.tar.bz2: 5628b6b6fe8d06c9a3f3be45aeca515d7deb78da
-  v1.9.17.tar.gz: a8823e9b5aefdc9640d4e704cc7ad56f3e773d96
+  v1.9.18.tar.gz: 92de66af6d0b87cd5871d29b7a4a72fe25146640
+  wine-1.9.18.tar.bz2: 738ef272b3faf898c47dfb64b93b80fcde7a0c24
+  wine-1.9.18.tar.bz2.sign: 18ca5dcd849f1144dbeb86de533f1c1f146f6d6f
