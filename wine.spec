@@ -26,7 +26,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.9.11
+Version:	1.9.18
 Release:	%{?%{beta}:0.%{beta}.}1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?%{beta}:-%{beta}}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?%{beta}:-%{beta}}.tar.bz2.sign
@@ -53,7 +53,12 @@ Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{version}%{?
 # com4 => /dev/ttyUSB0 (replaces /dev/ttyS3)
 Patch108:	wine-mdkconf.patch
 
+# (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
+# 64-bit wine cannot run 32-bit programs without wine32.
 ExclusiveArch:	%{ix86} x86_64
+%ifarch x86_64
+BuildRequires:	gcc >= 4.4
+%endif
 
 BuildRequires:	bison
 BuildRequires:	flex
