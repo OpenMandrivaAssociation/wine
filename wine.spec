@@ -13,9 +13,9 @@
 %define	major	1
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%{mklibname -d wine}
-%define beta	%{nil}
+%define beta	rc2
 # Sometimes -staging patches are released late...
-%define sbeta	%{nil}
+%define sbeta	rc2
 
 # On 32-bit we have
 # wine32 - those 32-bit binaries that are also used on 64-bit for 32-bit support
@@ -26,10 +26,20 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	1.9.23
-Release:	%{?%{beta}:0.%{beta}.}2
-Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?%{beta}:-%{beta}}.tar.bz2
-Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}%{?%{beta}:-%{beta}}.tar.bz2.sign
+Version:	2.0
+%if "%{beta}" != ""
+Release:	0.%{beta}.1
+Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.bz2
+Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.bz2.sign
+# from https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
+Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{version}-%{sbeta}.tar.gz
+%else
+Release:	1
+Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2
+Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2.sign
+# from https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
+Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{version}.tar.gz
+%endif
 Epoch:		1
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 License:	LGPLv2+
@@ -46,8 +56,6 @@ Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
 Patch3:		wine-1.9.23-freetype-unresolved-symbol.patch
 
-# from https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
-Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{version}%{?%{sbeta}:-}%{sbeta}.tar.gz
 # a: => /media/floppy
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
 #              note that Wine also provides $HOME in My Documents)
@@ -262,14 +270,22 @@ develop programs which make use of wine.
 Wine is often updated.
 
 %prep
-%setup -q -n %{name}-%{version}%{?%{beta}:-%{beta}}
+%if "%{beta}" != ""
+%setup -qn %{name}-%{version}-%{beta}
+%else
+%setup -q
+%endif
 %patch1 -p0 -b .chinese~
 %patch2 -p1 -b .cjk~
 %patch108 -p1 -b .conf~
 
 # wine-staging
 tar --strip-components=1 -zxf "%{SOURCE900}"
+%if "%{beta}" != ""
+make -C "patches" DESTDIR="%{_builddir}/wine-%{version}-%{beta}" install
+%else
 make -C "patches" DESTDIR="%{_builddir}/wine-%{version}%{?%{beta}:-%{beta}}" install
+%endif
 
 %patch3 -p1 -b .dlopenLazy~
 
