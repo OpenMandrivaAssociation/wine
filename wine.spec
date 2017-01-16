@@ -13,9 +13,9 @@
 %define	major	1
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%{mklibname -d wine}
-%define beta	rc2
+%define beta	rc5
 # Sometimes -staging patches are released late...
-%define sbeta	rc2
+%define sbeta	rc5
 
 # On 32-bit we have
 # wine32 - those 32-bit binaries that are also used on 64-bit for 32-bit support
