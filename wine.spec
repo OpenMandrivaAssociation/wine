@@ -15,7 +15,7 @@
 %define	devname	%{mklibname -d wine}
 %define beta	%{nil}
 # Sometimes -staging patches are released late...
-%define sbeta	rc6
+%define sbeta	%{nil}
 
 # On 32-bit we have
 # wine32 - those 32-bit binaries that are also used on 64-bit for 32-bit support
@@ -26,15 +26,15 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	2.0
+Version:	2.1
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.bz2.sign
 %else
 Release:	1
-Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2
-Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2.sign
+Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz
+Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz.sign
 %endif
 %if "%{sbeta}" != ""
 # from https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
