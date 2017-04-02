@@ -1,0 +1,50 @@
+--- wine-2.4/dlls/msvcp90/string.c.omv~	2017-04-02 23:00:35.099891225 +0200
++++ wine-2.4/dlls/msvcp90/string.c	2017-04-02 23:05:05.855588360 +0200
+@@ -1979,7 +1979,10 @@ char* __thiscall MSVCP_basic_string_char
+ {
+     TRACE("%p %lu\n", this, pos);
+ 
+-    assert(this->size >= pos);
++    if(this->size < pos) {
++        static const char msg[] = "invalid string position";
++        throw_exception(EXCEPTION_OUT_OF_RANGE, msg);
++    }
+     return basic_string_char_ptr(this)+pos;
+ }
+ 
+@@ -1991,7 +1994,10 @@ const char* __thiscall MSVCP_basic_strin
+ {
+     TRACE("%p %lu\n", this, pos);
+ 
+-    assert(this->size >= pos);
++    if(this->size < pos) {
++        static const char msg[] = "invalid string position";
++        throw_exception(EXCEPTION_OUT_OF_RANGE, msg);
++    }
+     return basic_string_char_const_ptr(this)+pos;
+ }
+ 
+@@ -3951,7 +3957,10 @@ wchar_t* __thiscall MSVCP_basic_string_w
+ {
+     TRACE("%p %lu\n", this, pos);
+ 
+-    assert(this->size >= pos);
++    if(this->size < pos) {
++        static const char msg[] = "invalid string position";
++        throw_exception(EXCEPTION_OUT_OF_RANGE, msg);
++    }
+     return basic_string_wchar_ptr(this)+pos;
+ }
+ 
+@@ -3965,7 +3974,10 @@ const wchar_t* __thiscall MSVCP_basic_st
+ {
+     TRACE("%p %lu\n", this, pos);
+ 
+-    assert(this->size >= pos);
++    if(this->size < pos) {
++        static const char msg[] = "invalid string position";
++        throw_exception(EXCEPTION_OUT_OF_RANGE, msg);
++    }
+     return basic_string_wchar_const_ptr(this)+pos;
+ }
+ 
