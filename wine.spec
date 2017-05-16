@@ -16,6 +16,7 @@
 %define beta	%{nil}
 # Sometimes -staging patches are released late...
 %define sbeta	%{nil}
+%define sver	%{version}
 
 # On 32-bit we have
 # wine32 - those 32-bit binaries that are also used on 64-bit for 32-bit support
@@ -26,7 +27,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	2.7
+Version:	2.8
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.bz2
@@ -41,7 +42,7 @@ Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%
 Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{version}-%{sbeta}.tar.gz
 %else
 # from https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
-Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{version}.tar.gz
+Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{sver}.tar.gz
 %endif
 Epoch:		1
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
@@ -58,7 +59,6 @@ Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
 Patch3:		wine-1.9.23-freetype-unresolved-symbol.patch
-Patch4:		wine-2.4-msvcp90-string-error.patch
 
 # a: => /media/floppy
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
