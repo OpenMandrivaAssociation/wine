@@ -285,14 +285,12 @@ Wine is often updated.
 
 # wine-staging
 tar --strip-components=1 -zxf "%{SOURCE900}"
-%if "%{beta}" != ""
-make -C "patches" DESTDIR="%{_builddir}/wine-%{version}-%{beta}" install
-%else
-make -C "patches" DESTDIR="%{_builddir}/wine-%{version}%{?%{beta}:-%{beta}}" install
-%endif
+WINEDIR="$(pwd)"
+cd patches
+./patchinstall.sh --all DESTDIR="$WINEDIR"
+cd ..
 
 %patch3 -p1 -b .dlopenLazy~
-%patch4 -p1 -b .string~
 
 autoreconf
 
