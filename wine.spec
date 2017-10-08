@@ -129,6 +129,9 @@ BuildRequires:	pkgconfig(sm)
 BuildRequires:	fontforge
 BuildRequires:	pkgconfig(fontconfig)
 BuildRequires:	pkgconfig(freetype2)
+BuildRequires:	pkgconfig(gstreamer-1.0)
+BuildRequires:	pkgconfig(gstreamer-base-1.0)
+BuildRequires:	pkgconfig(gstreamer-plugins-base-1.0)
 %if "%{distepoch}" >= "2011.0"
 BuildRequires:	prelink
 %endif
