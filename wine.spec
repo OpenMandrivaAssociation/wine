@@ -15,7 +15,8 @@
 %define	devname	%{mklibname -d wine}
 %define beta	%{nil}
 # Sometimes -staging patches are released late...
-%define sbeta	rc6
+%define sbeta	%{nil}
+%define sver	%{version}
 
 # On 32-bit we have
 # wine32 - those 32-bit binaries that are also used on 64-bit for 32-bit support
@@ -26,22 +27,22 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	2.0
+Version:	2.18
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.bz2.sign
 %else
-Release:	1
-Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2
-Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}.tar.bz2.sign
+Release:	2
+Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz
+Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz.sign
 %endif
 %if "%{sbeta}" != ""
 # from https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
 Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{version}-%{sbeta}.tar.gz
 %else
 # from https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
-Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{version}.tar.gz
+Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{sver}.tar.gz
 %endif
 Epoch:		1
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
@@ -58,6 +59,7 @@ Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
 Patch3:		wine-1.9.23-freetype-unresolved-symbol.patch
+Patch4:		wine-2.17-freetype2-crash-fix.patch
 
 # a: => /media/floppy
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -128,6 +130,9 @@ BuildRequires:	pkgconfig(sm)
 BuildRequires:	fontforge
 BuildRequires:	pkgconfig(fontconfig)
 BuildRequires:	pkgconfig(freetype2)
+BuildRequires:	pkgconfig(gstreamer-1.0)
+BuildRequires:	pkgconfig(gstreamer-base-1.0)
+BuildRequires:	pkgconfig(gstreamer-plugins-base-1.0)
 %if "%{distepoch}" >= "2011.0"
 BuildRequires:	prelink
 %endif
@@ -284,11 +289,10 @@ Wine is often updated.
 
 # wine-staging
 tar --strip-components=1 -zxf "%{SOURCE900}"
-%if "%{beta}" != ""
-make -C "patches" DESTDIR="%{_builddir}/wine-%{version}-%{beta}" install
-%else
-make -C "patches" DESTDIR="%{_builddir}/wine-%{version}%{?%{beta}:-%{beta}}" install
-%endif
+WINEDIR="$(pwd)"
+cd patches
+./patchinstall.sh --all DESTDIR="$WINEDIR"
+cd ..
 
 %patch3 -p1 -b .dlopenLazy~
 
@@ -310,13 +314,11 @@ export CFLAGS="%{optflags} -fno-omit-frame-pointer"
 export CC=gcc
 export CXX=g++
 
-# gstreamer is broken on glib > 2.32 and causes a lot of crashes
-# https://bugs.winehq.org/show_bug.cgi?id=30557
 %configure	--with-pulse \
 		--without-hal \
 		--without-nas \
     		--with-xattr \
-		--without-gstreamer \
+		--with-gstreamer \
 %ifarch x86_64
 		--enable-win64
 %endif
