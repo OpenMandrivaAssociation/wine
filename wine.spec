@@ -33,7 +33,7 @@ Release:	0.%{beta}.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.bz2.sign
 %else
-Release:	1
+Release:	2
 Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz
 Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz.sign
 %endif
@@ -59,6 +59,7 @@ Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
 Patch3:		wine-1.9.23-freetype-unresolved-symbol.patch
+Patch4:		wine-2.17-freetype2-crash-fix.patch
 
 # a: => /media/floppy
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
