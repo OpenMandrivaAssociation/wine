@@ -1,3 +1,4 @@
 sources:
-  wine-2.20.tar.xz: 4658153729bf7abc00e068c5e535bb5a76633dcd
-  v2.20.tar.gz: 14230585c7471e02dcc2f6020088b3c8a5b0a7c9
+  v2.21.tar.gz: 194c492e7dc942d9477b36cd55f94c86bae0c53d
+  wine-2.21.tar.xz: 8a00efdac4554ac2d3a023cc4098202dd8fdebad
+  wine-2.21.tar.xz.sign: 25d6e2340841339f22460a5a33d00a03dca8c487
