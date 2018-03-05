@@ -27,7 +27,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	2.21
+Version:	3.3
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.bz2
@@ -42,7 +42,7 @@ Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%
 Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{version}-%{sbeta}.tar.gz
 %else
 # from https://github.com/compholio/wine-compholio/archive/v%{version}.tar.gz#/wine-staging-%{version}.tar.gz
-Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{sver}.tar.gz
+Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}.tar.gz
 %endif
 Epoch:		1
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
