@@ -51,7 +51,7 @@ URL:		http://www.winehq.com/
 # RH stuff
 Source2:	wine.binfmt
 Source10:	wine.rpmlintrc
-Source11:	http://kegel.com/wine/winetricks
+Source11:	https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 Source12:	http://kegel.com/wine/wisotool
 Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
