@@ -3,6 +3,8 @@
 # /tmp/ccHA1ZYg.ltrans0.ltrans.o(.text+0x12): error: undefined reference to 'thread_data'
 # /tmp/ccHA1ZYg.ltrans0.ltrans.o(.text+0x2a): error: undefined reference to 'wld_start'
 %define _disable_lto 1
+# OpenCL support doesn't see cl* functions even with -lCL, but works if built...
+%define _disable_ld_no_undefined 1
 
 %ifarch x86_64
 %define	wine	wine64
@@ -27,7 +29,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	3.4
+Version:	3.11
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.bz2
