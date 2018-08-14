@@ -6,7 +6,7 @@
 # OpenCL support doesn't see cl* functions even with -lCL, but works if built...
 %define _disable_ld_no_undefined 1
 
-%ifarch x86_64
+%ifarch %{x86_64}
 %define	wine	wine64
 %else
 %define	wine	wine
@@ -17,8 +17,11 @@
 %define	devname	%{mklibname -d wine}
 %define beta	%{nil}
 # Sometimes -staging patches are released late...
+# And sometimes there's interim releases
 %define sbeta	%{nil}
-%define sver	%{version}
+%define sver	%{version}.1
+
+%bcond_without staging
 
 # On 32-bit we have
 # wine32 - those 32-bit binaries that are also used on 64-bit for 32-bit support
@@ -29,20 +32,20 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	3.11
+Version:	3.13
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.bz2
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.bz2.sign
 %else
-Release:	2
+Release:	1
 Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz
 Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz.sign
 %endif
 %if "%{sbeta}" != ""
-Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{version}-%{sbeta}.tar.gz
+Source900:	https://github.com/wine-compholio/wine-staging/archive/v%{sver}-%{sbeta}.tar.gz
 %else
-Source900:	https://github.com/wine-staging/wine-staging/archive/v%{version}.tar.gz
+Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}.tar.gz
 %endif
 Epoch:		1
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
@@ -59,6 +62,7 @@ Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
 Patch3:		wine-1.9.23-freetype-unresolved-symbol.patch
+Patch4:		wine-3.13-winegcc-use-ld.bfd.patch
 
 # a: => /media/floppy
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -68,8 +72,8 @@ Patch108:	wine-mdkconf.patch
 
 # (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
 # 64-bit wine cannot run 32-bit programs without wine32.
-ExclusiveArch:	%{ix86} x86_64
-%ifarch x86_64
+ExclusiveArch:	%{ix86} %{x86_64}
+%ifarch %{x86_64}
 BuildRequires:	gcc >= 4.4
 %endif
 
@@ -78,7 +82,7 @@ BuildRequires:	flex
 BuildRequires:	gpm-devel
 BuildRequires:	perl-devel
 BuildRequires:	pcap-devel
-BuildRequires:	opencl-devel
+BuildRequires:	pkgconfig(OpenCL)
 BuildRequires:	pkgconfig(ncursesw)
 BuildRequires:	cups-devel
 BuildRequires:	pkgconfig(sane-backends)
@@ -143,7 +147,7 @@ Windows binary, and a library (called Winelib) that implements Windows \
 API calls using their Unix or X11 equivalents.  The library may also \
 be used for porting Win32 code into native Unix executables.
 
-%ifarch x86_64
+%ifarch %{x86_64}
 %package -n	%{wine}
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 Group:		Emulators
@@ -196,7 +200,7 @@ Suggests:	webcore-fonts
 %rename		winetricks
 
 #remove compholio
-%ifarch x86_64
+%ifarch %{x86_64}
 Obsoletes:	wine-compholio64 <= %{EVRD}
 %else
 Obsoletes:	wine-compholio <= %{EVRD}
@@ -205,7 +209,7 @@ Obsoletes:	wine-compholio <= %{EVRD}
 %description
 %desc
 
-%ifarch x86_64
+%ifarch %{x86_64}
 %description -n	%{wine}
 %desc
 
@@ -261,7 +265,7 @@ Conflicts:	wine-devel
 %endif
 
 #remove compholio devel
-%ifarch x86_64
+%ifarch %{x86_64}
 Obsoletes:	wine-compholio64-devel <= %{EVRD}
 %else
 Obsoletes:	wine-compholio-devel <= %{EVRD}
@@ -284,8 +288,10 @@ Wine is often updated.
 %endif
 %patch1 -p0 -b .chinese~
 %patch2 -p1 -b .cjk~
+%patch4 -p1 -b .winegcc~
 %patch108 -p1 -b .conf~
 
+%if %{with staging}
 # wine-staging
 tar --strip-components=1 -zxf "%{SOURCE900}"
 WINEDIR="$(pwd)"
@@ -294,6 +300,7 @@ cd patches
 cd ..
 
 %patch3 -p1 -b .dlopenLazy~
+%endif
 
 autoreconf
 
@@ -318,7 +325,7 @@ export CXX=g++
 		--without-nas \
     		--with-xattr \
 		--with-gstreamer \
-%ifarch x86_64
+%ifarch %{x86_64}
 		--enable-win64
 %endif
 
@@ -395,7 +402,7 @@ desktop-file-install	--vendor="" \
 			--add-category=Emulator \
 			--dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/wine.desktop
 
-%ifarch x86_64
+%ifarch %{x86_64}
 # fix the binary name
 sed -i 's,Exec=wine ,Exec=wine64 ,' %{buildroot}%{_datadir}/applications/wine.desktop
 %endif
@@ -436,13 +443,13 @@ sed -i 's,Icon=%{name},Icon=regedit,' %{buildroot}%{_datadir}/applications/mandr
 sed -i 's,Icon=%{name},Icon=winemine,' %{buildroot}%{_datadir}/applications/mandriva-wine-winemine.desktop
 sed -i 's,Icon=%{name},Icon=msiexec,' "%{buildroot}%{_datadir}/applications/mandriva-wine-wine uninstaller.desktop"
 
-%ifarch x86_64
+%ifarch %{x86_64}
 chrpath -d %{buildroot}%{_bindir}/{wine64,wineserver,wmc,wrc} %{buildroot}%{_libdir}/%{name}/*.so
 %else
 chrpath -d %{buildroot}%{_bindir}/{wine,wineserver,wmc,wrc} %{buildroot}%{_libdir}/%{name}/*.so
 %endif
 
-%ifarch x86_64
+%ifarch %{x86_64}
 cat > README.install.urpmi <<EOF
 This is the Win64 version of Wine. This version can only be used to run
 64-bit Windows applications as is. For running 32-bit Windows applications,
@@ -452,7 +459,7 @@ EOF
 
 %files -n %{wine}
 %doc ANNOUNCE AUTHORS README
-%ifarch x86_64
+%ifarch %{x86_64}
 %doc README.install.urpmi
 %{_bindir}/wine64
 %{_bindir}/wine64-preloader
