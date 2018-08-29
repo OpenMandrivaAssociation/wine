@@ -19,7 +19,7 @@
 # Sometimes -staging patches are released late...
 # And sometimes there's interim releases
 %define sbeta	%{nil}
-%define sver	%{version}.1
+%define sver	%{version}
 
 %bcond_without staging
 
@@ -32,7 +32,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	3.13
+Version:	3.14
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.bz2
@@ -62,7 +62,6 @@ Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
 Patch3:		wine-1.9.23-freetype-unresolved-symbol.patch
-Patch4:		wine-3.13-winegcc-use-ld.bfd.patch
 
 # a: => /media/floppy
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -288,7 +287,6 @@ Wine is often updated.
 %endif
 %patch1 -p0 -b .chinese~
 %patch2 -p1 -b .cjk~
-%patch4 -p1 -b .winegcc~
 %patch108 -p1 -b .conf~
 
 %if %{with staging}
