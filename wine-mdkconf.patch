@@ -1,16 +1,16 @@
-Index: wine-1.0-rc1/dlls/ntdll/server.c
-===================================================================
---- wine-1.0-rc1/dlls/ntdll/server.c
-+++ wine-1.0-rc1/dlls/ntdll/server.c	2008-05-13 23:02:38.000000000 +0300
-@@ -772,6 +772,11 @@
-     mkdir( "drive_c", 0777 );
+diff -up wine-3.16/dlls/ntdll/server.c.conf~ wine-3.16/dlls/ntdll/server.c
+--- wine-3.16/dlls/ntdll/server.c.conf~	2018-09-16 08:54:52.200339498 +0200
++++ wine-3.16/dlls/ntdll/server.c	2018-09-16 09:01:27.541378473 +0200
+@@ -1165,6 +1165,12 @@ static int setup_config_dir(void)
      symlink( "../drive_c", "dosdevices/c:" );
      symlink( "/", "dosdevices/z:" );
-+
+ 
 +    /* OpenMandriva specific */
 +    symlink( "/media/floppy", "dosdevices/a:" );
 +    symlink( getenv( "HOME" ), "dosdevices/d:" );
-+    symlink( "/dev/ttyUSB0", "dosdevices/com4" );
- }
- 
- 
++    symlink( "/dev/ttyUSB0", "dosdevices/com3" );
++    symlink( "/dev/ttyUSB1", "dosdevices/com4" );
++
+ done:
+     if (fd_cwd == -1) fd_cwd = open( "dosdevices/c:", O_RDONLY );
+     fcntl( fd_cwd, F_SETFD, FD_CLOEXEC );
