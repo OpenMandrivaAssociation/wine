@@ -15,7 +15,7 @@
 %define	major	1
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%{mklibname -d wine}
-%define beta	rc2
+%define beta	rc3
 # Sometimes -staging patches are released late...
 # And sometimes there's interim releases
 %define sbeta	%{beta}
@@ -408,9 +408,9 @@ sed -i 's,Exec=wine ,Exec=wine64 ,' %{buildroot}%{_datadir}/applications/wine.de
 install -d %{buildroot}{%{_liconsdir},%{_iconsdir},%{_miconsdir}}
 
 # winecfg icon
-convert dlls/user32/resources/oic_winlogo.ico[8] %{buildroot}%{_miconsdir}/%{name}.png
-convert dlls/user32/resources/oic_winlogo.ico[7] %{buildroot}%{_iconsdir}/%{name}.png
-convert dlls/user32/resources/oic_winlogo.ico[6] %{buildroot}%{_liconsdir}/%{name}.png
+convert dlls/user32/resources/oic_winlogo.ico[5] %{buildroot}%{_miconsdir}/%{name}.png
+convert dlls/user32/resources/oic_winlogo.ico[0] %{buildroot}%{_iconsdir}/%{name}.png
+convert dlls/user32/resources/oic_winlogo.ico[1] %{buildroot}%{_liconsdir}/%{name}.png
 
 # notepad icon
 convert programs/notepad/notepad.ico[2] %{buildroot}%{_miconsdir}/notepad.png
