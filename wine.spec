@@ -15,7 +15,7 @@
 %define	major	1
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%{mklibname -d wine}
-%define beta	rc7
+%define beta	%{nil}
 # Sometimes -staging patches are released late...
 # And sometimes there's interim releases
 %define sbeta	%{beta}
@@ -39,8 +39,8 @@ Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz.sign
 %else
 Release:	1
-Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz
-Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz.sign
+Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/wine-%{version}.tar.xz
+Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/wine-%{version}.tar.xz.sign
 %endif
 %if "%{sbeta}" != ""
 Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}-%{sbeta}.tar.gz
