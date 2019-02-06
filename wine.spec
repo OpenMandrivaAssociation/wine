@@ -32,15 +32,15 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	4.0
+Version:	4.1
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
-Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
-Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz.sign
+Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1).x/%{name}-%{version}-%{beta}.tar.xz
+Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1).x/%{name}-%{version}-%{beta}.tar.xz.sign
 %else
 Release:	1
-Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/wine-%{version}.tar.xz
-Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/wine-%{version}.tar.xz.sign
+Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz
+Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz.sign
 %endif
 %if "%{sbeta}" != ""
 Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}-%{sbeta}.tar.gz
