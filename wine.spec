@@ -32,7 +32,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	4.2
+Version:	4.3
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1).x/%{name}-%{version}-%{beta}.tar.xz
@@ -135,9 +135,8 @@ BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(gstreamer-1.0)
 BuildRequires:	pkgconfig(gstreamer-base-1.0)
 BuildRequires:	pkgconfig(gstreamer-plugins-base-1.0)
-%if "%{distepoch}" >= "2011.0"
+BuildRequires:	cmake(FAudio)
 BuildRequires:	prelink
-%endif
 
 %define desc Wine is a program which allows running Microsoft Windows programs \
 (including DOS, Windows 3.x and Win32 executables) on Unix. It \
