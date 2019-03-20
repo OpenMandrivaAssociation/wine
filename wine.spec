@@ -129,7 +129,7 @@ BuildRequires:	pkgconfig(xrender)
 BuildRequires:	pkgconfig(xext)
 BuildRequires:	pkgconfig(sm)
 BUildRequires:	pkgconfig(vulkan)
-BuildRequires:	pkgconfig(vkd3d)
+BuildRequires:	pkgconfig(libvkd3d)
 BuildRequires:	fontforge
 BuildRequires:	pkgconfig(fontconfig)
 BuildRequires:	pkgconfig(freetype2)
