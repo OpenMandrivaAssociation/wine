@@ -32,7 +32,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	4.3
+Version:	4.4
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1).x/%{name}-%{version}-%{beta}.tar.xz
@@ -47,7 +47,6 @@ Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}-%{sbeta
 %else
 Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}.tar.gz
 %endif
-Epoch:		1
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 License:	LGPLv2+
 Group:		Emulators
@@ -129,6 +128,8 @@ BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xrender)
 BuildRequires:	pkgconfig(xext)
 BuildRequires:	pkgconfig(sm)
+BUildRequires:	pkgconfig(vulkan)
+BuildRequires:	pkgconfig(vkd3d)
 BuildRequires:	fontforge
 BuildRequires:	pkgconfig(fontconfig)
 BuildRequires:	pkgconfig(freetype2)
