@@ -32,7 +32,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	4.5
+Version:	4.6
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1).x/%{name}-%{version}-%{beta}.tar.xz
@@ -315,8 +315,8 @@ export CFLAGS="%{optflags} -fno-omit-frame-pointer"
 %endif
 
 # Clang doesn't support M$ ABI on 64bit
-export CC=gcc
-export CXX=g++
+#export CC=gcc
+#export CXX=g++
 
 %configure	--with-pulse \
 		--without-hal \
