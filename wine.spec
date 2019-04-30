@@ -32,7 +32,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	4.6
+Version:	4.7
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1).x/%{name}-%{version}-%{beta}.tar.xz
@@ -136,6 +136,10 @@ BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(gstreamer-1.0)
 BuildRequires:	pkgconfig(gstreamer-base-1.0)
 BuildRequires:	pkgconfig(gstreamer-plugins-base-1.0)
+BuildRequires:	pkgconfig(libva)
+BuildRequires:	pkgconfig(libavcodec)
+BuildRequires:	pkgconfig(libudev)
+BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	cmake(FAudio)
 BuildRequires:	prelink
 
