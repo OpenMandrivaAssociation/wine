@@ -32,7 +32,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	4.11
+Version:	4.12.1
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1).x/%{name}-%{version}-%{beta}.tar.xz
@@ -241,6 +241,9 @@ Requires:	%{dlopen_req Xinerama}
 Requires:	%{dlopen_req Xrandr}
 Requires:	%{dlopen_req Xrender}
 Requires:	%{dlopen_req v4l2}
+# Make sure we have 32-bit versions of DRI drivers... Needed
+# as soon as a 32-bit Windows app uses OpenGL or DirectX
+Requires:	libdri-drivers
 # (Anssi) If wine-gecko is not installed, wine pops up a dialog on first
 # start proposing to download wine-gecko from sourceforge, while recommending
 # to use distribution packages instead. Therefore suggest wine-gecko here:
