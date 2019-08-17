@@ -38,7 +38,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	4.13
+Version:	4.14
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1).x/%{name}-%{version}-%{beta}.tar.xz
