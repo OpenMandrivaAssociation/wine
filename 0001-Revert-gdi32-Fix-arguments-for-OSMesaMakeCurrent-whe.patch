@@ -1,0 +1,40 @@
+From 5d298fc9733bb3031d6e8794c1ef3b5dffacb616 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@lindev.ch>
+Date: Thu, 29 Aug 2019 17:44:22 +0200
+Subject: [PATCH] Revert "gdi32: Fix arguments for OSMesaMakeCurrent when using
+ 16 bit formats."
+
+This reverts commit e618ab65ed5b623785c58ea5ece6e39895d43063.
+---
+ dlls/gdi32/dibdrv/opengl.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/dlls/gdi32/dibdrv/opengl.c b/dlls/gdi32/dibdrv/opengl.c
+index 09bb43448d..c768e6031f 100644
+--- a/dlls/gdi32/dibdrv/opengl.c
++++ b/dlls/gdi32/dibdrv/opengl.c
+@@ -253,7 +253,6 @@ static BOOL dibdrv_wglMakeCurrent( HDC hdc, struct wgl_context *context )
+     HBITMAP bitmap;
+     BITMAPOBJ *bmp;
+     dib_info dib;
+-    GLenum type;
+     BOOL ret = FALSE;
+ 
+     if (!context)
+@@ -284,12 +283,7 @@ static BOOL dibdrv_wglMakeCurrent( HDC hdc, struct wgl_context *context )
+ 
+         TRACE( "context %p bits %p size %ux%u\n", context, bits, width, height );
+ 
+-        if (pixel_formats[context->format - 1].mesa == OSMESA_RGB_565)
+-            type = GL_UNSIGNED_SHORT_5_6_5;
+-        else
+-            type = GL_UNSIGNED_BYTE;
+-
+-        ret = pOSMesaMakeCurrent( context->context, bits, type, width, height );
++        ret = pOSMesaMakeCurrent( context->context, bits, GL_UNSIGNED_BYTE, width, height );
+         if (ret)
+         {
+             pOSMesaPixelStore( OSMESA_ROW_LENGTH, abs( dib.stride ) * 8 / dib.bit_count );
+-- 
+2.21.0
+
