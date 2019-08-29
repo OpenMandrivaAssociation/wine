@@ -44,7 +44,7 @@ Release:	0.%{beta}.1
 Source0:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1).x/%{name}-%{version}-%{beta}.tar.xz
 Source1:	http://mirrors.ibiblio.org/wine/source/%(echo %version |cut -d. -f1).x/%{name}-%{version}-%{beta}.tar.xz.sign
 %else
-Release:	2
+Release:	3
 Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz
 Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz.sign
 %endif
@@ -314,6 +314,7 @@ cd ..
 
 %patch3 -p1 -b .dlopenLazy~
 %endif
+%patch4 -p1 -b .civ3~
 
 autoreconf
 
