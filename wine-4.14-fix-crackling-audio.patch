@@ -1,0 +1,16 @@
+diff -up wine-4.14/loader/main.c.omv~ wine-4.14/loader/main.c
+--- wine-4.14/loader/main.c.omv~	2019-08-30 01:28:08.748036639 +0200
++++ wine-4.14/loader/main.c	2019-08-30 01:31:44.770908819 +0200
+@@ -320,6 +320,12 @@ int main( int argc, char *argv[] )
+     char error[1024];
+     int i;
+ 
++    /* Workaround for crackling audio with many games (e.g. Civ3, Broken Sword 4, ...) */
++    if (!getenv( "PULSE_LATENCY_MSEC" ) && !getenv( "WINE_DONT_MESS_WITH_PULSE" ))
++    {
++        setenv( "PULSE_LATENCY_MSEC", "60", 1);
++    }
++
+     if (!getenv( "WINELOADERNOEXEC" ))  /* first time around */
+     {
+         static char noexec[] = "WINELOADERNOEXEC=1";
