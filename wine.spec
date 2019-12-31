@@ -553,6 +553,7 @@ EOF
 %{_libdir}/libwine*.so.%{major}*
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/*.cpl.so
+%{_libdir}/%{name}/*.com.so
 %{_libdir}/%{name}/*.drv.so
 %{_libdir}/%{name}/*.dll.so
 %{_libdir}/%{name}/*.exe.so
