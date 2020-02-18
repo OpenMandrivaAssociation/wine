@@ -38,7 +38,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	5.1
+Version:	5.2
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -512,9 +512,9 @@ EOF
 %{_bindir}/winefile
 %{_bindir}/winetricks
 %{_bindir}/wisotool
-%optional %{_mandir}/man1/wine.1*
-%optional %lang(de) %{_mandir}/de.UTF-8/man1/wine.1*
-%optional %lang(pl) %{_mandir}/pl.UTF-8/man1/wine.1*
+#%optional %{_mandir}/man1/wine.1*
+#%optional %lang(de) %{_mandir}/de.UTF-8/man1/wine.1*
+#%optional %lang(pl) %{_mandir}/pl.UTF-8/man1/wine.1*
 %lang(de) %{_mandir}/de.UTF-8/man1/winemaker.1*
 %lang(de) %{_mandir}/de.UTF-8/man1/wineserver.1*
 %lang(fr) %{_mandir}/fr.UTF-8/man1/*
@@ -534,7 +534,8 @@ EOF
 %{_datadir}/%{name}/%{name}.inf
 %{_datadir}/%{name}/winebus.inf
 %{_datadir}/%{name}/winehid.inf
-%{_datadir}/%{name}/l_intl.nls
+%{_datadir}/%{name}/nls/l_intl.nls
+%{_datadir}/%{name}/nls/c_*
 %{_datadir}/applications/*.desktop
 %{_sysconfdir}/xdg/menus/applications-merged/mandriva-%{name}.menu
 %{_datadir}/desktop-directories/mandriva-%{name}.directory
