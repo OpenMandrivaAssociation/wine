@@ -534,7 +534,8 @@ EOF
 %{_datadir}/%{name}/%{name}.inf
 %{_datadir}/%{name}/winebus.inf
 %{_datadir}/%{name}/winehid.inf
-#{_datadir}/%{name}/l_intl.nls
+%{_datadir}/%{name}/nls/l_intl.nls
+%{_datadir}/%{name}/nls/c_*
 %{_datadir}/applications/*.desktop
 %{_sysconfdir}/xdg/menus/applications-merged/mandriva-%{name}.menu
 %{_datadir}/desktop-directories/mandriva-%{name}.directory
