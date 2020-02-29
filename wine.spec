@@ -538,6 +538,11 @@ EOF
 %{_datadir}/%{name}/winehid.inf
 %{_datadir}/%{name}/nls/l_intl.nls
 %{_datadir}/%{name}/nls/c_*
+%{_datadir}/%{name}/nls/normidna.nls
+%{_datadir}/%{name}/nls/normnfc.nls
+%{_datadir}/%{name}/nls/normnfd.nls
+%{_datadir}/%{name}/nls/normnfkc.nls
+%{_datadir}/%{name}/nls/normnfkd.nls
 %{_datadir}/applications/*.desktop
 %{_sysconfdir}/xdg/menus/applications-merged/mandriva-%{name}.menu
 %{_datadir}/desktop-directories/mandriva-%{name}.directory
