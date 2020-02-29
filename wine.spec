@@ -38,7 +38,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	5.2
+Version:	5.3
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -538,6 +538,11 @@ EOF
 %{_datadir}/%{name}/winehid.inf
 %{_datadir}/%{name}/nls/l_intl.nls
 %{_datadir}/%{name}/nls/c_*
+%{_datadir}/%{name}/nls/normidna.nls
+%{_datadir}/%{name}/nls/normnfc.nls
+%{_datadir}/%{name}/nls/normnfd.nls
+%{_datadir}/%{name}/nls/normnfkc.nls
+%{_datadir}/%{name}/nls/normnfkd.nls
 %{_datadir}/applications/*.desktop
 %{_sysconfdir}/xdg/menus/applications-merged/mandriva-%{name}.menu
 %{_datadir}/desktop-directories/mandriva-%{name}.directory
