@@ -543,6 +543,7 @@ EOF
 %{_datadir}/%{name}/nls/normnfd.nls
 %{_datadir}/%{name}/nls/normnfkc.nls
 %{_datadir}/%{name}/nls/normnfkd.nls
+%{_datadir}/%{name}/nls/sortdefault.nls
 %{_datadir}/applications/*.desktop
 %{_sysconfdir}/xdg/menus/applications-merged/mandriva-%{name}.menu
 %{_datadir}/desktop-directories/mandriva-%{name}.directory
