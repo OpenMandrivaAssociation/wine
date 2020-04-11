@@ -1,31 +1,22 @@
---- wine-1.9.23/dlls/gdi32/freetype.c.omv~	2016-11-21 21:14:00.692767381 +0100
-+++ wine-1.9.23/dlls/gdi32/freetype.c	2016-11-21 21:16:17.114734493 +0100
-@@ -2789,7 +2789,7 @@ static UINT parse_aa_pattern( FcPattern
+diff -up wine-5.6/dlls/gdi32/freetype.c.omv~ wine-5.6/dlls/gdi32/freetype.c
+--- wine-5.6/dlls/gdi32/freetype.c.omv~	2020-04-11 15:38:12.835590112 +0200
++++ wine-5.6/dlls/gdi32/freetype.c	2020-04-11 15:38:33.502829989 +0200
+@@ -2790,7 +2790,7 @@ static UINT parse_aa_pattern( FcPattern
  
  static void init_fontconfig(void)
  {
--    void *fc_handle = wine_dlopen(SONAME_LIBFONTCONFIG, RTLD_NOW, NULL, 0);
-+    void *fc_handle = wine_dlopen(SONAME_LIBFONTCONFIG, RTLD_LAZY, NULL, 0);
+-    void *fc_handle = dlopen(SONAME_LIBFONTCONFIG, RTLD_NOW);
++    void *fc_handle = dlopen(SONAME_LIBFONTCONFIG, RTLD_LAZY);
  
      if (!fc_handle)
      {
-@@ -4100,7 +4100,7 @@ static void update_font_info(void)
+@@ -4160,7 +4160,7 @@ static void update_font_info(void)
  
  static BOOL init_freetype(void)
  {
--    ft_handle = wine_dlopen(SONAME_LIBFREETYPE, RTLD_NOW, NULL, 0);
-+    ft_handle = wine_dlopen(SONAME_LIBFREETYPE, RTLD_LAZY, NULL, 0);
+-    ft_handle = dlopen(SONAME_LIBFREETYPE, RTLD_NOW);
++    ft_handle = dlopen(SONAME_LIBFREETYPE, RTLD_LAZY);
      if(!ft_handle) {
          WINE_MESSAGE(
        "Wine cannot find the FreeType font library.  To enable Wine to\n"
---- wine-1.9.23/loader/main.c.omv~	2016-11-21 21:16:25.358549766 +0100
-+++ wine-1.9.23/loader/main.c	2016-11-21 21:16:41.322191631 +0100
-@@ -182,7 +182,7 @@ static void check_command_line( int argc
- 
-         for(; *wine_libs; wine_libs++)
-         {
--            lib_handle = wine_dlopen( *wine_libs, RTLD_NOW, NULL, 0 );
-+            lib_handle = wine_dlopen( *wine_libs, RTLD_LAZY, NULL, 0 );
-             if (lib_handle)
-             {
-             #ifdef HAVE_DLADDR
+diff -up wine-5.6/loader/main.c.omv~ wine-5.6/loader/main.c

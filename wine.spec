@@ -38,15 +38,15 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	5.5
+Version:	5.6
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
 Source1:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz.sign
 %else
 Release:	1
-Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/wine-%{version}.tar.xz
-Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/wine-%{version}.tar.xz.sign
+Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz
+Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz.sign
 %endif
 %if "%{sbeta}" != ""
 Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}-%{sbeta}.tar.gz
@@ -66,7 +66,7 @@ Source12:	http://kegel.com/wine/wisotool
 Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
-Patch3:		wine-1.9.23-freetype-unresolved-symbol.patch
+#Patch3:		wine-1.9.23-freetype-unresolved-symbol.patch
 # https://bugs.winehq.org/show_bug.cgi?id=41930#c0
 Patch4:		0001-Revert-gdi32-Fix-arguments-for-OSMesaMakeCurrent-whe.patch
 Patch5:		wine-4.14-fix-crackling-audio.patch
@@ -328,7 +328,7 @@ cd patches
 ./patchinstall.sh --all DESTDIR="$WINEDIR"
 cd ..
 
-%patch3 -p1 -b .dlopenLazy~
+#patch3 -p1 -b .dlopenLazy~
 %endif
 %patch4 -p1 -b .civ3~
 %patch5 -p1 -b .pulseaudiosucks~
