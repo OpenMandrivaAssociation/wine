@@ -8,8 +8,8 @@
 # Build time errors with lld 9.0.0-rc1 on x86_32 only
 # ld: error: can't create dynamic relocation R_386_32 against symbol: .L.str in readonly segment; recompile object files with -fPIC or pass '-Wl,-z,notext' to allow text relocations in the output
 %ifarch %{ix86}
-%global optflags %{optflags} -Wl,-z,notext
-%global ldflags %{ldflags} -Wl,-z,notext
+%global optflags %{optflags} -Wl,-z,notext -fuse-ld=lld
+%global ldflags %{ldflags} -Wl,-z,notext -fuse-ld=lld
 %endif
 
 %ifarch %{x86_64}
@@ -44,7 +44,7 @@ Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
 Source1:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz.sign
 %else
-Release:	1
+Release:	2
 Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz
 Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz.sign
 %endif
@@ -70,6 +70,7 @@ Patch2:		wine-cjk.patch
 # https://bugs.winehq.org/show_bug.cgi?id=41930#c0
 Patch4:		0001-Revert-gdi32-Fix-arguments-for-OSMesaMakeCurrent-whe.patch
 Patch5:		wine-4.14-fix-crackling-audio.patch
+Patch6:		wine-5.6-schrpc-gcc-workaround.patch
 
 # a: => /media/floppy
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -347,9 +348,13 @@ autoreconf
 export CFLAGS="%{optflags} -fno-omit-frame-pointer"
 %endif
 
-# Clang doesn't support M$ ABI on 64bit
-#export CC=gcc
-#export CXX=g++
+%ifarch %{x86_64}
+# As of wine 5.6, clang 10.0:
+# winecfg in 64bit mode crashes on startup if built with
+# clang. Probably clang doesn't get the M$ ABI right
+export CC=gcc
+export CXX=g++
+%endif
 
 %configure	--with-pulse \
 		--without-hal \
@@ -360,11 +365,15 @@ export CFLAGS="%{optflags} -fno-omit-frame-pointer"
 		--enable-win64
 %endif
 
-%make depend
-%make
+%make_build depend
+if ! %make_build; then
+	# Ugly, but effective -- let's patch some generated code...
+	patch -p1 -b -z .gcc10~ <%{PATCH6}
+	%make_build
+fi
 
 %install
-%makeinstall_std LDCONFIG=/bin/true
+%make_install LDCONFIG=/bin/true
 
 install -m 0755 %{SOURCE11} %{buildroot}%{_bindir}/
 install -m 0755 %{SOURCE12} %{buildroot}%{_bindir}/

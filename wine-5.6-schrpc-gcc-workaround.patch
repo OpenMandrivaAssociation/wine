@@ -1,0 +1,12 @@
+diff -up wine-5.6/dlls/schedsvc/tests/schrpc_c.c.omv~ wine-5.6/dlls/schedsvc/tests/schrpc_c.c
+--- wine-5.6/dlls/schedsvc/tests/schrpc_c.c.omv~	2020-04-18 23:41:19.357785500 +0200
++++ wine-5.6/dlls/schedsvc/tests/schrpc_c.c	2020-04-18 23:41:29.526894692 +0200
+@@ -148,7 +148,7 @@ static const MIDL_PROC_FORMAT_STRING __M
+  * ITaskSchedulerService interface
+  */
+ 
+-handle_t rpc_handle;
++extern handle_t rpc_handle;
+ 
+ static const RPC_CLIENT_INTERFACE ITaskSchedulerService___RpcClientInterface =
+ {
