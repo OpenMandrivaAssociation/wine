@@ -38,13 +38,13 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	5.6
+Version:	5.7
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
 Source1:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz.sign
 %else
-Release:	2
+Release:	1
 Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz
 Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz.sign
 %endif
@@ -545,6 +545,7 @@ EOF
 %{_datadir}/%{name}/%{name}.inf
 %{_datadir}/%{name}/winebus.inf
 %{_datadir}/%{name}/winehid.inf
+%{_datadir}/%{name}/wineusb.inf
 %{_datadir}/%{name}/nls/l_intl.nls
 %{_datadir}/%{name}/nls/c_*
 %{_datadir}/%{name}/nls/normidna.nls
