@@ -70,11 +70,8 @@ Patch6:		wine-5.6-schrpc-gcc-workaround.patch
 #              note that Wine also provides $HOME in My Documents)
 # com4 => /dev/ttyUSB0 (replaces /dev/ttyS3)
 Patch108:	wine-mdkconf.patch
-
-# (anssi) Wine needs GCC 4.4+ on x86_64 for MS ABI support. Note also that
-# 64-bit wine cannot run 32-bit programs without wine32.
-ExclusiveArch:	%{ix86} %{x86_64}
 %ifarch %{x86_64}
+# Wine needs GCC 4.4+ on x86_64 for MS ABI support.
 BuildRequires:	gcc >= 4.4
 %endif
 
@@ -107,7 +104,9 @@ BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(libusb-1.0)
 BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	pkgconfig(libxslt)
+%ifarch %{ix86} %{x86_64}
 BuildRequires:	isdn4k-utils-devel
+%endif
 BuildRequires:	glibc-static-devel
 BuildRequires:	chrpath
 BuildRequires:	giflib-devel
@@ -159,7 +158,6 @@ BuildRequires:	pkgconfig(libavcodec)
 BuildRequires:	pkgconfig(libudev)
 BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	cmake(FAudio)
-BuildRequires:	prelink
 
 %if %{with wow64}
 # This is ugly, but it has to be until and unless we fix multiarch support
