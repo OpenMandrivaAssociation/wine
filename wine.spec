@@ -627,6 +627,10 @@ done
 %{_libdir}/%{name}/*.tlb.so
 %{_libdir}/%{name}/*.ds.so
 %{_libdir}/%{name}/*.sys.so
+%ifarch %{ix86}
+%{_libdir}/%{name}/*16.so
+%{_libdir}/%{name}/*.vxd.so
+%endif
 %{_libdir}/%{name}/fakedlls
 %if %{with wow64}
 %{_prefix}/lib/libwine*.so.%{major}*
@@ -648,11 +652,13 @@ done
 
 %files devel
 %{_libdir}/%{name}/*.a
-%{_prefix}/lib/%{name}/*.a
 %{_libdir}/libwine*.so
-%{_prefix}/lib/libwine*.so
 %{_libdir}/%{name}/*.def
+%ifarch %{x86_64}
+%{_prefix}/lib/%{name}/*.a
+%{_prefix}/lib/libwine*.so
 %{_prefix}/lib/%{name}/*.def
+%endif
 %{_includedir}/*
 # %{_bindir}/fnt2bdf
 %{_bindir}/wmc
