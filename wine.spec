@@ -337,12 +337,20 @@ mkdir build
 cd build
 %configure	--with-pulse \
 		--without-hal \
-		--without-nas \
     		--with-xattr \
 		--with-gstreamer \
 %ifarch %{x86_64}
 		--enable-win64
 %endif
+
+if cat config.log |grep -q "won't be supported" |grep -q -vE '(OSSv4)'; then
+	echo "******************************"
+	echo "Missing dependencies detected:"
+	echo "(Only missing OSSv4 is OK):"
+	echo "******************************"
+	cat config.log |grep "won't be supported"
+	exit 1
+fi
 
 %make_build depend
 if ! %make_build; then
@@ -395,16 +403,24 @@ for i in libSDL2-2.0.so.1 libOpenCL.so.1 libncursesw.so.6 libcups.so.2 \
 		ln -s /lib/$i lib32/`echo $i |sed -e 's,\.so\..*,.so,'`
 	fi
 done
+ln -s /usr/lib/libpng16.so.16 lib32/libpng.so
 mkdir build32
 cd build32
 ../configure \
 		--prefix=%{_prefix} \
 		--with-pulse \
 		--without-hal \
-		--without-nas \
     		--with-xattr \
 		--with-gstreamer \
 		--with-wine64=../build
+if cat config.log |grep -q "won't be supported" |grep -q -vE '(OSSv4)'; then
+	echo "******************************"
+	echo "Missing dependencies detected:"
+	echo "(Only missing OSSv4 is OK):"
+	echo "******************************"
+	cat config.log |grep "won't be supported"
+	exit 1
+fi
 %make_build depend
 if ! %make_build; then
 	# Ugly, but effective -- let's patch some generated code...
