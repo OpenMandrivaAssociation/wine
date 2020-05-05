@@ -13,9 +13,9 @@
 %endif
 
 %ifarch %{x86_64}
-%define	wine	wine64
+%bcond_without wow64
 %else
-%define	wine	wine
+%bcond_with wow64
 %endif
 
 %define	major	1
@@ -29,13 +29,6 @@
 
 %bcond_without staging
 
-# On 32-bit we have
-# wine32 - those 32-bit binaries that are also used on 64-bit for 32-bit support
-# wine - all other files (requires 'wine32')
-# On 64-bit we have
-# wine64 - all 64-bit files (suggests 'wine32')
-# - Anssi 07/2010
-
 Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	5.7
@@ -44,7 +37,7 @@ Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
 Source1:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz.sign
 %else
-Release:	1
+Release:	2
 Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz
 Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz.sign
 %endif
@@ -168,32 +161,72 @@ BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	cmake(FAudio)
 BuildRequires:	prelink
 
-%define desc Wine is a program which allows running Microsoft Windows programs \
-(including DOS, Windows 3.x and Win32 executables) on Unix. It \
-consists of a program loader which loads and executes a Microsoft \
-Windows binary, and a library (called Winelib) that implements Windows \
-API calls using their Unix or X11 equivalents.  The library may also \
-be used for porting Win32 code into native Unix executables.
-
-%ifarch %{x86_64}
-%package -n	%{wine}
-Summary:	WINE Is Not An Emulator - runs MS Windows programs
-Group:		Emulators
-Suggests:	wine32 = %{EVRD}
-Suggests:	wine64-gecko
-Suggests:	%{dlopen_req ncursesw}
-%else
-# on 32-bit we always want wine32 package
-Requires:	wine32 = %{EVRD}
+%if %{with wow64}
+# This is ugly, but it has to be until and unless we fix multiarch support
+# in general.
+# We need to pull in 32-bit libraries, but can't install the corresponding
+# -devel packages because the headers would conflict with the 64bit headers.
+# Given the headers are the same anyway, we can just create fake devel
+# environments by symlinking .so files and reusing system (64bit) includes.
+BuildRequires:	libSDL2-2.0.so.1
+BuildRequires:	libOpenCL.so.1
+BuildRequires:	libncursesw.so.6
+BuildRequires:	libcups.so.2
+BuildRequires:	libsane.so.1
+BuildRequires:	libsystemd.so.0
+BuildRequires:	libz.so.1
+BuildRequires:	libjack.so.0
+BuildRequires:	libpulse.so.0
+BuildRequires:	libmpg123.so.0
+BuildRequires:	libopenal.so.1
+BuildRequires:	libasound.so.2
+BuildRequires:	libaudiofile.so.1
+BuildRequires:	libglut.so.3
+BuildRequires:	libpng16.so.16
+BuildRequires:	libusb-1.0.so.0
+BuildRequires:	libxml2.so.2
+BuildRequires:	libxslt.so.1
+BuildRequires:	libcapi20.so.3
+BuildRequires:	libgif.so.7
+BuildRequires:	libtiff.so.5
+BuildRequires:	libXpm.so.4
+BuildRequires:	librsvg-2.so.2
+BuildRequires:	libgphoto2.so.6
+BuildRequires:	libldap-2.4.so.2
+BuildRequires:	libdbus-1.so.3
+BuildRequires:	libgsm.so.1
+BuildRequires:	libodbc.so.2
+BuildRequires:	libgnutls.so.30
+BuildRequires:	libintl.so.8
+BuildRequires:	libd3dadapter9_1
+BuildRequires:	liblcms2.so.2
+BuildRequires:	libOSMesa.so.8
+BuildRequires:	libGL.so.1
+BuildRequires:	libGLU.so.1
+BuildRequires:	libv4l2.so.0
+BuildRequires:	libieee1284.so.3
+BuildRequires:	libjpeg.so.8
+BuildRequires:	libXcursor.so.1
+BuildRequires:	libXcomposite.so.1
+BuildRequires:	libXi.so.6
+BuildRequires:	libXinerama.so.1
+BuildRequires:	libXxf86vm.so.1
+BuildRequires:	libXmu.so.6
+BuildRequires:	libXrandr.so.2
+BuildRequires:	libX11.so.6
+BuildRequires:	libXrender.so.1
+BuildRequires:	libXext.so.6
+BuildRequires:	libSM.so.6
+BUildRequires:	libvulkan-devel
+BuildRequires:	libvkd3d.so.1
+BuildRequires:	libfontconfig.so.1
+BuildRequires:	libfreetype.so.6
+BuildRequires:	libgstreamer-1.0.so.0
+BuildRequires:	libva.so.2
+BuildRequires:	libavcodec.so.58
+BuildRequires:	libudev.so.1
+BuildRequires:	libFAudio.so.0
 %endif
-
-%rename		%{wine}-utils
-%rename		%{wine}-full
-%rename		%{libname}-capi
-%rename		%{libname}-twain
-%rename		%{libname}
-Provides:	wine-bin = %{EVRD}
-Requires:	xmessage
 Suggests:	sane-frontends
 # wine dlopen's these, so let's add the dependencies ourself
 Requires:	%{dlopen_req freetype}
@@ -211,61 +244,11 @@ Requires(post):	desktop-file-utils
 Requires(postun):	desktop-file-utils
 Requires(post):	desktop-common-data
 Requires(postun):	desktop-common-data
-Conflicts:	%{wine} < %{EVRD}
-
-%ifarch %{ix86}
-Conflicts:	wine64
-%else
-Conflicts:	wine
-%endif
-
-
 #for winetricks
 Requires:	cabextract
 Requires:	unzip
-
 Suggests:	webcore-fonts
 %rename		winetricks
-
-#remove compholio
-%ifarch %{x86_64}
-Obsoletes:	wine-compholio64 <= %{EVRD}
-%else
-Obsoletes:	wine-compholio <= %{EVRD}
-%endif
-
-%description
-%desc
-
-%ifarch %{x86_64}
-%description -n	%{wine}
-%desc
-
-This package contains the Win64 version of Wine. You need the wine32
-package from the 32-bit repository to be able to run 32-bit applications.
-%endif
-
-%ifarch %{ix86}
-%package -n	wine32
-Summary:	32-bit support for Wine
-Group:		Emulators
-# This is not an EVR-specific requirement, as otherwise on x86_64 urpmi could
-# resolve the dependency to wine64 even on upgrades, and therefore replace
-# wine+wine32 installation with a wine32+wine64 installation. - Anssi
-Requires:	wine-bin
-Conflicts:	wine < %{EVRD}
-Conflicts:	wine64 < %{EVRD}
-Requires:	%{dlopen_req freetype}
-Requires:	%{dlopen_req gnutls}
-Requires:	%{dlopen_req asound}
-Requires:   	%{dlopen_req png}
-Requires:	%{dlopen_req OSMesa}
-Requires:	%{dlopen_req Xcomposite}
-Requires:	%{dlopen_req Xcursor}
-Requires:	%{dlopen_req Xinerama}
-Requires:	%{dlopen_req Xrandr}
-Requires:	%{dlopen_req Xrender}
-Requires:	%{dlopen_req v4l2}
 # Make sure we have 32-bit versions of DRI drivers... Needed
 # as soon as a 32-bit Windows app uses OpenGL or DirectX
 Requires:	libdri-drivers
@@ -274,39 +257,32 @@ Requires:	libdri-drivers
 # to use distribution packages instead. Therefore suggest wine-gecko here:
 Suggests:	wine-gecko
 Suggests:	%{dlopen_req ncursesw}
-
-%description -n	wine32
-Wine is a program which allows running Microsoft Windows programs
-(including DOS, Windows 3.x and Win32 executables) on Unix.
-
-This package contains the files needed to support 32-bit Windows
-programs.
+%if %{with wow64}
+%rename		wine32
+%rename		wine64
 %endif
 
-%package -n	%{wine}-devel
+%description
+Wine is a program which allows running Microsoft Windows programs
+(including DOS, Windows 3.x and Win32 executables) on Unix. It
+consists of a program loader which loads and executes a Microsoft
+Windows binary, and a library (called Winelib) that implements Windows
+API calls using their Unix or X11 equivalents.  The library may also
+be used for porting Win32 code into native Unix executables.
+
+%package devel
 Summary:	Static libraries and headers for %{name}
 Group:		Development/C
-Requires:	%{wine} = %{EVRD}
+Requires:	%{name} = %{EVRD}
 %rename		%{devname}
 Obsoletes:	%{mklibname -d wine 1} < %{EVRD}
-%ifarch %{ix86}
-Conflicts:	wine64-devel
-%else
-Conflicts:	wine-devel
-%endif
+%rename wine64-devel
 
-#remove compholio devel
-%ifarch %{x86_64}
-Obsoletes:	wine-compholio64-devel <= %{EVRD}
-%else
-Obsoletes:	wine-compholio-devel <= %{EVRD}
-%endif
-
-%description -n	%{wine}-devel
+%description devel
 Wine is a program which allows running Microsoft Windows programs
 (including DOS, Windows 3.x and Win32 executables) on Unix.
 
-%{wine}-devel contains the libraries and header files needed to
+%{name}-devel contains the libraries and header files needed to
 develop programs which make use of wine.
 
 Wine is often updated.
@@ -356,6 +332,9 @@ export CC=gcc
 export CXX=g++
 %endif
 
+export CONFIGURE_TOP=`pwd`
+mkdir build
+cd build
 %configure	--with-pulse \
 		--without-hal \
 		--without-nas \
@@ -372,8 +351,79 @@ if ! %make_build; then
 	%make_build
 fi
 
+%if %{with wow64}
+cd ..
+
+# FIXME Continuing workarounds for lack of proper multiarch support
+export LD_LIBRARY_PATH=`pwd`/lib32
+export CFLAGS="`echo $CFLAGS |sed -e 's,-m64,,g'` -L`pwd`/lib32 -I%{_includedir}/freetype2 -m32"
+export LDFLAGS="%{ldflags} -L`pwd`/lib32 -m32"
+export PKG_CONFIG_PATH="`pwd`/lib32/pkgconfig":%{_datadir}/pkgconfig
+mkdir -p lib32/pkgconfig
+for i in OpenCL ncursesw sane-backends zlib jack libpulse \
+	libmpg123 openal alsa audiofile freeglut libpng libusb-1.0 libxml-2.0 \
+	libxslt xpm libtiff-4 librsvg-2.0 libgphoto2 libxslt dbus-1 gnutls \
+	lcms2 osmesa libglvnd glu libv4l2 libjpeg xcursor xcomposite xi \
+	xinerama xxf86vm xmu xrandr x11 xrender xext sm vulkan libvkd3d \
+	fontconfig freetype2 gstreamer-1.0 gstreamer-base-1.0 \
+	gstreamer-plugins-base-1.0 libva libavcodec libudev sdl2; do
+	sed -e 's,64,,g' %{_libdir}/pkgconfig/$i.pc >lib32/pkgconfig/$i.pc
+done
+# ****ing glib SUCKS, why can't they just use stdint.h like the rest
+# of the world?
+sed -e "s,64,,g;s,-I\\\${libdir}/glib-2.0/include,-I`pwd`/lib32,g" %{_libdir}/pkgconfig/glib-2.0.pc >lib32/pkgconfig/glib-2.0.pc
+sed -e 's,typedef signed long gint64,typedef int64_t gint64,g;s,typedef unsigned long guint64,typedef uint64_t guint64,g' %{_libdir}/glib-2.0/include/glibconfig.h >lib32/glibconfig.h
+
+for i in libSDL2-2.0.so.1 libOpenCL.so.1 libncursesw.so.6 libcups.so.2 \
+	libsane.so.1 libsystemd.so.0 libz.so.1 libjack.so.0 libpulse.so.0 \
+	libmpg123.so.0 libopenal.so.1 libasound.so.2 libaudiofile.so.1 \
+	libglut.so.3 libpng16.so.16 libusb-1.0.so.0 libxml2.so.2 \
+	libxslt.so.1 libcapi20.so.3 libgif.so.7	libtiff.so.5 libXpm.so.4 \
+	librsvg-2.so.2 libgphoto2.so.6 libldap-2.4.so.2	libdbus-1.so.3 \
+	libgsm.so.1 libodbc.so.2 libgnutls.so.30 libintl.so.8 \
+	liblcms2.so.2 libOSMesa.so.8 libGL.so.1 \
+	libGLU.so.1 libv4l2.so.0 libieee1284.so.3 libjpeg.so.8 \
+	libXcursor.so.1 libXcomposite.so.1 libXi.so.6 libXinerama.so.1 \
+	libXxf86vm.so.1 libXmu.so.6 libXrandr.so.2 libX11.so.6 \
+	libXrender.so.1 libXext.so.6 libSM.so.6 \
+	libvkd3d.so.1 libfontconfig.so.1 libfreetype.so.6 \
+	libgstreamer-1.0.so.0 libva.so.2 libavcodec.so.58 \
+	libudev.so.1 libFAudio.so.0; do
+	if [ -e /usr/lib/$i ]; then 
+		ln -s /usr/lib/$i lib32/`echo $i |sed -e 's,\.so\..*,.so,'`
+	else
+		ln -s /lib/$i lib32/`echo $i |sed -e 's,\.so\..*,.so,'`
+	fi
+done
+mkdir build32
+cd build32
+../configure \
+		--prefix=%{_prefix} \
+		--with-pulse \
+		--without-hal \
+		--without-nas \
+    		--with-xattr \
+		--with-gstreamer \
+		--with-wine64=../build
+%make_build depend
+if ! %make_build; then
+	# Ugly, but effective -- let's patch some generated code...
+	patch -p1 -b -z .gcc10~ <%{PATCH6}
+	%make_build
+fi
+%endif
+
+
 %install
+%if %{with wow64}
+cd build32
 %make_install LDCONFIG=/bin/true
+cd ..
+%endif
+
+cd build
+%make_install LDCONFIG=/bin/true
+cd ..
 
 install -m 0755 %{SOURCE11} %{buildroot}%{_bindir}/
 install -m 0755 %{SOURCE12} %{buildroot}%{_bindir}/
@@ -442,11 +492,6 @@ desktop-file-install	--vendor="" \
 			--add-category=Emulator \
 			--dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/wine.desktop
 
-%ifarch %{x86_64}
-# fix the binary name
-sed -i 's,Exec=wine ,Exec=wine64 ,' %{buildroot}%{_datadir}/applications/wine.desktop
-%endif
-
 install -d %{buildroot}{%{_liconsdir},%{_iconsdir},%{_miconsdir}}
 
 # winecfg icon
@@ -483,26 +528,22 @@ sed -i 's,Icon=%{name},Icon=regedit,' %{buildroot}%{_datadir}/applications/mandr
 sed -i 's,Icon=%{name},Icon=winemine,' %{buildroot}%{_datadir}/applications/mandriva-wine-winemine.desktop
 sed -i 's,Icon=%{name},Icon=msiexec,' "%{buildroot}%{_datadir}/applications/mandriva-wine-wine uninstaller.desktop"
 
-%ifarch %{x86_64}
-chrpath -d %{buildroot}%{_bindir}/{wine64,wineserver,wmc,wrc} %{buildroot}%{_libdir}/%{name}/*.so
-%else
-chrpath -d %{buildroot}%{_bindir}/{wine,wineserver,wmc,wrc} %{buildroot}%{_libdir}/%{name}/*.so
-%endif
+for i in %{buildroot}%{_bindir}/* %{buildroot}%{_libdir}/%{name}/*.so %{buildroot}%{_prefix}/lib/%{name}/*.so; do
+	chrpath -d $i || :
+done
 
-%ifarch %{x86_64}
-cat > README.install.urpmi <<EOF
-This is the Win64 version of Wine. This version can only be used to run
-64-bit Windows applications as is. For running 32-bit Windows applications,
-you need to also install the 'wine32' package from the 32-bit repository.
-EOF
-%endif
-
-%files -n %{wine}
+%files
 %doc ANNOUNCE AUTHORS README
 %ifarch %{x86_64}
-%doc README.install.urpmi
 %{_bindir}/wine64
 %{_bindir}/wine64-preloader
+%if %{with wow64}
+%{_bindir}/wine
+%{_bindir}/wine-preloader
+%endif
+%else
+%{_bindir}/wine
+%{_bindir}/wine-preloader
 %endif
 %config %{_binfmtdir}/wine.conf
 %{_bindir}/winecfg
@@ -521,13 +562,11 @@ EOF
 %{_bindir}/winefile
 %{_bindir}/winetricks
 %{_bindir}/wisotool
-%ifarch %{ix86}
-%optional %{_mandir}/man1/wine.1*
-%optional %lang(de) %{_mandir}/de.UTF-8/man1/wine.1*
-%optional %lang(pl) %{_mandir}/pl.UTF-8/man1/wine.1*
-%endif
+%{_mandir}/man1/wine.1*
+%lang(de) %{_mandir}/de.UTF-8/man1/wine.1*
 %lang(de) %{_mandir}/de.UTF-8/man1/winemaker.1*
 %lang(de) %{_mandir}/de.UTF-8/man1/wineserver.1*
+%lang(pl) %{_mandir}/pl.UTF-8/man1/wine.1*
 %lang(fr) %{_mandir}/fr.UTF-8/man1/*
 %{_mandir}/man1/wineserver.1*
 %{_mandir}/man1/msiexec.1*
@@ -562,13 +601,6 @@ EOF
 %{_miconsdir}/*.png
 %{_iconsdir}/*.png
 %{_liconsdir}/*.png
-
-%ifarch %{ix86}
-%files -n wine32
-%{_bindir}/wine
-%{_bindir}/wine-preloader
-%endif
-
 %{_libdir}/libwine*.so.%{major}*
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/*.cpl.so
@@ -578,19 +610,35 @@ EOF
 %{_libdir}/%{name}/*.exe.so
 %{_libdir}/%{name}/*.acm.so
 %{_libdir}/%{name}/*.ocx.so
-%ifarch %{ix86}
-%{_libdir}/%{name}/*.vxd.so
-%{_libdir}/%{name}/*16.so
-%endif
 %{_libdir}/%{name}/*.tlb.so
 %{_libdir}/%{name}/*.ds.so
 %{_libdir}/%{name}/*.sys.so
 %{_libdir}/%{name}/fakedlls
+%if %{with wow64}
+%{_prefix}/lib/libwine*.so.%{major}*
+%dir %{_prefix}/lib/%{name}
+%{_prefix}/lib/%{name}/*.cpl.so
+%{_prefix}/lib/%{name}/*.com.so
+%{_prefix}/lib/%{name}/*.drv.so
+%{_prefix}/lib/%{name}/*.dll.so
+%{_prefix}/lib/%{name}/*.exe.so
+%{_prefix}/lib/%{name}/*.acm.so
+%{_prefix}/lib/%{name}/*.ocx.so
+%{_prefix}/lib/%{name}/*.vxd.so
+%{_prefix}/lib/%{name}/*16.so
+%{_prefix}/lib/%{name}/*.tlb.so
+%{_prefix}/lib/%{name}/*.ds.so
+%{_prefix}/lib/%{name}/*.sys.so
+%{_prefix}/lib/%{name}/fakedlls
+%endif
 
-%files -n %{wine}-devel
+%files devel
 %{_libdir}/%{name}/*.a
+%{_prefix}/lib/%{name}/*.a
 %{_libdir}/libwine*.so
+%{_prefix}/lib/libwine*.so
 %{_libdir}/%{name}/*.def
+%{_prefix}/lib/%{name}/*.def
 %{_includedir}/*
 # %{_bindir}/fnt2bdf
 %{_bindir}/wmc
