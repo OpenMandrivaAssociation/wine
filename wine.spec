@@ -390,6 +390,8 @@ cd build
 %endif
 
 if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4)'; then
+	echo "Full config.log:"
+	cat config.log
 	echo "******************************"
 	echo "Missing dependencies detected:"
 	echo "(Only missing OSSv4 is OK):"
@@ -478,6 +480,8 @@ cd build32
 		--with-gstreamer \
 		--with-wine64=../build
 if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4)'; then
+	echo "Full config.log:"
+	cat config.log
 	echo "******************************"
 	echo "Missing dependencies detected:"
 	echo "(Only missing OSSv4 is OK):"
