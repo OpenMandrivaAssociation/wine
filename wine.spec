@@ -232,6 +232,9 @@ BuildRequires:	libvkd3d.so.1
 BuildRequires:	libfontconfig.so.1
 BuildRequires:	libfreetype.so.6
 BuildRequires:	libgstreamer-1.0.so.0
+BuildRequires:	libgstvideo-1.0.so.0
+BuildRequires:	libgstaudio-1.0.so.0
+BuildRequires:	libgstbase-1.0.so.0
 BuildRequires:	libva.so.2
 BuildRequires:	libva-x11.so.2
 BuildRequires:	libva-drm.so.2
@@ -446,7 +449,9 @@ for i in libSDL2-2.0.so.1 libOpenCL.so.1 libncurses.so.6 libncursesw.so.6 libcup
 	libXxf86vm.so.1 libXmu.so.6 libXrandr.so.2 libX11.so.6 \
 	libXrender.so.1 libXext.so.6 libSM.so.6 \
 	libvkd3d.so.1 libfontconfig.so.1 libfreetype.so.6 \
-	libgstreamer-1.0.so.0 libva.so.2 libva-x11.so.2 libva-drm.so.2 \
+	libgstreamer-1.0.so.0 libgstvideo-1.0.so.0 \
+	libgstaudio-1.0.so.0 libgstbase-1.0.so.0 \
+	libva.so.2 libva-x11.so.2 libva-drm.so.2 \
 	libavcodec.so.58 libpcap.so.1 libkrb5.so.3 libk5crypto.so.3 \
 	libudev.so.1 libFAudio.so.0 libcom_err.so.2 libgcrypt.so.20 libgpg-error.so.0 \
 	libgtk-3.so.0 libgdk-3.so.0 libpangocairo-1.0.so.0 libpango-1.0.so.0 \
