@@ -64,6 +64,8 @@ Patch2:		wine-cjk.patch
 Patch4:		0001-Revert-gdi32-Fix-arguments-for-OSMesaMakeCurrent-whe.patch
 Patch5:		wine-4.14-fix-crackling-audio.patch
 Patch6:		wine-5.6-schrpc-gcc-workaround.patch
+Patch7:		wine-5.7-detect-i686-w32-mingw32.patch
+Patch8:		wine32-5.6-schrpc-gcc-workaround.patch
 
 # a: => /media/floppy
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -81,6 +83,7 @@ BuildRequires:	gpm-devel
 BuildRequires:	perl-devel
 BuildRequires:	pcap-devel
 BuildRequires:	pkgconfig(OpenCL)
+BuildRequires:	pkgconfig(ncurses)
 BuildRequires:	pkgconfig(ncursesw)
 BuildRequires:	pkgconfig(libclc)
 BuildRequires:	cups-devel
@@ -104,6 +107,9 @@ BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(libusb-1.0)
 BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	pkgconfig(libxslt)
+BuildRequires:	pkgconfig(libgcrypt)
+BuildRequires:	pkgconfig(gpg-error)
+BuildRequires:	pkgconfig(gtk+-3.0)
 %ifarch %{ix86} %{x86_64}
 BuildRequires:	isdn4k-utils-devel
 %endif
@@ -147,6 +153,8 @@ BuildRequires:	pkgconfig(xext)
 BuildRequires:	pkgconfig(sm)
 BUildRequires:	pkgconfig(vulkan)
 BuildRequires:	pkgconfig(libvkd3d)
+BuildRequires:	pkgconfig(krb5)
+BuildRequires:	pkgconfig(com_err)
 BuildRequires:	fontforge
 BuildRequires:	pkgconfig(fontconfig)
 BuildRequires:	pkgconfig(freetype2)
@@ -168,6 +176,7 @@ BuildRequires:	cmake(FAudio)
 # environments by symlinking .so files and reusing system (64bit) includes.
 BuildRequires:	libSDL2-2.0.so.1
 BuildRequires:	libOpenCL.so.1
+BuildRequires:	libncurses.so.6
 BuildRequires:	libncursesw.so.6
 BuildRequires:	libcups.so.2
 BuildRequires:	libsane.so.1
@@ -190,7 +199,9 @@ BuildRequires:	libtiff.so.5
 BuildRequires:	libXpm.so.4
 BuildRequires:	librsvg-2.so.2
 BuildRequires:	libgphoto2.so.6
-BuildRequires:	libldap-2.4.so.2
+BuildRequires:	libgphoto2_port.so.12
+BuildRequires:	libldap_r-2.4.so.2
+BuildRequires:	liblber-2.4.so.2
 BuildRequires:	libdbus-1.so.3
 BuildRequires:	libgsm.so.1
 BuildRequires:	libodbc.so.2
@@ -206,6 +217,7 @@ BuildRequires:	libieee1284.so.3
 BuildRequires:	libjpeg.so.8
 BuildRequires:	libXcursor.so.1
 BuildRequires:	libXcomposite.so.1
+BuildRequires:	libXfixes.so.3
 BuildRequires:	libXi.so.6
 BuildRequires:	libXinerama.so.1
 BuildRequires:	libXxf86vm.so.1
@@ -221,9 +233,29 @@ BuildRequires:	libfontconfig.so.1
 BuildRequires:	libfreetype.so.6
 BuildRequires:	libgstreamer-1.0.so.0
 BuildRequires:	libva.so.2
+BuildRequires:	libva-x11.so.2
+BuildRequires:	libva-drm.so.2
 BuildRequires:	libavcodec.so.58
 BuildRequires:	libudev.so.1
 BuildRequires:	libFAudio.so.0
+BuildRequires:	libpcap.so.1
+BuildRequires:	libkrb5.so.3
+BuildRequires:	libk5crypto.so.3
+BuildRequires:	libcom_err.so.2
+BuildRequires:	libgcrypt.so.20
+BuildRequires:	libgpg-error.so.0
+BuildRequires:	libgtk-3.so.0
+BuildRequires:	libgdk-3.so.0
+BuildRequires:	libpangocairo-1.0.so.0
+BuildRequires:	libpango-1.0.so.0
+BuildRequires:	libharfbuzz.so.0
+BuildRequires:	libatk-1.0.so.0
+BuildRequires:	libcairo-gobject.so.2
+BuildRequires:	libcairo.so.2
+BuildRequires:	libgdk_pixbuf-2.0.so.0
+BuildRequires:	libgio-2.0.so.0
+BuildRequires:	libgobject-2.0.so.0
+BuildRequires:	libglib-2.0.so.0
 %endif
 Suggests:	sane-frontends
 # wine dlopen's these, so let's add the dependencies ourself
@@ -260,6 +292,12 @@ Suggests:	%{dlopen_req ncursesw}
 %if %{with wow64}
 %rename		wine32
 %rename		wine64
+%endif
+%ifarch %{ix86} %{x86_64}
+BuildRequires:	cross-i686-w32-mingw32-gcc-bootstrap
+%ifarch %{x86_64}
+BuildRequires:	cross-x86_64-w64-mingw32-gcc-bootstrap
+%endif
 %endif
 
 %description
@@ -309,8 +347,11 @@ cd ..
 %endif
 %patch4 -p1 -b .civ3~
 %patch5 -p1 -b .pulseaudiosucks~
+%patch7 -p1 -b .detectmingw~
 
 autoreconf
+aclocal
+autoconf
 
 %build
 # disable fortify as it breaks wine
@@ -343,7 +384,7 @@ cd build
 		--enable-win64
 %endif
 
-if cat config.log |grep -q "won't be supported" |grep -q -vE '(OSSv4)'; then
+if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4)'; then
 	echo "******************************"
 	echo "Missing dependencies detected:"
 	echo "(Only missing OSSv4 is OK):"
@@ -368,41 +409,57 @@ export CFLAGS="`echo $CFLAGS |sed -e 's,-m64,,g'` -L`pwd`/lib32 -I%{_includedir}
 export LDFLAGS="%{ldflags} -L`pwd`/lib32 -m32"
 export PKG_CONFIG_PATH="`pwd`/lib32/pkgconfig":%{_datadir}/pkgconfig
 mkdir -p lib32/pkgconfig
-for i in OpenCL ncursesw sane-backends zlib jack libpulse \
+for i in OpenCL ncurses ncursesw sane-backends zlib jack libpulse \
 	libmpg123 openal alsa audiofile freeglut libpng libusb-1.0 libxml-2.0 \
-	libxslt xpm libtiff-4 librsvg-2.0 libgphoto2 libxslt dbus-1 gnutls \
+	libxslt xpm libtiff-4 librsvg-2.0 libgphoto2 libxslt gnutls \
 	lcms2 osmesa libglvnd glu libv4l2 libjpeg xcursor xcomposite xi \
 	xinerama xxf86vm xmu xrandr x11 xrender xext sm vulkan libvkd3d \
 	fontconfig freetype2 gstreamer-1.0 gstreamer-base-1.0 \
-	gstreamer-plugins-base-1.0 libva libavcodec libudev sdl2; do
+	gstreamer-plugins-base-1.0 libva libavcodec libudev sdl2 gtk+-3.0; do
 	sed -e 's,64,,g' %{_libdir}/pkgconfig/$i.pc >lib32/pkgconfig/$i.pc
 done
 # ****ing glib SUCKS, why can't they just use stdint.h like the rest
 # of the world?
-sed -e "s,64,,g;s,-I\\\${libdir}/glib-2.0/include,-I`pwd`/lib32,g" %{_libdir}/pkgconfig/glib-2.0.pc >lib32/pkgconfig/glib-2.0.pc
+sed -e "s,lib64,lib,g;s,-I\\\${libdir}/glib-2.0/include,-I`pwd`/lib32,g" %{_libdir}/pkgconfig/glib-2.0.pc >lib32/pkgconfig/glib-2.0.pc
 sed -e 's,typedef signed long gint64,typedef int64_t gint64,g;s,typedef unsigned long guint64,typedef uint64_t guint64,g' %{_libdir}/glib-2.0/include/glibconfig.h >lib32/glibconfig.h
+sed -i -e '/limits.h/i#include <stdint.h>' lib32/glibconfig.h
+# Same for dbus and other libraries that prefer compatibility with
+# the 1960s over sanity
+mkdir lib32/dbus
+sed -e "s,64,,g;s,-I\\\${libdir}/dbus-1.0/include,-I`pwd`/lib32,g" %{_libdir}/pkgconfig/dbus-1.pc >lib32/pkgconfig/dbus-1.pc
+sed -e 's,typedef signed long gint64,typedef int64_t gint64,g;s,typedef unsigned long guint64,typedef uint64_t guint64,g' %{_libdir}/dbus-1.0/include/dbus/dbus-arch-deps.h >lib32/dbus/dbus-arch-deps.h
 
-for i in libSDL2-2.0.so.1 libOpenCL.so.1 libncursesw.so.6 libcups.so.2 \
+for i in libSDL2-2.0.so.1 libOpenCL.so.1 libncurses.so.6 libncursesw.so.6 libcups.so.2 \
 	libsane.so.1 libsystemd.so.0 libz.so.1 libjack.so.0 libpulse.so.0 \
 	libmpg123.so.0 libopenal.so.1 libasound.so.2 libaudiofile.so.1 \
 	libglut.so.3 libpng16.so.16 libusb-1.0.so.0 libxml2.so.2 \
 	libxslt.so.1 libcapi20.so.3 libgif.so.7	libtiff.so.5 libXpm.so.4 \
-	librsvg-2.so.2 libgphoto2.so.6 libldap-2.4.so.2	libdbus-1.so.3 \
+	librsvg-2.so.2 libgphoto2.so.6 libgphoto2_port.so.12 \
+	libldap_r-2.4.so.2 liblber-2.4.so.2 libdbus-1.so.3 \
 	libgsm.so.1 libodbc.so.2 libgnutls.so.30 libintl.so.8 \
 	liblcms2.so.2 libOSMesa.so.8 libGL.so.1 \
 	libGLU.so.1 libv4l2.so.0 libieee1284.so.3 libjpeg.so.8 \
 	libXcursor.so.1 libXcomposite.so.1 libXi.so.6 libXinerama.so.1 \
+	libXfixes.so.3 \
 	libXxf86vm.so.1 libXmu.so.6 libXrandr.so.2 libX11.so.6 \
 	libXrender.so.1 libXext.so.6 libSM.so.6 \
 	libvkd3d.so.1 libfontconfig.so.1 libfreetype.so.6 \
-	libgstreamer-1.0.so.0 libva.so.2 libavcodec.so.58 \
-	libudev.so.1 libFAudio.so.0; do
+	libgstreamer-1.0.so.0 libva.so.2 libva-x11.so.2 libva-drm.so.2 \
+	libavcodec.so.58 libpcap.so.1 libkrb5.so.3 libk5crypto.so.3 \
+	libudev.so.1 libFAudio.so.0 libcom_err.so.2 libgcrypt.so.20 libgpg-error.so.0 \
+	libgtk-3.so.0 libgdk-3.so.0 libpangocairo-1.0.so.0 libpango-1.0.so.0 \
+	libharfbuzz.so.0 libatk-1.0.so.0 libcairo-gobject.so.2 libcairo.so.2 \
+	libgdk_pixbuf-2.0.so.0 libgio-2.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 \
+	; do
 	if [ -e /usr/lib/$i ]; then 
 		ln -s /usr/lib/$i lib32/`echo $i |sed -e 's,\.so\..*,.so,'`
 	else
 		ln -s /lib/$i lib32/`echo $i |sed -e 's,\.so\..*,.so,'`
 	fi
 done
+ln -s libSDL2-2.0.so lib32/libSDL2.so
+ln -s libldap_r-2.4.so lib32/libldap_r.so
+ln -s liblber-2.4.so lib32/liblber.so
 ln -s /usr/lib/libpng16.so.16 lib32/libpng.so
 mkdir build32
 cd build32
@@ -413,7 +470,7 @@ cd build32
     		--with-xattr \
 		--with-gstreamer \
 		--with-wine64=../build
-if cat config.log |grep -q "won't be supported" |grep -q -vE '(OSSv4)'; then
+if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4)'; then
 	echo "******************************"
 	echo "Missing dependencies detected:"
 	echo "(Only missing OSSv4 is OK):"
@@ -424,7 +481,7 @@ fi
 %make_build depend
 if ! %make_build; then
 	# Ugly, but effective -- let's patch some generated code...
-	patch -p1 -b -z .gcc10~ <%{PATCH6}
+	patch -p1 -b -z .gcc10_32~ <%{PATCH8}
 	%make_build
 fi
 %endif
@@ -619,14 +676,33 @@ done
 %{_liconsdir}/*.png
 %{_libdir}/libwine*.so.%{major}*
 %dir %{_libdir}/%{name}
-%{_libdir}/%{name}/*.cpl.so
-%{_libdir}/%{name}/*.com.so
+# *.cpl, *.com and friends get built if there
+# is a working Windoze crosscompiler
+# (x86_64)
+%optional %{_libdir}/%{name}/*.cpl
+%optional %{_libdir}/%{name}/*.com
+%optional %{_libdir}/%{name}/*.ocx
+%optional %{_libdir}/%{name}/*.tlb
+%optional %{_libdir}/%{name}/*.drv
+%optional %{_libdir}/%{name}/*.dll
+%optional %{_libdir}/%{name}/*.exe
+%optional %{_libdir}/%{name}/*.acm
+%optional %{_libdir}/%{name}/*.ds
+%optional %{_libdir}/%{name}/*.sys
+# If there isn't, they get built as *.cpl.so,
+# *.com.so etc. instead
+# (e.g. arches that don't have native
+# Windoze versions)
+# Some stuff gets built as *.*.so all
+# the time.
+%optional %{_libdir}/%{name}/*.cpl.so
+%optional %{_libdir}/%{name}/*.com.so
+%optional %{_libdir}/%{name}/*.ocx.so
+%optional %{_libdir}/%{name}/*.tlb.so
 %{_libdir}/%{name}/*.drv.so
 %{_libdir}/%{name}/*.dll.so
 %{_libdir}/%{name}/*.exe.so
 %{_libdir}/%{name}/*.acm.so
-%{_libdir}/%{name}/*.ocx.so
-%{_libdir}/%{name}/*.tlb.so
 %{_libdir}/%{name}/*.ds.so
 %{_libdir}/%{name}/*.sys.so
 %ifarch %{ix86}
@@ -637,18 +713,29 @@ done
 %if %{with wow64}
 %{_prefix}/lib/libwine*.so.%{major}*
 %dir %{_prefix}/lib/%{name}
-%{_prefix}/lib/%{name}/*.cpl.so
-%{_prefix}/lib/%{name}/*.com.so
-%{_prefix}/lib/%{name}/*.drv.so
-%{_prefix}/lib/%{name}/*.dll.so
-%{_prefix}/lib/%{name}/*.exe.so
-%{_prefix}/lib/%{name}/*.acm.so
-%{_prefix}/lib/%{name}/*.ocx.so
-%{_prefix}/lib/%{name}/*.vxd.so
-%{_prefix}/lib/%{name}/*16.so
-%{_prefix}/lib/%{name}/*.tlb.so
-%{_prefix}/lib/%{name}/*.ds.so
-%{_prefix}/lib/%{name}/*.sys.so
+%optional %{_prefix}/lib/%{name}/*.cpl.so
+%optional %{_prefix}/lib/%{name}/*.com.so
+%optional %{_prefix}/lib/%{name}/*.drv.so
+%optional %{_prefix}/lib/%{name}/*.dll.so
+%optional %{_prefix}/lib/%{name}/*.exe.so
+%optional %{_prefix}/lib/%{name}/*.acm.so
+%optional %{_prefix}/lib/%{name}/*.ocx.so
+%optional %{_prefix}/lib/%{name}/*.vxd.so
+%optional %{_prefix}/lib/%{name}/*16.so
+%optional %{_prefix}/lib/%{name}/*.tlb.so
+%optional %{_prefix}/lib/%{name}/*.ds.so
+%optional %{_prefix}/lib/%{name}/*.sys.so
+%optional %{_prefix}/lib/%{name}/*.cpl
+%optional %{_prefix}/lib/%{name}/*.com
+%optional %{_prefix}/lib/%{name}/*.drv
+%optional %{_prefix}/lib/%{name}/*.dll
+%optional %{_prefix}/lib/%{name}/*.exe
+%optional %{_prefix}/lib/%{name}/*.acm
+%optional %{_prefix}/lib/%{name}/*.ocx
+%optional %{_prefix}/lib/%{name}/*.vxd
+%optional %{_prefix}/lib/%{name}/*.tlb
+%optional %{_prefix}/lib/%{name}/*.ds
+%optional %{_prefix}/lib/%{name}/*.sys
 %{_prefix}/lib/%{name}/fakedlls
 %endif
 
