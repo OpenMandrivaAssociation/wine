@@ -247,9 +247,11 @@ Requires:	cabextract
 Requires:	unzip
 Suggests:	webcore-fonts
 %rename		winetricks
+%ifarch %{x86_64}
 # Make sure we have 32-bit versions of DRI drivers... Needed
 # as soon as a 32-bit Windows app uses OpenGL or DirectX
 Requires:	libdri-drivers
+%endif
 # (Anssi) If wine-gecko is not installed, wine pops up a dialog on first
 # start proposing to download wine-gecko from sourceforge, while recommending
 # to use distribution packages instead. Therefore suggest wine-gecko here:
