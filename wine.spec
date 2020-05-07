@@ -64,8 +64,6 @@ Patch2:		wine-cjk.patch
 Patch4:		0001-Revert-gdi32-Fix-arguments-for-OSMesaMakeCurrent-whe.patch
 Patch5:		wine-4.14-fix-crackling-audio.patch
 Patch6:		wine-5.6-schrpc-gcc-workaround.patch
-Patch7:		wine-5.7-detect-i686-w32-mingw32.patch
-Patch8:		wine32-5.6-schrpc-gcc-workaround.patch
 
 # a: => /media/floppy
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -297,9 +295,9 @@ Suggests:	%{dlopen_req ncursesw}
 %rename		wine64
 %endif
 %ifarch %{ix86} %{x86_64}
-BuildRequires:	cross-i686-w32-mingw32-binutils
-BuildRequires:	cross-i686-w32-mingw32-gcc-bootstrap
-BuildRequires:	cross-i686-w32-mingw32-libc
+BuildRequires:	cross-i686-w64-mingw32-binutils
+BuildRequires:	cross-i686-w64-mingw32-gcc-bootstrap
+BuildRequires:	cross-i686-w64-mingw32-libc
 %ifarch %{x86_64}
 BuildRequires:	cross-x86_64-w64-mingw32-binutils
 BuildRequires:	cross-x86_64-w64-mingw32-gcc-bootstrap
@@ -354,7 +352,6 @@ cd ..
 %endif
 %patch4 -p1 -b .civ3~
 %patch5 -p1 -b .pulseaudiosucks~
-%patch7 -p1 -b .detectmingw~
 
 autoreconf
 aclocal
@@ -404,8 +401,9 @@ fi
 
 %make_build depend
 if ! %make_build; then
+exit 1234
 	# Ugly, but effective -- let's patch some generated code...
-	patch -p1 -b -z .gcc10~ <%{PATCH6}
+#	patch -p1 -b -z .gcc10~ <%{PATCH6}
 	%make_build
 fi
 
@@ -492,11 +490,7 @@ if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4)'; then
 	exit 1
 fi
 %make_build depend
-if ! %make_build; then
-	# Ugly, but effective -- let's patch some generated code...
-	patch -p1 -b -z .gcc10_32~ <%{PATCH8}
-	%make_build
-fi
+%make_build
 %endif
 
 
@@ -749,6 +743,10 @@ done
 %optional %{_prefix}/lib/%{name}/*.tlb
 %optional %{_prefix}/lib/%{name}/*.ds
 %optional %{_prefix}/lib/%{name}/*.sys
+%{_prefix}/lib/%{name}/*.dll16
+%{_prefix}/lib/%{name}/*.exe16
+%{_prefix}/lib/%{name}/*.drv16
+%{_prefix}/lib/%{name}/*.mod16
 %{_prefix}/lib/%{name}/fakedlls
 %endif
 
