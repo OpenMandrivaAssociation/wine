@@ -63,7 +63,6 @@ Patch2:		wine-cjk.patch
 # https://bugs.winehq.org/show_bug.cgi?id=41930#c0
 Patch4:		0001-Revert-gdi32-Fix-arguments-for-OSMesaMakeCurrent-whe.patch
 Patch5:		wine-4.14-fix-crackling-audio.patch
-Patch6:		wine-5.6-schrpc-gcc-workaround.patch
 
 # a: => /media/floppy
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -400,12 +399,7 @@ if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4)'; then
 fi
 
 %make_build depend
-if ! %make_build; then
-exit 1234
-	# Ugly, but effective -- let's patch some generated code...
-#	patch -p1 -b -z .gcc10~ <%{PATCH6}
-	%make_build
-fi
+%make_build
 
 %if %{with wow64}
 cd ..
