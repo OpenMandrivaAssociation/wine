@@ -31,7 +31,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	5.7
+Version:	5.8
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -690,6 +690,7 @@ done
 %optional %{_libdir}/%{name}/*.acm
 %optional %{_libdir}/%{name}/*.ds
 %optional %{_libdir}/%{name}/*.sys
+%{_libdir}/%{name}/*.ax
 # If there isn't, they get built as *.cpl.so,
 # *.com.so etc. instead
 # (e.g. arches that don't have native
@@ -741,6 +742,7 @@ done
 %{_prefix}/lib/%{name}/*.exe16
 %{_prefix}/lib/%{name}/*.drv16
 %{_prefix}/lib/%{name}/*.mod16
+%{_prefix}/lib/%{name}/*.ax
 %{_prefix}/lib/%{name}/fakedlls
 %endif
 
