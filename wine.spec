@@ -173,17 +173,17 @@ BuildRequires:	cmake(FAudio)
 # environments by symlinking .so files and reusing system (64bit) includes.
 BuildRequires:	libSDL2-2.0.so.1
 BuildRequires:	libOpenCL.so.1
-BuildRequires:	libncurses.so.6
-BuildRequires:	libncursesw.so.6
+BuildRequires:	devel(libncurses)
+BuildRequires:	devel(libncursesw)
 BuildRequires:	libcups.so.2
 BuildRequires:	libsane.so.1
 BuildRequires:	libsystemd.so.0
-BuildRequires:	libz.so.1
+BuildRequires:	devel(libz)
 BuildRequires:	libjack.so.0
 BuildRequires:	libpulse.so.0
 BuildRequires:	libmpg123.so.0
 BuildRequires:	libopenal.so.1
-BuildRequires:	libasound.so.2
+BuildRequires:	devel(libasound)
 BuildRequires:	libaudiofile.so.1
 BuildRequires:	libglut.so.3
 BuildRequires:	libpng16.so.16
@@ -410,7 +410,7 @@ export CFLAGS="`echo $CFLAGS |sed -e 's,-m64,,g'` -L`pwd`/lib32 -I%{_includedir}
 export LDFLAGS="%{ldflags} -L`pwd`/lib32 -m32"
 export PKG_CONFIG_PATH="`pwd`/lib32/pkgconfig":%{_datadir}/pkgconfig
 mkdir -p lib32/pkgconfig
-for i in OpenCL ncurses ncursesw sane-backends zlib jack libpulse \
+for i in OpenCL sane-backends zlib jack libpulse \
 	libmpg123 openal alsa audiofile freeglut libpng libusb-1.0 libxml-2.0 \
 	libxslt xpm libtiff-4 librsvg-2.0 libgphoto2 libxslt gnutls \
 	lcms2 osmesa libglvnd glu libv4l2 libjpeg xcursor xcomposite xi \
@@ -430,9 +430,9 @@ mkdir lib32/dbus
 sed -e "s,64,,g;s,-I\\\${libdir}/dbus-1.0/include,-I`pwd`/lib32,g" %{_libdir}/pkgconfig/dbus-1.pc >lib32/pkgconfig/dbus-1.pc
 sed -e 's,typedef signed long gint64,typedef int64_t gint64,g;s,typedef unsigned long guint64,typedef uint64_t guint64,g' %{_libdir}/dbus-1.0/include/dbus/dbus-arch-deps.h >lib32/dbus/dbus-arch-deps.h
 
-for i in libSDL2-2.0.so.1 libOpenCL.so.1 libncurses.so.6 libncursesw.so.6 libcups.so.2 \
-	libsane.so.1 libsystemd.so.0 libz.so.1 libjack.so.0 libpulse.so.0 \
-	libmpg123.so.0 libopenal.so.1 libasound.so.2 libaudiofile.so.1 \
+for i in libSDL2-2.0.so.1 libOpenCL.so.1 libcups.so.2 \
+	libsane.so.1 libsystemd.so.0 libjack.so.0 libpulse.so.0 \
+	libmpg123.so.0 libopenal.so.1 libaudiofile.so.1 \
 	libglut.so.3 libpng16.so.16 libusb-1.0.so.0 libxml2.so.2 \
 	libxslt.so.1 libcapi20.so.3 libgif.so.7	libtiff.so.5 libXpm.so.4 \
 	librsvg-2.so.2 libgphoto2.so.6 libgphoto2_port.so.12 \
