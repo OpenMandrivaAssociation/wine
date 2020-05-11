@@ -186,9 +186,9 @@ BuildRequires:	libopenal.so.1
 BuildRequires:	devel(libasound)
 BuildRequires:	libaudiofile.so.1
 BuildRequires:	libglut.so.3
-BuildRequires:	libpng16.so.16
+BuildRequires:	devel(libpng16)
 BuildRequires:	libusb-1.0.so.0
-BuildRequires:	libxml2.so.2
+BuildRequires:	devel(libxml2)
 BuildRequires:	libxslt.so.1
 BuildRequires:	libcapi20.so.3
 BuildRequires:	libgif.so.7
@@ -410,8 +410,8 @@ export CFLAGS="`echo $CFLAGS |sed -e 's,-m64,,g'` -L`pwd`/lib32 -I%{_includedir}
 export LDFLAGS="%{ldflags} -L`pwd`/lib32 -m32"
 export PKG_CONFIG_PATH="`pwd`/lib32/pkgconfig":%{_datadir}/pkgconfig
 mkdir -p lib32/pkgconfig
-for i in OpenCL sane-backends zlib jack libpulse \
-	libmpg123 openal alsa audiofile freeglut libpng libusb-1.0 libxml-2.0 \
+for i in OpenCL sane-backends jack libpulse \
+	libmpg123 openal alsa audiofile freeglut libusb-1.0 \
 	libxslt xpm libtiff-4 librsvg-2.0 libgphoto2 libxslt gnutls \
 	lcms2 osmesa libglvnd glu libv4l2 libjpeg xcursor xcomposite xi \
 	xinerama xxf86vm xmu xrandr x11 xrender xext sm vulkan libvkd3d \
@@ -433,7 +433,7 @@ sed -e 's,typedef signed long gint64,typedef int64_t gint64,g;s,typedef unsigned
 for i in libSDL2-2.0.so.1 libOpenCL.so.1 libcups.so.2 \
 	libsane.so.1 libsystemd.so.0 libjack.so.0 libpulse.so.0 \
 	libmpg123.so.0 libopenal.so.1 libaudiofile.so.1 \
-	libglut.so.3 libpng16.so.16 libusb-1.0.so.0 libxml2.so.2 \
+	libglut.so.3 libusb-1.0.so.0 \
 	libxslt.so.1 libcapi20.so.3 libgif.so.7	libtiff.so.5 libXpm.so.4 \
 	librsvg-2.so.2 libgphoto2.so.6 libgphoto2_port.so.12 \
 	libldap_r-2.4.so.2 liblber-2.4.so.2 libdbus-1.so.3 \
@@ -463,7 +463,6 @@ done
 ln -s libSDL2-2.0.so lib32/libSDL2.so
 ln -s libldap_r-2.4.so lib32/libldap_r.so
 ln -s liblber-2.4.so lib32/liblber.so
-ln -s /usr/lib/libpng16.so.16 lib32/libpng.so
 mkdir build32
 cd build32
 ../configure \
