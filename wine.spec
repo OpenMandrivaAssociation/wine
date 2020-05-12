@@ -191,7 +191,7 @@ BuildRequires:	libusb-1.0.so.0
 BuildRequires:	devel(libxml2)
 BuildRequires:	devel(libxslt)
 BuildRequires:	libcapi20.so.3
-BuildRequires:	libgif.so.7
+BuildRequires:	devel(libgif)
 BuildRequires:	libtiff.so.5
 BuildRequires:	libXpm.so.4
 BuildRequires:	librsvg-2.so.2
@@ -212,18 +212,18 @@ BuildRequires:	libGLU.so.1
 BuildRequires:	libv4l2.so.0
 BuildRequires:	libieee1284.so.3
 BuildRequires:	libjpeg.so.8
-BuildRequires:	libXcursor.so.1
-BuildRequires:	libXcomposite.so.1
-BuildRequires:	libXfixes.so.3
-BuildRequires:	libXi.so.6
-BuildRequires:	libXinerama.so.1
-BuildRequires:	libXxf86vm.so.1
-BuildRequires:	libXmu.so.6
-BuildRequires:	libXrandr.so.2
-BuildRequires:	libX11.so.6
-BuildRequires:	libXrender.so.1
-BuildRequires:	libXext.so.6
-BuildRequires:	libSM.so.6
+BuildRequires:	devel(libXcursor)
+BuildRequires:	devel(libXcomposite)
+BuildRequires:	devel(libXfixes)
+BuildRequires:	devel(libXi)
+BuildRequires:	devel(libXinerama)
+BuildRequires:	devel(libXxf86vm)
+BuildRequires:	devel(libXmu)
+BuildRequires:	devel(libXrandr)
+BuildRequires:	devel(libX11)
+BuildRequires:	devel(libXrender)
+BuildRequires:	devel(libXext)
+BuildRequires:	devel(libSM)
 BUildRequires:	libvulkan-devel
 BuildRequires:	libvkd3d.so.1
 BuildRequires:	libfontconfig.so.1
@@ -413,8 +413,8 @@ mkdir -p lib32/pkgconfig
 for i in OpenCL sane-backends jack libpulse \
 	libmpg123 openal alsa audiofile freeglut libusb-1.0 \
 	xpm libtiff-4 librsvg-2.0 libgphoto2 gnutls \
-	lcms2 osmesa libglvnd glu libv4l2 libjpeg xcursor xcomposite xi \
-	xinerama xxf86vm xmu xrandr x11 xrender xext sm vulkan libvkd3d \
+	lcms2 osmesa libglvnd glu libv4l2 libjpeg \
+	vulkan libvkd3d \
 	fontconfig freetype2 gstreamer-1.0 gstreamer-base-1.0 \
 	gstreamer-plugins-base-1.0 libva libavcodec libudev sdl2 gtk+-3.0; do
 	sed -e 's,64,,g' %{_libdir}/pkgconfig/$i.pc >lib32/pkgconfig/$i.pc
@@ -434,16 +434,12 @@ for i in libSDL2-2.0.so.1 libOpenCL.so.1 libcups.so.2 \
 	libsane.so.1 libsystemd.so.0 libjack.so.0 libpulse.so.0 \
 	libmpg123.so.0 libopenal.so.1 libaudiofile.so.1 \
 	libglut.so.3 libusb-1.0.so.0 \
-	libcapi20.so.3 libgif.so.7	libtiff.so.5 libXpm.so.4 \
+	libcapi20.so.3 libtiff.so.5 libXpm.so.4 \
 	librsvg-2.so.2 libgphoto2.so.6 libgphoto2_port.so.12 \
 	libldap_r-2.4.so.2 liblber-2.4.so.2 libdbus-1.so.3 \
 	libgsm.so.1 libodbc.so.2 libgnutls.so.30 libintl.so.8 \
 	liblcms2.so.2 libOSMesa.so.8 libGL.so.1 \
 	libGLU.so.1 libv4l2.so.0 libieee1284.so.3 libjpeg.so.8 \
-	libXcursor.so.1 libXcomposite.so.1 libXi.so.6 libXinerama.so.1 \
-	libXfixes.so.3 \
-	libXxf86vm.so.1 libXmu.so.6 libXrandr.so.2 libX11.so.6 \
-	libXrender.so.1 libXext.so.6 libSM.so.6 \
 	libvkd3d.so.1 libfontconfig.so.1 libfreetype.so.6 \
 	libgstreamer-1.0.so.0 libgstvideo-1.0.so.0 \
 	libgstaudio-1.0.so.0 libgstbase-1.0.so.0 \
