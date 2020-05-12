@@ -189,7 +189,7 @@ BuildRequires:	libglut.so.3
 BuildRequires:	devel(libpng16)
 BuildRequires:	libusb-1.0.so.0
 BuildRequires:	devel(libxml2)
-BuildRequires:	libxslt.so.1
+BuildRequires:	devel(libxslt)
 BuildRequires:	libcapi20.so.3
 BuildRequires:	libgif.so.7
 BuildRequires:	libtiff.so.5
@@ -242,8 +242,8 @@ BuildRequires:	libpcap.so.1
 BuildRequires:	libkrb5.so.3
 BuildRequires:	libk5crypto.so.3
 BuildRequires:	libcom_err.so.2
-BuildRequires:	libgcrypt.so.20
-BuildRequires:	libgpg-error.so.0
+BuildRequires:	devel(libgcrypt)
+BuildRequires:	devel(libgpg-error)
 BuildRequires:	libgtk-3.so.0
 BuildRequires:	libgdk-3.so.0
 BuildRequires:	libpangocairo-1.0.so.0
@@ -412,7 +412,7 @@ export PKG_CONFIG_PATH="`pwd`/lib32/pkgconfig":%{_datadir}/pkgconfig
 mkdir -p lib32/pkgconfig
 for i in OpenCL sane-backends jack libpulse \
 	libmpg123 openal alsa audiofile freeglut libusb-1.0 \
-	libxslt xpm libtiff-4 librsvg-2.0 libgphoto2 libxslt gnutls \
+	xpm libtiff-4 librsvg-2.0 libgphoto2 gnutls \
 	lcms2 osmesa libglvnd glu libv4l2 libjpeg xcursor xcomposite xi \
 	xinerama xxf86vm xmu xrandr x11 xrender xext sm vulkan libvkd3d \
 	fontconfig freetype2 gstreamer-1.0 gstreamer-base-1.0 \
@@ -434,7 +434,7 @@ for i in libSDL2-2.0.so.1 libOpenCL.so.1 libcups.so.2 \
 	libsane.so.1 libsystemd.so.0 libjack.so.0 libpulse.so.0 \
 	libmpg123.so.0 libopenal.so.1 libaudiofile.so.1 \
 	libglut.so.3 libusb-1.0.so.0 \
-	libxslt.so.1 libcapi20.so.3 libgif.so.7	libtiff.so.5 libXpm.so.4 \
+	libcapi20.so.3 libgif.so.7	libtiff.so.5 libXpm.so.4 \
 	librsvg-2.so.2 libgphoto2.so.6 libgphoto2_port.so.12 \
 	libldap_r-2.4.so.2 liblber-2.4.so.2 libdbus-1.so.3 \
 	libgsm.so.1 libodbc.so.2 libgnutls.so.30 libintl.so.8 \
@@ -449,7 +449,7 @@ for i in libSDL2-2.0.so.1 libOpenCL.so.1 libcups.so.2 \
 	libgstaudio-1.0.so.0 libgstbase-1.0.so.0 \
 	libva.so.2 libva-x11.so.2 libva-drm.so.2 \
 	libavcodec.so.58 libpcap.so.1 libkrb5.so.3 libk5crypto.so.3 \
-	libudev.so.1 libFAudio.so.0 libcom_err.so.2 libgcrypt.so.20 libgpg-error.so.0 \
+	libudev.so.1 libFAudio.so.0 libcom_err.so.2 \
 	libgtk-3.so.0 libgdk-3.so.0 libpangocairo-1.0.so.0 libpango-1.0.so.0 \
 	libharfbuzz.so.0 libatk-1.0.so.0 libcairo-gobject.so.2 libcairo.so.2 \
 	libgdk_pixbuf-2.0.so.0 libgio-2.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 \
