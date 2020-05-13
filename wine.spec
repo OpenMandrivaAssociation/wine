@@ -408,7 +408,7 @@ cd ..
 export LD_LIBRARY_PATH=`pwd`/lib32
 export CFLAGS="`echo $CFLAGS |sed -e 's,-m64,,g'` -L`pwd`/lib32 -I%{_includedir}/freetype2 -m32"
 export LDFLAGS="%{ldflags} -L`pwd`/lib32 -m32"
-export PKG_CONFIG_PATH="`pwd`/lib32/pkgconfig":%{_datadir}/pkgconfig
+export PKG_CONFIG_PATH=%{_prefix}/lib/pkgconfig:"`pwd`/lib32/pkgconfig":%{_datadir}/pkgconfig
 mkdir -p lib32/pkgconfig
 for i in OpenCL sane-backends jack libpulse \
 	libmpg123 openal alsa audiofile freeglut libusb-1.0 \
@@ -471,10 +471,10 @@ cd build32
 if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4)'; then
 	echo "Full config.log:"
 	cat config.log
-	echo "******************************"
-	echo "Missing dependencies detected:"
+	echo "*************************************"
+	echo "Missing 32-bit dependencies detected:"
 	echo "(Only missing OSSv4 is OK):"
-	echo "******************************"
+	echo "*************************************"
 	cat config.log |grep "won't be supported"
 	exit 1
 fi
