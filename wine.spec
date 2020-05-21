@@ -184,7 +184,7 @@ BuildRequires:	libpulse.so.0
 BuildRequires:	libmpg123.so.0
 BuildRequires:	libopenal.so.1
 BuildRequires:	devel(libasound)
-BuildRequires:	libaudiofile.so.1
+BuildRequires:	devel(libaudiofile)
 BuildRequires:	libglut.so.3
 BuildRequires:	devel(libpng16)
 BuildRequires:	libusb-1.0.so.0
@@ -199,7 +199,7 @@ BuildRequires:	libgphoto2.so.6
 BuildRequires:	libgphoto2_port.so.12
 BuildRequires:	libldap_r-2.4.so.2
 BuildRequires:	liblber-2.4.so.2
-BuildRequires:	libdbus-1.so.3
+BuildRequires:	devel(libdbus-1)
 BuildRequires:	libgsm.so.1
 BuildRequires:	libodbc.so.2
 BuildRequires:	libgnutls.so.30
@@ -207,7 +207,7 @@ BuildRequires:	libintl.so.8
 BuildRequires:	libd3dadapter9_1
 BuildRequires:	liblcms2.so.2
 BuildRequires:	libOSMesa.so.8
-BuildRequires:	libGL.so.1
+BuildRequires:	devel(libGL)
 BuildRequires:	libGLU.so.1
 BuildRequires:	libv4l2.so.0
 BuildRequires:	libieee1284.so.3
@@ -224,7 +224,7 @@ BuildRequires:	devel(libX11)
 BuildRequires:	devel(libXrender)
 BuildRequires:	devel(libXext)
 BuildRequires:	devel(libSM)
-BUildRequires:	libvulkan-devel
+BuildRequires:	libvulkan-devel
 BuildRequires:	libvkd3d.so.1
 BuildRequires:	libfontconfig.so.1
 BuildRequires:	libfreetype.so.6
@@ -241,7 +241,7 @@ BuildRequires:	libFAudio.so.0
 BuildRequires:	libpcap.so.1
 BuildRequires:	libkrb5.so.3
 BuildRequires:	libk5crypto.so.3
-BuildRequires:	libcom_err.so.2
+BuildRequires:	devel(libcom_err)
 BuildRequires:	devel(libgcrypt)
 BuildRequires:	devel(libgpg-error)
 BuildRequires:	libgtk-3.so.0
@@ -253,9 +253,9 @@ BuildRequires:	libatk-1.0.so.0
 BuildRequires:	libcairo-gobject.so.2
 BuildRequires:	libcairo.so.2
 BuildRequires:	libgdk_pixbuf-2.0.so.0
-BuildRequires:	libgio-2.0.so.0
-BuildRequires:	libgobject-2.0.so.0
-BuildRequires:	libglib-2.0.so.0
+BuildRequires:	devel(libgio-2.0)
+BuildRequires:	devel(libgobject-2.0)
+BuildRequires:	devel(libglib-2.0)
 %endif
 Suggests:	sane-frontends
 # wine dlopen's these, so let's add the dependencies ourself
@@ -411,7 +411,7 @@ export LDFLAGS="%{ldflags} -L`pwd`/lib32 -m32"
 export PKG_CONFIG_PATH=%{_prefix}/lib/pkgconfig:"`pwd`/lib32/pkgconfig":%{_datadir}/pkgconfig
 mkdir -p lib32/pkgconfig
 for i in OpenCL sane-backends jack libpulse \
-	libmpg123 openal alsa audiofile freeglut libusb-1.0 \
+	libmpg123 openal alsa freeglut libusb-1.0 \
 	xpm libtiff-4 librsvg-2.0 libgphoto2 gnutls \
 	lcms2 osmesa libglvnd glu libv4l2 libjpeg \
 	vulkan libvkd3d \
@@ -419,36 +419,26 @@ for i in OpenCL sane-backends jack libpulse \
 	gstreamer-plugins-base-1.0 libva libavcodec libudev sdl2 gtk+-3.0; do
 	sed -e 's,64,,g' %{_libdir}/pkgconfig/$i.pc >lib32/pkgconfig/$i.pc
 done
-# ****ing glib SUCKS, why can't they just use stdint.h like the rest
-# of the world?
-sed -e "s,lib64,lib,g;s,-I\\\${libdir}/glib-2.0/include,-I`pwd`/lib32,g" %{_libdir}/pkgconfig/glib-2.0.pc >lib32/pkgconfig/glib-2.0.pc
-sed -e 's,typedef signed long gint64,typedef int64_t gint64,g;s,typedef unsigned long guint64,typedef uint64_t guint64,g' %{_libdir}/glib-2.0/include/glibconfig.h >lib32/glibconfig.h
-sed -i -e '/limits.h/i#include <stdint.h>' lib32/glibconfig.h
-# Same for dbus and other libraries that prefer compatibility with
-# the 1960s over sanity
-mkdir lib32/dbus
-sed -e "s,64,,g;s,-I\\\${libdir}/dbus-1.0/include,-I`pwd`/lib32,g" %{_libdir}/pkgconfig/dbus-1.pc >lib32/pkgconfig/dbus-1.pc
-sed -e 's,typedef signed long gint64,typedef int64_t gint64,g;s,typedef unsigned long guint64,typedef uint64_t guint64,g' %{_libdir}/dbus-1.0/include/dbus/dbus-arch-deps.h >lib32/dbus/dbus-arch-deps.h
 
 for i in libSDL2-2.0.so.1 libOpenCL.so.1 libcups.so.2 \
 	libsane.so.1 libsystemd.so.0 libjack.so.0 libpulse.so.0 \
-	libmpg123.so.0 libopenal.so.1 libaudiofile.so.1 \
+	libmpg123.so.0 libopenal.so.1 \
 	libglut.so.3 libusb-1.0.so.0 \
 	libcapi20.so.3 libtiff.so.5 libXpm.so.4 \
 	librsvg-2.so.2 libgphoto2.so.6 libgphoto2_port.so.12 \
-	libldap_r-2.4.so.2 liblber-2.4.so.2 libdbus-1.so.3 \
+	libldap_r-2.4.so.2 liblber-2.4.so.2 \
 	libgsm.so.1 libodbc.so.2 libgnutls.so.30 libintl.so.8 \
-	liblcms2.so.2 libOSMesa.so.8 libGL.so.1 \
+	liblcms2.so.2 libOSMesa.so.8 \
 	libGLU.so.1 libv4l2.so.0 libieee1284.so.3 libjpeg.so.8 \
 	libvkd3d.so.1 libfontconfig.so.1 libfreetype.so.6 \
 	libgstreamer-1.0.so.0 libgstvideo-1.0.so.0 \
 	libgstaudio-1.0.so.0 libgstbase-1.0.so.0 \
 	libva.so.2 libva-x11.so.2 libva-drm.so.2 \
 	libavcodec.so.58 libpcap.so.1 libkrb5.so.3 libk5crypto.so.3 \
-	libudev.so.1 libFAudio.so.0 libcom_err.so.2 \
+	libudev.so.1 libFAudio.so.0 \
 	libgtk-3.so.0 libgdk-3.so.0 libpangocairo-1.0.so.0 libpango-1.0.so.0 \
 	libharfbuzz.so.0 libatk-1.0.so.0 libcairo-gobject.so.2 libcairo.so.2 \
-	libgdk_pixbuf-2.0.so.0 libgio-2.0.so.0 libgobject-2.0.so.0 libglib-2.0.so.0 \
+	libgdk_pixbuf-2.0.so.0 \
 	; do
 	if [ -e /usr/lib/$i ]; then 
 		ln -s /usr/lib/$i lib32/`echo $i |sed -e 's,\.so\..*,.so,'`
