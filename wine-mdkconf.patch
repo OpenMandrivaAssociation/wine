@@ -1,6 +1,6 @@
-diff -up wine-5.8/dlls/ntdll/server.c.conf~ wine-5.8/dlls/ntdll/server.c
---- wine-5.8/dlls/ntdll/server.c.conf~	2020-05-09 17:30:15.873015801 +0200
-+++ wine-5.8/dlls/ntdll/server.c	2020-05-09 17:31:25.452856584 +0200
+diff -up wine-5.8/dlls/ntdll/unix/server.c.conf~ wine-5.8/dlls/ntdll/unix/server.c
+--- wine-5.8/dlls/ntdll/unix/server.c.conf~	2020-05-09 17:30:15.873015801 +0200
++++ wine-5.8/dlls/ntdll/unix/server.c	2020-05-09 17:31:25.452856584 +0200
 @@ -1593,6 +1593,12 @@ static int setup_config_dir(void)
      }
      else if (errno != EEXIST) fatal_perror( "cannot create %s/dosdevices", config_dir );

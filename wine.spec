@@ -12,6 +12,9 @@
 %global ldflags %{ldflags} -Wl,-z,notext -fuse-ld=lld
 %endif
 
+%define _fortify_cflags %{nil}
+%define _ssp_cflags %{nil}
+
 %ifarch %{x86_64}
 %bcond_without wow64
 %else
@@ -31,13 +34,13 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	5.8
+Version:	5.11
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
 Source1:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz.sign
 %else
-Release:	2
+Release:	1
 Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz
 Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz.sign
 %endif
@@ -63,6 +66,7 @@ Patch2:		wine-cjk.patch
 # https://bugs.winehq.org/show_bug.cgi?id=41930#c0
 Patch4:		0001-Revert-gdi32-Fix-arguments-for-OSMesaMakeCurrent-whe.patch
 Patch5:		wine-4.14-fix-crackling-audio.patch
+Patch6:		wine-5.11-llvm-libunwind.patch
 
 # a: => /media/floppy
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -78,7 +82,7 @@ BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	gpm-devel
 BuildRequires:	perl-devel
-BuildRequires:	pcap-devel
+BuildRequires:	pkgconfig(libpcap)
 BuildRequires:	pkgconfig(OpenCL)
 BuildRequires:	pkgconfig(ncurses)
 BuildRequires:	pkgconfig(ncursesw)
@@ -108,7 +112,7 @@ BuildRequires:	pkgconfig(libgcrypt)
 BuildRequires:	pkgconfig(gpg-error)
 BuildRequires:	pkgconfig(gtk+-3.0)
 %ifarch %{ix86} %{x86_64}
-BuildRequires:	isdn4k-utils-devel
+BuildRequires:	devel(libcapi20(64bit))
 %endif
 BuildRequires:	glibc-static-devel
 BuildRequires:	chrpath
@@ -171,47 +175,47 @@ BuildRequires:	cmake(FAudio)
 # -devel packages because the headers would conflict with the 64bit headers.
 # Given the headers are the same anyway, we can just create fake devel
 # environments by symlinking .so files and reusing system (64bit) includes.
-BuildRequires:	libSDL2-2.0.so.1
-BuildRequires:	libOpenCL.so.1
+BuildRequires:	devel(libSDL2-2.0)
+BuildRequires:	devel(libOpenCL)
 BuildRequires:	devel(libncurses)
 BuildRequires:	devel(libncursesw)
-BuildRequires:	libcups.so.2
-BuildRequires:	libsane.so.1
-BuildRequires:	libsystemd.so.0
+BuildRequires:	devel(libcups)
+BuildRequires:	devel(libsane)
+BuildRequires:	devel(libsystemd)
 BuildRequires:	devel(libz)
-BuildRequires:	libjack.so.0
-BuildRequires:	libpulse.so.0
-BuildRequires:	libmpg123.so.0
-BuildRequires:	libopenal.so.1
+BuildRequires:	devel(libjack)
+BuildRequires:	devel(libpulse)
+BuildRequires:	devel(libmpg123)
+BuildRequires:	devel(libopenal)
 BuildRequires:	devel(libasound)
 BuildRequires:	devel(libaudiofile)
-BuildRequires:	libglut.so.3
+BuildRequires:	devel(libglut)
 BuildRequires:	devel(libpng16)
-BuildRequires:	libusb-1.0.so.0
+BuildRequires:	devel(libusb-1.0)
 BuildRequires:	devel(libxml2)
 BuildRequires:	devel(libxslt)
-BuildRequires:	libcapi20.so.3
+BuildRequires:	devel(libcapi20)
 BuildRequires:	devel(libgif)
-BuildRequires:	libtiff.so.5
-BuildRequires:	libXpm.so.4
-BuildRequires:	librsvg-2.so.2
-BuildRequires:	libgphoto2.so.6
-BuildRequires:	libgphoto2_port.so.12
-BuildRequires:	libldap_r-2.4.so.2
-BuildRequires:	liblber-2.4.so.2
+BuildRequires:	devel(libtiff)
+BuildRequires:	devel(libXpm)
+BuildRequires:	devel(librsvg-2)
+BuildRequires:	devel(libgphoto2)
+BuildRequires:	devel(libgphoto2_port)
+BuildRequires:	devel(libldap_r-2.4)
+BuildRequires:	devel(liblber-2.4)
 BuildRequires:	devel(libdbus-1)
-BuildRequires:	libgsm.so.1
-BuildRequires:	libodbc.so.2
-BuildRequires:	libgnutls.so.30
-BuildRequires:	libintl.so.8
-BuildRequires:	libd3dadapter9_1
-BuildRequires:	liblcms2.so.2
-BuildRequires:	libOSMesa.so.8
+BuildRequires:	devel(libgsm)
+BuildRequires:	devel(libodbc)
+BuildRequires:	devel(libgnutls)
+BuildRequires:	devel(libintl)
+BuildRequires:	libd3dadapter9-devel
+BuildRequires:	devel(liblcms2)
+BuildRequires:	devel(libOSMesa)
 BuildRequires:	devel(libGL)
-BuildRequires:	libGLU.so.1
-BuildRequires:	libv4l2.so.0
-BuildRequires:	libieee1284.so.3
-BuildRequires:	libjpeg.so.8
+BuildRequires:	devel(libGLU)
+BuildRequires:	devel(libv4l2)
+BuildRequires:	devel(libieee1284)
+BuildRequires:	devel(libjpeg)
 BuildRequires:	devel(libXcursor)
 BuildRequires:	devel(libXcomposite)
 BuildRequires:	devel(libXfixes)
@@ -225,34 +229,34 @@ BuildRequires:	devel(libXrender)
 BuildRequires:	devel(libXext)
 BuildRequires:	devel(libSM)
 BuildRequires:	libvulkan-devel
-BuildRequires:	libvkd3d.so.1
-BuildRequires:	libfontconfig.so.1
-BuildRequires:	libfreetype.so.6
-BuildRequires:	libgstreamer-1.0.so.0
-BuildRequires:	libgstvideo-1.0.so.0
-BuildRequires:	libgstaudio-1.0.so.0
-BuildRequires:	libgstbase-1.0.so.0
-BuildRequires:	libva.so.2
-BuildRequires:	libva-x11.so.2
-BuildRequires:	libva-drm.so.2
-BuildRequires:	libavcodec.so.58
-BuildRequires:	libudev.so.1
-BuildRequires:	libFAudio.so.0
-BuildRequires:	libpcap.so.1
-BuildRequires:	libkrb5.so.3
-BuildRequires:	libk5crypto.so.3
+BuildRequires:	devel(libvkd3d)
+BuildRequires:	devel(libfontconfig)
+BuildRequires:	devel(libfreetype)
+BuildRequires:	devel(libgstreamer-1.0)
+BuildRequires:	devel(libgstvideo-1.0)
+BuildRequires:	devel(libgstaudio-1.0)
+BuildRequires:	devel(libgstbase-1.0)
+BuildRequires:	devel(libva)
+BuildRequires:	devel(libva-x11)
+BuildRequires:	devel(libva-drm)
+BuildRequires:	devel(libavcodec)
+BuildRequires:	devel(libudev)
+BuildRequires:	devel(libFAudio)
+BuildRequires:	devel(libpcap)
+BuildRequires:	devel(libkrb5)
+BuildRequires:	devel(libk5crypto)
 BuildRequires:	devel(libcom_err)
 BuildRequires:	devel(libgcrypt)
 BuildRequires:	devel(libgpg-error)
-BuildRequires:	libgtk-3.so.0
-BuildRequires:	libgdk-3.so.0
-BuildRequires:	libpangocairo-1.0.so.0
-BuildRequires:	libpango-1.0.so.0
-BuildRequires:	libharfbuzz.so.0
-BuildRequires:	libatk-1.0.so.0
-BuildRequires:	libcairo-gobject.so.2
-BuildRequires:	libcairo.so.2
-BuildRequires:	libgdk_pixbuf-2.0.so.0
+BuildRequires:	devel(libgtk-3)
+BuildRequires:	devel(libgdk-3)
+BuildRequires:	devel(libpangocairo-1.0)
+BuildRequires:	devel(libpango-1.0)
+BuildRequires:	devel(libharfbuzz)
+BuildRequires:	devel(libatk-1.0)
+BuildRequires:	devel(libcairo-gobject)
+BuildRequires:	devel(libcairo)
+BuildRequires:	devel(libgdk_pixbuf-2.0)
 BuildRequires:	devel(libgio-2.0)
 BuildRequires:	devel(libgobject-2.0)
 BuildRequires:	devel(libglib-2.0)
@@ -351,6 +355,7 @@ cd ..
 %endif
 %patch4 -p1 -b .civ3~
 %patch5 -p1 -b .pulseaudiosucks~
+%patch6 -p1 -b .unwind~
 
 autoreconf
 aclocal
@@ -361,11 +366,14 @@ autoconf
 # http://bugs.winehq.org/show_bug.cgi?id=24606
 # http://bugs.winehq.org/show_bug.cgi?id=25073
 %undefine _fortify_cflags
+export CFLAGS="`echo %{optflags} |sed -e 's,-m64,,g;s,-mx32,,g'`"
+export CXXFLAGS="`echo %{optflags} |sed -e 's,-m64,,g;s,-mx32,,g'`"
+export LDFLAGS="`echo %{build_ldflags} |sed -e 's,-m64,,g;s,-mx32,,g'`"
 %ifarch %{ix86}
 # (Anssi 04/2008) bug #39604
 # Some protection systems complain "debugger detected" with our
 # -fomit-frame-pointer flag, so disable it.
-export CFLAGS="%{optflags} -fno-omit-frame-pointer"
+export CFLAGS="${CFLAGS} -fno-omit-frame-pointer"
 %endif
 
 %ifarch %{x86_64}
@@ -404,53 +412,10 @@ fi
 %if %{with wow64}
 cd ..
 
-# FIXME Continuing workarounds for lack of proper multiarch support
-export LD_LIBRARY_PATH=`pwd`/lib32
-export CFLAGS="`echo $CFLAGS |sed -e 's,-m64,,g'` -L`pwd`/lib32 -I%{_includedir}/freetype2 -m32"
-export LDFLAGS="%{ldflags} -L`pwd`/lib32 -m32"
-export PKG_CONFIG_PATH=%{_prefix}/lib/pkgconfig:"`pwd`/lib32/pkgconfig":%{_datadir}/pkgconfig
-mkdir -p lib32/pkgconfig
-for i in OpenCL sane-backends jack libpulse \
-	libmpg123 openal alsa freeglut libusb-1.0 \
-	xpm libtiff-4 librsvg-2.0 libgphoto2 gnutls \
-	lcms2 osmesa libglvnd glu libv4l2 libjpeg \
-	vulkan libvkd3d \
-	fontconfig freetype2 gstreamer-1.0 gstreamer-base-1.0 \
-	gstreamer-plugins-base-1.0 libva libavcodec libudev sdl2 gtk+-3.0; do
-	sed -e 's,64,,g' %{_libdir}/pkgconfig/$i.pc >lib32/pkgconfig/$i.pc
-done
-
-for i in libSDL2-2.0.so.1 libOpenCL.so.1 libcups.so.2 \
-	libsane.so.1 libsystemd.so.0 libjack.so.0 libpulse.so.0 \
-	libmpg123.so.0 libopenal.so.1 \
-	libglut.so.3 libusb-1.0.so.0 \
-	libcapi20.so.3 libtiff.so.5 libXpm.so.4 \
-	librsvg-2.so.2 libgphoto2.so.6 libgphoto2_port.so.12 \
-	libldap_r-2.4.so.2 liblber-2.4.so.2 \
-	libgsm.so.1 libodbc.so.2 libgnutls.so.30 libintl.so.8 \
-	liblcms2.so.2 libOSMesa.so.8 \
-	libGLU.so.1 libv4l2.so.0 libieee1284.so.3 libjpeg.so.8 \
-	libvkd3d.so.1 libfontconfig.so.1 libfreetype.so.6 \
-	libgstreamer-1.0.so.0 libgstvideo-1.0.so.0 \
-	libgstaudio-1.0.so.0 libgstbase-1.0.so.0 \
-	libva.so.2 libva-x11.so.2 libva-drm.so.2 \
-	libavcodec.so.58 libpcap.so.1 libkrb5.so.3 libk5crypto.so.3 \
-	libudev.so.1 libFAudio.so.0 \
-	libgtk-3.so.0 libgdk-3.so.0 libpangocairo-1.0.so.0 libpango-1.0.so.0 \
-	libharfbuzz.so.0 libatk-1.0.so.0 libcairo-gobject.so.2 libcairo.so.2 \
-	libgdk_pixbuf-2.0.so.0 \
-	; do
-	if [ -e /usr/lib/$i ]; then 
-		ln -s /usr/lib/$i lib32/`echo $i |sed -e 's,\.so\..*,.so,'`
-	else
-		ln -s /lib/$i lib32/`echo $i |sed -e 's,\.so\..*,.so,'`
-	fi
-done
-ln -s libSDL2-2.0.so lib32/libSDL2.so
-ln -s libldap_r-2.4.so lib32/libldap_r.so
-ln -s liblber-2.4.so lib32/liblber.so
 mkdir build32
 cd build32
+PKG_CONFIG_LIBDIR="%{_prefix}/lib/pkgconfig:%{_datadir}/pkgconfig" \
+PKG_CONFIG_PATH="%{_prefix}/lib/pkgconfig:%{_datadir}/pkgconfig" \
 ../configure \
 		--prefix=%{_prefix} \
 		--with-pulse \
@@ -692,6 +657,7 @@ done
 %{_libdir}/%{name}/*.acm.so
 %{_libdir}/%{name}/*.ds.so
 %{_libdir}/%{name}/*.sys.so
+%{_libdir}/%{name}/ntdll.so
 %ifarch %{ix86}
 %{_libdir}/%{name}/*16.so
 %{_libdir}/%{name}/*.vxd.so
@@ -728,6 +694,7 @@ done
 %{_prefix}/lib/%{name}/*.drv16
 %{_prefix}/lib/%{name}/*.mod16
 %{_prefix}/lib/%{name}/*.ax
+%{_prefix}/lib/%{name}/ntdll.so
 %{_prefix}/lib/%{name}/fakedlls
 %endif
 

@@ -1,9 +1,9 @@
-diff -up wine-4.14/loader/main.c.omv~ wine-4.14/loader/main.c
---- wine-4.14/loader/main.c.omv~	2019-08-30 01:28:08.748036639 +0200
-+++ wine-4.14/loader/main.c	2019-08-30 01:31:44.770908819 +0200
-@@ -320,6 +320,12 @@ int main( int argc, char *argv[] )
-     char error[1024];
-     int i;
+diff -up wine-5.9/loader/main.c.pulseaudiosucks~ wine-5.9/loader/main.c
+--- wine-5.9/loader/main.c.pulseaudiosucks~	2020-05-24 00:06:21.290999689 +0200
++++ wine-5.9/loader/main.c	2020-05-24 00:09:44.278638652 +0200
+@@ -327,6 +327,12 @@ int main( int argc, char *argv[] )
+         exit(1);
+     }
  
 +    /* Workaround for crackling audio with many games (e.g. Civ3, Broken Sword 4, ...) */
 +    if (!getenv( "PULSE_LATENCY_MSEC" ) && !getenv( "WINE_DONT_MESS_WITH_PULSE" ))
