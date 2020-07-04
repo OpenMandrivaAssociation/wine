@@ -112,9 +112,7 @@ BuildRequires:	pkgconfig(libxslt)
 BuildRequires:	pkgconfig(libgcrypt)
 BuildRequires:	pkgconfig(gpg-error)
 BuildRequires:	pkgconfig(gtk+-3.0)
-%ifarch %{ix86} %{x86_64}
-BuildRequires:	devel(libcapi20(64bit))
-%endif
+BuildRequires:	%{mklibname -d capi20}
 BuildRequires:	glibc-static-devel
 BuildRequires:	chrpath
 BuildRequires:	giflib-devel
