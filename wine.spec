@@ -182,6 +182,7 @@ BuildRequires:	devel(libcups)
 BuildRequires:	devel(libsane)
 BuildRequires:	devel(libsystemd)
 BuildRequires:	devel(libz)
+BuildRequires:	devel(libbz2)
 BuildRequires:	devel(libjack)
 BuildRequires:	devel(libpulse)
 BuildRequires:	devel(libmpg123)
@@ -253,12 +254,36 @@ BuildRequires:	devel(libpangocairo-1.0)
 BuildRequires:	devel(libpango-1.0)
 BuildRequires:	devel(libharfbuzz)
 BuildRequires:	devel(libatk-1.0)
+BuildRequires:	devel(libatk-bridge-2.0)
+BuildRequires:	devel(libatspi)
 BuildRequires:	devel(libcairo-gobject)
 BuildRequires:	devel(libcairo)
 BuildRequires:	devel(libgdk_pixbuf-2.0)
 BuildRequires:	devel(libgio-2.0)
 BuildRequires:	devel(libgobject-2.0)
 BuildRequires:	devel(libglib-2.0)
+BuildRequires:	devel(liborc-0.4)
+BuildRequires:	devel(libunwind)
+BuildRequires:	devel(libelf)
+BuildRequires:	devel(libdw)
+BuildRequires:	devel(liblzma)
+BuildRequires:	devel(libpcre)
+BuildRequires:	devel(libffi)
+BuildRequires:	devel(libepoxy)
+BuildRequires:	devel(libfribidi)
+BuildRequires:	devel(libpangoft2-1.0)
+BuildRequires:	devel(libuuid)
+BuildRequires:	devel(libblkid)
+BuildRequires:	devel(libmount)
+BuildRequires:	devel(libpixman-1)
+BuildRequires:	devel(libexpat)
+BuildRequires:	devel(libxcb)
+BuildRequires:	devel(libXft)
+BuildRequires:	devel(libxcb-render)
+BuildRequires:	devel(libxcb-shm)
+BuildRequires:	devel(libXau)
+BuildRequires:	devel(libXdmcp)
+BuildRequires:	devel(libXdamage)
 %endif
 Suggests:	sane-frontends
 # wine dlopen's these, so let's add the dependencies ourself
@@ -415,7 +440,7 @@ cd ..
 
 mkdir build32
 cd build32
-PKG_CONFIG_LIBDIR="%{_prefix}/lib/pkgconfig:%{_datadir}/pkgconfig" \
+if ! PKG_CONFIG_LIBDIR="%{_prefix}/lib/pkgconfig:%{_datadir}/pkgconfig" \
 PKG_CONFIG_PATH="%{_prefix}/lib/pkgconfig:%{_datadir}/pkgconfig" \
 ../configure \
 		--prefix=%{_prefix} \
@@ -423,7 +448,10 @@ PKG_CONFIG_PATH="%{_prefix}/lib/pkgconfig:%{_datadir}/pkgconfig" \
 		--without-hal \
     		--with-xattr \
 		--with-gstreamer \
-		--with-wine64=../build
+		--with-wine64=../build; then
+	echo "32-bit configure failed. Full config.log:"
+	cat config.log
+fi
 if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4)'; then
 	echo "Full config.log:"
 	cat config.log
