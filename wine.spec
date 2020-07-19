@@ -34,7 +34,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	5.12
+Version:	5.13
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -66,8 +66,6 @@ Patch2:		wine-cjk.patch
 Patch4:		0001-Revert-gdi32-Fix-arguments-for-OSMesaMakeCurrent-whe.patch
 Patch5:		wine-4.14-fix-crackling-audio.patch
 Patch6:		wine-5.11-llvm-libunwind.patch
-Patch7:		https://github.com/wine-staging/wine-staging/commit/3f3a05f91c85cb5ccdc4c8185bcc862c6e96cd52.patch
-Patch8:		wine-5.12-xact-compile.patch
 
 # a: => /media/floppy
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -370,7 +368,6 @@ Wine is often updated.
 %if %{with staging}
 # wine-staging
 tar --strip-components=1 -zxf "%{SOURCE900}"
-%patch7 -p1 -b .xact_compile1~
 WINEDIR="$(pwd)"
 cd patches
 ./patchinstall.sh --all DESTDIR="$WINEDIR"
@@ -381,7 +378,6 @@ cd ..
 %patch4 -p1 -b .civ3~
 %patch5 -p1 -b .pulseaudiosucks~
 %patch6 -p1 -b .unwind~
-%patch8 -p1 -b .xact_compile2~
 
 autoreconf
 aclocal
