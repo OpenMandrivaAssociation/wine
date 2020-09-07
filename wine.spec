@@ -34,7 +34,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	5.15
+Version:	5.16
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -261,7 +261,7 @@ BuildRequires:	devel(libgio-2.0)
 BuildRequires:	devel(libgobject-2.0)
 BuildRequires:	devel(libglib-2.0)
 BuildRequires:	devel(liborc-0.4)
-BuildRequires:	devel(libunwind)
+BuildRequires:	libunwind-nongnu-devel
 BuildRequires:	devel(libelf)
 BuildRequires:	devel(libdw)
 BuildRequires:	devel(liblzma)
