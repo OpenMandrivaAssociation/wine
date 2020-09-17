@@ -1,9 +1,9 @@
-diff -up wine-5.9/loader/main.c.pulseaudiosucks~ wine-5.9/loader/main.c
---- wine-5.9/loader/main.c.pulseaudiosucks~	2020-05-24 00:06:21.290999689 +0200
-+++ wine-5.9/loader/main.c	2020-05-24 00:09:44.278638652 +0200
-@@ -327,6 +327,12 @@ int main( int argc, char *argv[] )
-         exit(1);
-     }
+diff -up wine-5.17/loader/main.c.pulseaudiosucks~ wine-5.17/loader/main.c
+--- wine-5.17/loader/main.c.pulseaudiosucks~	2020-09-17 21:28:04.333743630 +0200
++++ wine-5.17/loader/main.c	2020-09-17 22:03:00.742256250 +0200
+@@ -151,6 +151,12 @@ int main( int argc, char *argv[] )
+ {
+     void *handle;
  
 +    /* Workaround for crackling audio with many games (e.g. Civ3, Broken Sword 4, ...) */
 +    if (!getenv( "PULSE_LATENCY_MSEC" ) && !getenv( "WINE_DONT_MESS_WITH_PULSE" ))
@@ -11,6 +11,6 @@ diff -up wine-5.9/loader/main.c.pulseaudiosucks~ wine-5.9/loader/main.c
 +        setenv( "PULSE_LATENCY_MSEC", "60", 1);
 +    }
 +
-     if (!getenv( "WINELOADERNOEXEC" ))  /* first time around */
+     if ((handle = load_ntdll( argv[0] )))
      {
-         static char noexec[] = "WINELOADERNOEXEC=1";
+         void (*init_func)(int, char **, char **) = dlsym( handle, "__wine_main" );
