@@ -34,7 +34,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	5.17
+Version:	5.19
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -688,6 +688,9 @@ done
 %{_libdir}/%{name}/*.vxd.so
 %endif
 %{_libdir}/%{name}/fakedlls
+%{_libdir}/%{name}/bcrypt.so
+%{_libdir}/%{name}/odbc32.so
+%{_libdir}/%{name}/user32.so
 %if %{with wow64}
 %{_prefix}/lib/libwine*.so.%{major}*
 %dir %{_prefix}/lib/%{name}
@@ -721,6 +724,9 @@ done
 %{_prefix}/lib/%{name}/*.ax
 %{_prefix}/lib/%{name}/ntdll.so
 %{_prefix}/lib/%{name}/fakedlls
+%{_prefix}/lib/%{name}/bcrypt.so
+%{_prefix}/lib/%{name}/odbc32.so
+%{_prefix}/lib/%{name}/user32.so
 %endif
 
 %files devel
