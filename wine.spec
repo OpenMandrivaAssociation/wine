@@ -34,7 +34,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	5.21
+Version:	5.22
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -631,9 +631,6 @@ done
 %{_mandir}/man1/winepath.1*
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/%{name}.inf
-%{_datadir}/%{name}/winebus.inf
-%{_datadir}/%{name}/winehid.inf
-%{_datadir}/%{name}/wineusb.inf
 %{_datadir}/%{name}/nls/l_intl.nls
 %{_datadir}/%{name}/nls/c_*
 %{_datadir}/%{name}/nls/normidna.nls
@@ -664,6 +661,12 @@ done
 %optional %{_libdir}/%{name}/*.exe
 %optional %{_libdir}/%{name}/*.acm
 %optional %{_libdir}/%{name}/*.ds
+%optional %{_libdir}/%{name}/crtdll.so
+%optional %{_libdir}/%{name}/crypt32.so
+%optional %{_libdir}/%{name}/mscmc.so
+%optional %{_libdir}/%{name}/mscms.so
+%optional %{_libdir}/%{name}/msvc*.so
+%optional %{_libdir}/%{name}/ucrtbase.so
 %optional %{_libdir}/%{name}/*.sys
 %{_libdir}/%{name}/*.ax
 # If there isn't, they get built as *.cpl.so,
@@ -718,6 +721,12 @@ done
 %optional %{_prefix}/lib/%{name}/*.vxd
 %optional %{_prefix}/lib/%{name}/*.tlb
 %optional %{_prefix}/lib/%{name}/*.ds
+%optional %{_prefix}/lib/%{name}/crtdll.so
+%optional %{_prefix}/lib/%{name}/crypt32.so
+%optional %{_prefix}/lib/%{name}/mscmc.so
+%optional %{_prefix}/lib/%{name}/mscms.so
+%optional %{_prefix}/lib/%{name}/msvc*.so
+%optional %{_prefix}/lib/%{name}/ucrtbase.so
 %optional %{_prefix}/lib/%{name}/*.sys
 %{_prefix}/lib/%{name}/*.dll16
 %{_prefix}/lib/%{name}/*.exe16
