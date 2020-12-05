@@ -24,7 +24,7 @@
 %define	major	1
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%{mklibname -d wine}
-%define beta	%{nil}
+%define beta	rc1
 # Sometimes -staging patches are released late...
 # And sometimes there's interim releases
 %define sbeta	%{beta}
@@ -34,7 +34,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	5.22
+Version:	6.0
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -45,7 +45,7 @@ Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%
 Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz.sign
 %endif
 %if "%{sbeta}" != ""
-Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}-%{sbeta}.tar.gz
+Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}%{sbeta}.tar.gz
 %else
 Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}.tar.gz
 %endif
@@ -686,6 +686,7 @@ done
 %{_libdir}/%{name}/*.ds.so
 %{_libdir}/%{name}/*.sys.so
 %{_libdir}/%{name}/ntdll.so
+%{_libdir}/%{name}/qcap.so
 %ifarch %{ix86}
 %{_libdir}/%{name}/*16.so
 %{_libdir}/%{name}/*.vxd.so
@@ -734,6 +735,7 @@ done
 %{_prefix}/lib/%{name}/*.mod16
 %{_prefix}/lib/%{name}/*.ax
 %{_prefix}/lib/%{name}/ntdll.so
+%{_prefix}/lib/%{name}/qcap.so
 %{_prefix}/lib/%{name}/fakedlls
 %{_prefix}/lib/%{name}/bcrypt.so
 %{_prefix}/lib/%{name}/odbc32.so
@@ -744,11 +746,9 @@ done
 
 %files devel
 %{_libdir}/%{name}/*.a
-%{_libdir}/libwine*.so
 %{_libdir}/%{name}/*.def
 %ifarch %{x86_64}
 %{_prefix}/lib/%{name}/*.a
-%{_prefix}/lib/libwine*.so
 %{_prefix}/lib/%{name}/*.def
 %endif
 %{_includedir}/*
