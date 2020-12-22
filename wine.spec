@@ -24,10 +24,10 @@
 %define	major	1
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%{mklibname -d wine}
-%define beta	rc2
+%define beta	rc3
 # Sometimes -staging patches are released late...
 # And sometimes there's interim releases
-%define sbeta	rc1
+%define sbeta	%{beta}
 %define sver	%{version}
 
 %bcond_without staging
@@ -45,7 +45,7 @@ Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%
 Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz.sign
 %endif
 %if "%{sbeta}" != ""
-Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}%{sbeta}.tar.gz
+Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}-%{sbeta}.tar.gz
 %else
 Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}.tar.gz
 %endif
@@ -56,7 +56,7 @@ URL:		http://www.winehq.com/
 
 Source2:	wine.binfmt
 Source10:	wine.rpmlintrc
-Source11:	http://kegel.com/wine/winetricks
+Source11:	https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 Source12:	http://kegel.com/wine/wisotool
 Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
