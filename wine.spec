@@ -24,10 +24,10 @@
 %define	major	1
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%{mklibname -d wine}
-%define beta	rc4
+%define beta	rc5
 # Sometimes -staging patches are released late...
 # And sometimes there's interim releases
-%define sbeta	%{beta}
+%define sbeta	rc4
 %define sver	%{version}
 
 %bcond_without staging
