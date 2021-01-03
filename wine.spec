@@ -27,7 +27,7 @@
 %define beta	rc5
 # Sometimes -staging patches are released late...
 # And sometimes there's interim releases
-%define sbeta	rc4
+%define sbeta	%{beta}
 %define sver	%{version}
 
 %bcond_without staging
@@ -36,7 +36,7 @@ Name:		wine
 #(peroyvind): please do backports for new versions
 Version:	6.0
 %if "%{beta}" != ""
-Release:	0.%{beta}.1
+Release:	0.%{beta}.2
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
 Source1:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz.sign
 %else
