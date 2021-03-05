@@ -34,7 +34,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	6.1
+Version:	6.3
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -138,6 +138,7 @@ BuildRequires:	pkgconfig(glu)
 BuildRequires:	pkgconfig(libv4l2)
 BuildRequires:	ieee1284-devel
 BuildRequires:	pkgconfig(libjpeg)
+BuildRequires:	jxrlib-devel
 BuildRequires:	pkgconfig(xcursor)
 BuildRequires:	pkgconfig(xcomposite)
 BuildRequires:	pkgconfig(xi)
@@ -214,6 +215,7 @@ BuildRequires:	devel(libGLU)
 BuildRequires:	devel(libv4l2)
 BuildRequires:	devel(libieee1284)
 BuildRequires:	devel(libjpeg)
+BuildRequires:	devel(libjpegxr)
 BuildRequires:	devel(libXcursor)
 BuildRequires:	devel(libXcomposite)
 BuildRequires:	devel(libXfixes)
@@ -687,6 +689,8 @@ done
 %{_libdir}/%{name}/*.sys.so
 %{_libdir}/%{name}/ntdll.so
 %{_libdir}/%{name}/qcap.so
+%{_libdir}/%{name}/winegstreamer.so
+%{_libdir}/%{name}/wmphoto.so
 %ifarch %{ix86}
 %{_libdir}/%{name}/*16.so
 %{_libdir}/%{name}/*.vxd.so
@@ -742,6 +746,8 @@ done
 %{_prefix}/lib/%{name}/user32.so
 %{_prefix}/lib/%{name}/gdi32.so
 %{_prefix}/lib/%{name}/windowscodecs.so
+%{_prefix}/lib/%{name}/winegstreamer.so
+%{_prefix}/lib/%{name}/wmphoto.so
 %endif
 
 %files devel
