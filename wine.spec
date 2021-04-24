@@ -34,7 +34,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	6.6
+Version:	6.7
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -704,6 +704,10 @@ done
 %{_libdir}/%{name}/user32.so
 %{_libdir}/%{name}/gdi32.so
 %{_libdir}/%{name}/windowscodecs.so
+%{_libdir}/%{name}/kerberos.so
+%{_libdir}/%{name}/netapi32.so
+%{_libdir}/%{name}/winevulkan.so
+%{_libdir}/%{name}/wldap32.so
 %if %{with wow64}
 %{_prefix}/lib/libwine*.so.%{major}*
 %dir %{_prefix}/lib/%{name}
@@ -754,6 +758,10 @@ done
 %{_prefix}/lib/%{name}/windowscodecs.so
 %{_prefix}/lib/%{name}/winegstreamer.so
 %{_prefix}/lib/%{name}/wmphoto.so
+%{_prefix}/lib/%{name}/kerberos.so
+%{_prefix}/lib/%{name}/netapi32.so
+%{_prefix}/lib/%{name}/winevulkan.so
+%{_prefix}/lib/%{name}/wldap32.so
 %endif
 
 %files devel
