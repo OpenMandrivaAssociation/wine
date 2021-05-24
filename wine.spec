@@ -34,7 +34,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	6.7
+Version:	6.9
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -649,127 +649,71 @@ done
 %{_miconsdir}/*.png
 %{_iconsdir}/*.png
 %{_liconsdir}/*.png
-%{_libdir}/libwine*.so.%{major}*
 %dir %{_libdir}/%{name}
-# *.cpl, *.com and friends get built if there
-# is a working Windoze crosscompiler
-# (x86_64)
-%optional %{_libdir}/%{name}/*.cpl
-%optional %{_libdir}/%{name}/*.com
-%optional %{_libdir}/%{name}/*.ocx
-%optional %{_libdir}/%{name}/*.tlb
-%optional %{_libdir}/%{name}/*.drv
-%optional %{_libdir}/%{name}/*.dll
-%optional %{_libdir}/%{name}/*.exe
-%optional %{_libdir}/%{name}/*.acm
-%optional %{_libdir}/%{name}/*.ds
-%optional %{_libdir}/%{name}/crtdll.so
-%optional %{_libdir}/%{name}/crypt32.so
-%optional %{_libdir}/%{name}/mscmc.so
-%optional %{_libdir}/%{name}/mscms.so
-%optional %{_libdir}/%{name}/msvc*.so
-%optional %{_libdir}/%{name}/ucrtbase.so
-%optional %{_libdir}/%{name}/*.sys
-%{_libdir}/%{name}/*.ax
-# If there isn't, they get built as *.cpl.so,
-# *.com.so etc. instead
-# (e.g. arches that don't have native
-# Windoze versions)
-# Some stuff gets built as *.*.so all
-# the time.
-%optional %{_libdir}/%{name}/*.cpl.so
-%optional %{_libdir}/%{name}/*.com.so
-%optional %{_libdir}/%{name}/*.ocx.so
-%optional %{_libdir}/%{name}/*.tlb.so
-%{_libdir}/%{name}/*.drv.so
-%{_libdir}/%{name}/*.dll.so
-%{_libdir}/%{name}/*.exe.so
-%{_libdir}/%{name}/*.acm.so
-%{_libdir}/%{name}/*.ds.so
-%{_libdir}/%{name}/*.sys.so
-%{_libdir}/%{name}/ntdll.so
-%{_libdir}/%{name}/qcap.so
-%{_libdir}/%{name}/winegstreamer.so
-%{_libdir}/%{name}/wmphoto.so
-%ifarch %{ix86}
-%{_libdir}/%{name}/*16.so
-%{_libdir}/%{name}/*.vxd.so
-%endif
-%{_libdir}/%{name}/fakedlls
-%{_libdir}/%{name}/bcrypt.so
-%{_libdir}/%{name}/dnsapi.so
-%{_libdir}/%{name}/dwrite.so
-%{_libdir}/%{name}/odbc32.so
-%{_libdir}/%{name}/opencl.so
-%{_libdir}/%{name}/user32.so
-%{_libdir}/%{name}/gdi32.so
-%{_libdir}/%{name}/windowscodecs.so
-%{_libdir}/%{name}/kerberos.so
-%{_libdir}/%{name}/netapi32.so
-%{_libdir}/%{name}/winevulkan.so
-%{_libdir}/%{name}/wldap32.so
+%dir %{_libdir}/%{name}/x86_64-unix
+%dir %{_libdir}/%{name}/x86_64-windows
+%{_libdir}/%{name}/x86_64-unix/libwine.so.1*
+%{_libdir}/%{name}/*/*.acm.so
+%{_libdir}/%{name}/*/*.drv.so
+%{_libdir}/%{name}/*/*.dll.so
+%{_libdir}/%{name}/*/*.exe.so
+%{_libdir}/%{name}/*/*.acm.so
+%{_libdir}/%{name}/*/*.ds.so
+%{_libdir}/%{name}/*/*.sys.so
+%{_libdir}/%{name}/*-windows/*.acm
+%{_libdir}/%{name}/*-windows/*.ax
+%{_libdir}/%{name}/*-windows/*.com
+%{_libdir}/%{name}/*-windows/*.cpl
+%{_libdir}/%{name}/*-windows/*.dll
+%{_libdir}/%{name}/*-windows/*.drv
+%{_libdir}/%{name}/*-windows/*.ds
+%{_libdir}/%{name}/*-windows/*.exe
+%{_libdir}/%{name}/*-windows/*.ocx
+%{_libdir}/%{name}/*-windows/*.sys
+%{_libdir}/%{name}/*-windows/*.tlb
+%{_libdir}/%{name}/*-unix/*.so
 %if %{with wow64}
-%{_prefix}/lib/libwine*.so.%{major}*
 %dir %{_prefix}/lib/%{name}
-%optional %{_prefix}/lib/%{name}/*.cpl.so
-%optional %{_prefix}/lib/%{name}/*.com.so
-%optional %{_prefix}/lib/%{name}/*.drv.so
-%optional %{_prefix}/lib/%{name}/*.dll.so
-%optional %{_prefix}/lib/%{name}/*.exe.so
-%optional %{_prefix}/lib/%{name}/*.acm.so
-%optional %{_prefix}/lib/%{name}/*.ocx.so
-%optional %{_prefix}/lib/%{name}/*.vxd.so
-%optional %{_prefix}/lib/%{name}/*16.so
-%optional %{_prefix}/lib/%{name}/*.tlb.so
-%optional %{_prefix}/lib/%{name}/*.ds.so
-%optional %{_prefix}/lib/%{name}/*.sys.so
-%optional %{_prefix}/lib/%{name}/*.cpl
-%optional %{_prefix}/lib/%{name}/*.com
-%optional %{_prefix}/lib/%{name}/*.drv
-%optional %{_prefix}/lib/%{name}/*.dll
-%optional %{_prefix}/lib/%{name}/*.exe
-%optional %{_prefix}/lib/%{name}/*.acm
-%optional %{_prefix}/lib/%{name}/*.ocx
-%optional %{_prefix}/lib/%{name}/*.vxd
-%optional %{_prefix}/lib/%{name}/*.tlb
-%optional %{_prefix}/lib/%{name}/*.ds
-%optional %{_prefix}/lib/%{name}/crtdll.so
-%optional %{_prefix}/lib/%{name}/crypt32.so
-%optional %{_prefix}/lib/%{name}/mscmc.so
-%optional %{_prefix}/lib/%{name}/mscms.so
-%optional %{_prefix}/lib/%{name}/msvc*.so
-%optional %{_prefix}/lib/%{name}/ucrtbase.so
-%optional %{_prefix}/lib/%{name}/*.sys
-%{_prefix}/lib/%{name}/*.dll16
-%{_prefix}/lib/%{name}/*.exe16
-%{_prefix}/lib/%{name}/*.drv16
-%{_prefix}/lib/%{name}/*.mod16
-%{_prefix}/lib/%{name}/*.ax
-%{_prefix}/lib/%{name}/ntdll.so
-%{_prefix}/lib/%{name}/qcap.so
-%{_prefix}/lib/%{name}/fakedlls
-%{_prefix}/lib/%{name}/bcrypt.so
-%{_prefix}/lib/%{name}/dnsapi.so
-%{_prefix}/lib/%{name}/dwrite.so
-%{_prefix}/lib/%{name}/odbc32.so
-%{_prefix}/lib/%{name}/opencl.so
-%{_prefix}/lib/%{name}/user32.so
-%{_prefix}/lib/%{name}/gdi32.so
-%{_prefix}/lib/%{name}/windowscodecs.so
-%{_prefix}/lib/%{name}/winegstreamer.so
-%{_prefix}/lib/%{name}/wmphoto.so
-%{_prefix}/lib/%{name}/kerberos.so
-%{_prefix}/lib/%{name}/netapi32.so
-%{_prefix}/lib/%{name}/winevulkan.so
-%{_prefix}/lib/%{name}/wldap32.so
+%dir %{_prefix}/lib/%{name}/i386-unix
+%dir %{_prefix}/lib/%{name}/i386-windows
+%{_prefix}/lib/%{name}/i386-unix/libwine.so.1*
+%{_prefix}/lib/%{name}/*/*.acm
+%{_prefix}/lib/%{name}/*/*.acm.so
+%{_prefix}/lib/%{name}/*/*.cpl
+%{_prefix}/lib/%{name}/*/*.com
+%{_prefix}/lib/%{name}/*/*.drv
+%{_prefix}/lib/%{name}/*/*.drv.so
+%{_prefix}/lib/%{name}/*/*.dll
+%{_prefix}/lib/%{name}/*/*.dll.so
+%{_prefix}/lib/%{name}/*/*.exe
+%{_prefix}/lib/%{name}/*/*.exe.so
+%{_prefix}/lib/%{name}/*/*.ocx
+%{_prefix}/lib/%{name}/*/*.vxd
+%{_prefix}/lib/%{name}/*/*.tlb
+%{_prefix}/lib/%{name}/*/*.ds
+%{_prefix}/lib/%{name}/*/*.ds.so
+%{_prefix}/lib/%{name}/*/*.sys
+%{_prefix}/lib/%{name}/*/*.sys.so
+%{_prefix}/lib/%{name}/i386-unix/crtdll.so
+%{_prefix}/lib/%{name}/i386-unix/crypt32.so
+%{_prefix}/lib/%{name}/i386-unix/mscms.so
+%{_prefix}/lib/%{name}/i386-unix/msvc*.so
+%{_prefix}/lib/%{name}/i386-unix/ucrtbase.so
+%{_prefix}/lib/%{name}/*/*.dll16
+%{_prefix}/lib/%{name}/*/*.exe16
+%{_prefix}/lib/%{name}/*/*.drv16
+%{_prefix}/lib/%{name}/*/*.mod16
+%{_prefix}/lib/%{name}/*/*.ax
+%{_prefix}/lib/%{name}/*-windows/*.dll
+%{_prefix}/lib/%{name}/*-unix/*.so
 %endif
 
 %files devel
-%{_libdir}/%{name}/*.a
-%{_libdir}/%{name}/*.def
+%{_libdir}/%{name}/*/*.a
+%{_libdir}/%{name}/*/*.def
 %ifarch %{x86_64}
-%{_prefix}/lib/%{name}/*.a
-%{_prefix}/lib/%{name}/*.def
+%{_prefix}/lib/%{name}/*/*.a
+%{_prefix}/lib/%{name}/*/*.def
 %endif
 %{_includedir}/*
 # %{_bindir}/fnt2bdf
