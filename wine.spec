@@ -34,7 +34,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	6.9
+Version:	6.10
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -671,6 +671,7 @@ done
 %{_libdir}/%{name}/*-windows/*.ocx
 %{_libdir}/%{name}/*-windows/*.sys
 %{_libdir}/%{name}/*-windows/*.tlb
+%{_libdir}/%{name}/*-windows/windows.networking.connectivity
 %{_libdir}/%{name}/*-unix/*.so
 %if %{with wow64}
 %dir %{_prefix}/lib/%{name}
@@ -705,6 +706,7 @@ done
 %{_prefix}/lib/%{name}/*/*.mod16
 %{_prefix}/lib/%{name}/*/*.ax
 %{_prefix}/lib/%{name}/*-windows/*.dll
+%{_prefix}/lib/%{name}/*-windows/windows.networking.connectivity
 %{_prefix}/lib/%{name}/*-unix/*.so
 %endif
 
