@@ -671,6 +671,7 @@ done
 %{_libdir}/%{name}/*-windows/*.ocx
 %{_libdir}/%{name}/*-windows/*.sys
 %{_libdir}/%{name}/*-windows/*.tlb
+%{_libdir}/%{name}/*-windows/windows.networking.connectivity
 %{_libdir}/%{name}/*-unix/*.so
 %if %{with wow64}
 %dir %{_prefix}/lib/%{name}
@@ -705,6 +706,7 @@ done
 %{_prefix}/lib/%{name}/*/*.mod16
 %{_prefix}/lib/%{name}/*/*.ax
 %{_prefix}/lib/%{name}/*-windows/*.dll
+%{_prefix}/lib/%{name}/*-windows/windows.networking.connectivity
 %{_prefix}/lib/%{name}/*-unix/*.so
 %endif
 
