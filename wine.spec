@@ -34,7 +34,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	6.10
+Version:	6.11
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -695,11 +695,8 @@ done
 %{_prefix}/lib/%{name}/*/*.ds.so
 %{_prefix}/lib/%{name}/*/*.sys
 %{_prefix}/lib/%{name}/*/*.sys.so
-%{_prefix}/lib/%{name}/i386-unix/crtdll.so
 %{_prefix}/lib/%{name}/i386-unix/crypt32.so
 %{_prefix}/lib/%{name}/i386-unix/mscms.so
-%{_prefix}/lib/%{name}/i386-unix/msvc*.so
-%{_prefix}/lib/%{name}/i386-unix/ucrtbase.so
 %{_prefix}/lib/%{name}/*/*.dll16
 %{_prefix}/lib/%{name}/*/*.exe16
 %{_prefix}/lib/%{name}/*/*.drv16
