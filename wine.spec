@@ -34,7 +34,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	6.11
+Version:	6.12
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -66,6 +66,7 @@ Patch2:		wine-cjk.patch
 Patch4:		0001-Revert-gdi32-Fix-arguments-for-OSMesaMakeCurrent-whe.patch
 Patch5:		wine-4.14-fix-crackling-audio.patch
 Patch6:		wine-5.11-llvm-libunwind.patch
+Patch7:		staging-6.12-dont-reference-nonexistant-patch.patch
 
 # a: => /media/floppy
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
@@ -370,6 +371,7 @@ Wine is often updated.
 %if %{with staging}
 # wine-staging
 tar --strip-components=1 -zxf "%{SOURCE900}"
+%patch7 -p1 -b .fix~
 WINEDIR="$(pwd)"
 cd patches
 ./patchinstall.sh --all DESTDIR="$WINEDIR"
@@ -671,6 +673,7 @@ done
 %{_libdir}/%{name}/*-windows/*.ocx
 %{_libdir}/%{name}/*-windows/*.sys
 %{_libdir}/%{name}/*-windows/*.tlb
+%{_libdir}/%{name}/*-windows/*.msstyles
 %{_libdir}/%{name}/*-windows/windows.networking.connectivity
 %{_libdir}/%{name}/*-unix/*.so
 %if %{with wow64}
@@ -704,6 +707,7 @@ done
 %{_prefix}/lib/%{name}/*/*.ax
 %{_prefix}/lib/%{name}/*-windows/*.dll
 %{_prefix}/lib/%{name}/*-windows/windows.networking.connectivity
+%{_prefix}/lib/%{name}/*-windows/*.msstyles
 %{_prefix}/lib/%{name}/*-unix/*.so
 %endif
 
