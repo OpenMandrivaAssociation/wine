@@ -1,3 +1,5 @@
 sources:
   wine-6.13.tar.xz: 2e3990f1bc3bfcb03ea435fd579e95b6428c2b50
   v6.13.tar.gz: 05e251d9bd14bbe763eed7e1bfe152d90c1389e1
+  v6.14.tar.gz: 50d575f34b88ec594e7fb95d17972bc37011f307
+  wine-6.14.tar.xz: 1d477e3b9609c17a783d7253defa89a24e37e71c
