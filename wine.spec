@@ -34,7 +34,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	6.15
+Version:	6.16
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -61,7 +61,6 @@ Source12:	http://kegel.com/wine/wisotool
 Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
-Patch3:		wine-6.14-glibc-2.34.patch
 # https://bugs.winehq.org/show_bug.cgi?id=41930#c0
 Patch4:		0001-Revert-gdi32-Fix-arguments-for-OSMesaMakeCurrent-whe.patch
 Patch5:		wine-4.14-fix-crackling-audio.patch
@@ -365,7 +364,6 @@ Wine is often updated.
 %endif
 %patch1 -p0 -b .chinese~
 %patch2 -p1 -b .cjk~
-%patch3 -p1 -b .glibc234~
 %patch108 -p1 -b .conf~
 
 %if %{with staging}
