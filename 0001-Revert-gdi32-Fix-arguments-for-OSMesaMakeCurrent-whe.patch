@@ -1,6 +1,6 @@
-diff -up wine-5.21/dlls/gdi32/dibdrv/opengl.c.civ3~ wine-5.21/dlls/gdi32/dibdrv/opengl.c
---- wine-5.21/dlls/gdi32/dibdrv/opengl.c.civ3~	2020-11-09 00:40:02.667706283 +0100
-+++ wine-5.21/dlls/gdi32/dibdrv/opengl.c	2020-11-09 14:05:18.623783559 +0100
+diff -up wine-5.21/dlls/win32u/dibdrv/opengl.c.civ3~ wine-5.21/dlls/win32u/dibdrv/opengl.c
+--- wine-5.21/dlls/win32u/dibdrv/opengl.c.civ3~	2020-11-09 00:40:02.667706283 +0100
++++ wine-5.21/dlls/win32u/dibdrv/opengl.c	2020-11-09 14:05:18.623783559 +0100
 @@ -192,7 +192,7 @@ static BOOL CDECL osmesa_make_current( s
          return TRUE;
      }
