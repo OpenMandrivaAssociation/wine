@@ -34,7 +34,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	6.19
+Version:	6.20
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -651,10 +651,8 @@ done
 %dir %{_libdir}/%{name}/x86_64-unix
 %dir %{_libdir}/%{name}/x86_64-windows
 %{_libdir}/%{name}/x86_64-unix/libwine.so.1*
-%{_libdir}/%{name}/*/*.acm.so
 %{_libdir}/%{name}/*/*.drv.so
 %{_libdir}/%{name}/*/*.dll.so
-%{_libdir}/%{name}/*/*.acm.so
 %{_libdir}/%{name}/*/*.ds.so
 %{_libdir}/%{name}/*/*.sys.so
 %{_libdir}/%{name}/*-windows/*.acm
@@ -677,7 +675,6 @@ done
 %dir %{_prefix}/lib/%{name}/i386-windows
 %{_prefix}/lib/%{name}/i386-unix/libwine.so.1*
 %{_prefix}/lib/%{name}/*/*.acm
-%{_prefix}/lib/%{name}/*/*.acm.so
 %{_prefix}/lib/%{name}/*/*.cpl
 %{_prefix}/lib/%{name}/*/*.com
 %{_prefix}/lib/%{name}/*/*.drv
@@ -693,7 +690,6 @@ done
 %{_prefix}/lib/%{name}/*/*.sys
 %{_prefix}/lib/%{name}/*/*.sys.so
 %{_prefix}/lib/%{name}/i386-unix/crypt32.so
-%{_prefix}/lib/%{name}/i386-unix/mscms.so
 %{_prefix}/lib/%{name}/*/*.dll16
 %{_prefix}/lib/%{name}/*/*.exe16
 %{_prefix}/lib/%{name}/*/*.drv16
