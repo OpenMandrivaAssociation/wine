@@ -62,7 +62,6 @@ Source12:	http://kegel.com/wine/wisotool
 Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
-Patch3:		wine-6.21-capi-compile.patch
 # https://bugs.winehq.org/show_bug.cgi?id=41930#c0
 Patch4:		0001-Revert-gdi32-Fix-arguments-for-OSMesaMakeCurrent-whe.patch
 Patch5:		wine-4.14-fix-crackling-audio.patch
@@ -111,7 +110,7 @@ BuildRequires:	pkgconfig(libxslt)
 BuildRequires:	pkgconfig(libgcrypt)
 BuildRequires:	pkgconfig(gpg-error)
 BuildRequires:	pkgconfig(gtk+-3.0)
-BuildRequires:	%{mklibname -d capi20}
+BuildRequires:	pkgconfig(capi20)
 BuildRequires:	glibc-static-devel
 BuildRequires:	chrpath
 BuildRequires:	giflib-devel
@@ -366,7 +365,7 @@ Wine is often updated.
 %endif
 %patch1 -p0 -b .chinese~
 %patch2 -p1 -b .cjk~
-%patch3 -p1 -b .capi~
+#patch3 -p1 -b .capi~
 %patch108 -p1 -b .conf~
 
 %if %{with staging}
@@ -656,7 +655,6 @@ done
 %{_libdir}/%{name}/x86_64-unix/libwine.so.1*
 %{_libdir}/%{name}/*/*.drv.so
 %{_libdir}/%{name}/*/*.dll.so
-%{_libdir}/%{name}/*/*.ds.so
 %{_libdir}/%{name}/*/*.sys.so
 %{_libdir}/%{name}/*-windows/*.acm
 %{_libdir}/%{name}/*-windows/*.ax
@@ -689,7 +687,6 @@ done
 %{_prefix}/lib/%{name}/*/*.vxd
 %{_prefix}/lib/%{name}/*/*.tlb
 %{_prefix}/lib/%{name}/*/*.ds
-%{_prefix}/lib/%{name}/*/*.ds.so
 %{_prefix}/lib/%{name}/*/*.sys
 %{_prefix}/lib/%{name}/*/*.sys.so
 %{_prefix}/lib/%{name}/i386-unix/crypt32.so
@@ -706,10 +703,8 @@ done
 
 %files devel
 %{_libdir}/%{name}/*/*.a
-%{_libdir}/%{name}/*/*.def
 %ifarch %{x86_64}
 %{_prefix}/lib/%{name}/*/*.a
-%{_prefix}/lib/%{name}/*/*.def
 %endif
 %{_includedir}/*
 # %{_bindir}/fnt2bdf
