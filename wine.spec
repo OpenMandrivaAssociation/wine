@@ -29,12 +29,13 @@
 # And sometimes there's interim releases
 %define sbeta	%{beta}
 %define sver	%{version}
+%define smaster 1
 
 %bcond_without staging
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	6.20
+Version:	6.22
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -47,7 +48,7 @@ Source1:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%
 %if "%{sbeta}" != ""
 Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}-%{sbeta}.tar.gz
 %else
-Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}.tar.gz
+Source900:	https://github.com/wine-staging/wine-staging/archive/%{?smaster:master}%{!?smaster:v%{sver}}.tar.gz
 %endif
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 License:	LGPLv2+
