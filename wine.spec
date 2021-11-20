@@ -62,6 +62,7 @@ Source12:	http://kegel.com/wine/wisotool
 Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
+Patch3:		wine-6.21-capi-compile.patch
 # https://bugs.winehq.org/show_bug.cgi?id=41930#c0
 Patch4:		0001-Revert-gdi32-Fix-arguments-for-OSMesaMakeCurrent-whe.patch
 Patch5:		wine-4.14-fix-crackling-audio.patch
@@ -365,6 +366,7 @@ Wine is often updated.
 %endif
 %patch1 -p0 -b .chinese~
 %patch2 -p1 -b .cjk~
+%patch3 -p1 -b .capi~
 %patch108 -p1 -b .conf~
 
 %if %{with staging}
