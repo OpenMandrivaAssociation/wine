@@ -24,18 +24,18 @@
 %define	major	1
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%{mklibname -d wine}
-%define beta	%{nil}
+%define beta	rc1
 # Sometimes -staging patches are released late...
 # And sometimes there's interim releases
 %define sbeta	%{beta}
 %define sver	%{version}
-%define smaster 1
+#define smaster 1
 
 %bcond_without staging
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	6.22
+Version:	7.0
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -111,6 +111,7 @@ BuildRequires:	pkgconfig(libgcrypt)
 BuildRequires:	pkgconfig(gpg-error)
 BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(capi20)
+BuildRequires:	pkgconfig(netapi)
 BuildRequires:	glibc-static-devel
 BuildRequires:	chrpath
 BuildRequires:	giflib-devel
@@ -450,13 +451,13 @@ PKG_CONFIG_PATH="%{_prefix}/lib/pkgconfig:%{_datadir}/pkgconfig" \
 	echo "32-bit configure failed. Full config.log:"
 	cat config.log
 fi
-if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4)'; then
+if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4|netapi)'; then
 	echo "Full config.log:"
 	cat config.log
-	echo "*************************************"
+	echo "***************************************"
 	echo "Missing 32-bit dependencies detected:"
-	echo "(Only missing OSSv4 is OK):"
-	echo "*************************************"
+	echo "(Only missing OSSv4 and netapi are OK):"
+	echo "***************************************"
 	cat config.log |grep "won't be supported"
 	exit 1
 fi
