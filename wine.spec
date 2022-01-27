@@ -115,7 +115,6 @@ BuildRequires:	pkgconfig(netapi)
 BuildRequires:	glibc-static-devel
 BuildRequires:	chrpath
 BuildRequires:	giflib-devel
-BuildRequires:	libtiff-devel
 BuildRequires:	pkgconfig(xpm)
 BuildRequires:	pkgconfig(libtiff-4)
 BuildRequires:	pkgconfig(librsvg-2.0)
