@@ -62,6 +62,7 @@ Source12:	http://kegel.com/wine/wisotool
 Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
+Patch3:		wine-7.0-aarch64-compile.patch
 # https://bugs.winehq.org/show_bug.cgi?id=41930#c0
 Patch4:		0001-Revert-gdi32-Fix-arguments-for-OSMesaMakeCurrent-whe.patch
 Patch5:		wine-4.14-fix-crackling-audio.patch
@@ -365,7 +366,6 @@ Wine is often updated.
 %endif
 %patch1 -p0 -b .chinese~
 %patch2 -p1 -b .cjk~
-#patch3 -p1 -b .capi~
 %patch108 -p1 -b .conf~
 
 %if %{with staging}
@@ -377,6 +377,9 @@ cd patches
 cd ..
 %endif
 
+%ifarch %{armx}
+%patch3 -p1 -b .aarch64~
+%endif
 %patch4 -p1 -b .civ3~
 %patch5 -p1 -b .pulseaudiosucks~
 %patch6 -p1 -b .unwind~
@@ -650,9 +653,16 @@ done
 %{_iconsdir}/*.png
 %{_liconsdir}/*.png
 %dir %{_libdir}/%{name}
+%ifarch %{x86_64}
 %dir %{_libdir}/%{name}/x86_64-unix
 %dir %{_libdir}/%{name}/x86_64-windows
 %{_libdir}/%{name}/x86_64-unix/libwine.so.1*
+%endif
+%ifarch %{aarch64}
+%dir %{_libdir}/%{name}/aarch64-unix
+%dir %{_libdir}/%{name}/aarch64-windows
+%{_libdir}/%{name}/aarch64-unix/libwine.so.1*
+%endif
 %{_libdir}/%{name}/*/*.drv.so
 %{_libdir}/%{name}/*/*.dll.so
 %{_libdir}/%{name}/*/*.sys.so
