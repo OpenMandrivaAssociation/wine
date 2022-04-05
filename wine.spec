@@ -35,7 +35,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	7.2
+Version:	7.5
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -434,7 +434,8 @@ if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4)'; then
 fi
 
 %make_build depend
-%make_build
+# FIXME https://bugs.winehq.org/show_bug.cgi?id=52770 has been fixed.
+make
 
 %if %{with wow64}
 cd ..
@@ -637,6 +638,7 @@ done
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/%{name}.inf
 %{_datadir}/%{name}/nls/l_intl.nls
+%{_datadir}/%{name}/nls/locale.nls
 %{_datadir}/%{name}/nls/c_*
 %{_datadir}/%{name}/nls/normidna.nls
 %{_datadir}/%{name}/nls/normnfc.nls
@@ -663,52 +665,44 @@ done
 %dir %{_libdir}/%{name}/aarch64-windows
 %{_libdir}/%{name}/aarch64-unix/libwine.so.1*
 %endif
-%{_libdir}/%{name}/*/*.drv.so
-%{_libdir}/%{name}/*/*.dll.so
-%{_libdir}/%{name}/*/*.sys.so
-%{_libdir}/%{name}/*-windows/*.acm
-%{_libdir}/%{name}/*-windows/*.ax
-%{_libdir}/%{name}/*-windows/*.com
-%{_libdir}/%{name}/*-windows/*.cpl
-%{_libdir}/%{name}/*-windows/*.dll
-%{_libdir}/%{name}/*-windows/*.drv
-%{_libdir}/%{name}/*-windows/*.ds
-%{_libdir}/%{name}/*-windows/*.exe
-%{_libdir}/%{name}/*-windows/*.ocx
-%{_libdir}/%{name}/*-windows/*.sys
-%{_libdir}/%{name}/*-windows/*.tlb
-%{_libdir}/%{name}/*-windows/*.msstyles
-%{_libdir}/%{name}/*-windows/windows.networking.connectivity
-%{_libdir}/%{name}/*-unix/*.so
+%{_libdir}/%{name}/*/*.so
+%{_libdir}/%{name}/*/*.acm
+%{_libdir}/%{name}/*/*.ax
+%{_libdir}/%{name}/*/*.com
+%{_libdir}/%{name}/*/*.cpl
+%{_libdir}/%{name}/*/*.dll
+%{_libdir}/%{name}/*/*.drv
+%{_libdir}/%{name}/*/*.ds
+%{_libdir}/%{name}/*/*.exe
+%{_libdir}/%{name}/*/*.ocx
+%{_libdir}/%{name}/*/*.sys
+%{_libdir}/%{name}/*/*.tlb
+%{_libdir}/%{name}/*/*.msstyles
+%{_libdir}/%{name}/*/windows.networking.connectivity
 %if %{with wow64}
 %dir %{_prefix}/lib/%{name}
 %dir %{_prefix}/lib/%{name}/i386-unix
 %dir %{_prefix}/lib/%{name}/i386-windows
 %{_prefix}/lib/%{name}/i386-unix/libwine.so.1*
+%{_prefix}/lib/%{name}/*/*.so
 %{_prefix}/lib/%{name}/*/*.acm
-%{_prefix}/lib/%{name}/*/*.cpl
+%{_prefix}/lib/%{name}/*/*.ax
 %{_prefix}/lib/%{name}/*/*.com
-%{_prefix}/lib/%{name}/*/*.drv
-%{_prefix}/lib/%{name}/*/*.drv.so
+%{_prefix}/lib/%{name}/*/*.cpl
 %{_prefix}/lib/%{name}/*/*.dll
-%{_prefix}/lib/%{name}/*/*.dll.so
-%{_prefix}/lib/%{name}/*/*.exe
-%{_prefix}/lib/%{name}/*/*.ocx
-%{_prefix}/lib/%{name}/*/*.vxd
-%{_prefix}/lib/%{name}/*/*.tlb
+%{_prefix}/lib/%{name}/*/*.drv
 %{_prefix}/lib/%{name}/*/*.ds
+%{_prefix}/lib/%{name}/*/*.exe
+%{_prefix}/lib/%{name}/*/*.msstyles
+%{_prefix}/lib/%{name}/*/*.ocx
 %{_prefix}/lib/%{name}/*/*.sys
-%{_prefix}/lib/%{name}/*/*.sys.so
-%{_prefix}/lib/%{name}/i386-unix/crypt32.so
+%{_prefix}/lib/%{name}/*/*.tlb
+%{_prefix}/lib/%{name}/*/*.vxd
 %{_prefix}/lib/%{name}/*/*.dll16
 %{_prefix}/lib/%{name}/*/*.exe16
 %{_prefix}/lib/%{name}/*/*.drv16
 %{_prefix}/lib/%{name}/*/*.mod16
-%{_prefix}/lib/%{name}/*/*.ax
-%{_prefix}/lib/%{name}/*-windows/*.dll
-%{_prefix}/lib/%{name}/*-windows/windows.networking.connectivity
-%{_prefix}/lib/%{name}/*-windows/*.msstyles
-%{_prefix}/lib/%{name}/*-unix/*.so
+%{_prefix}/lib/%{name}/*/windows.networking.connectivity
 %endif
 
 %files devel
