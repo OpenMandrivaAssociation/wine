@@ -35,7 +35,7 @@
 
 Name:		wine
 #(peroyvind): please do backports for new versions
-Version:	7.5
+Version:	7.7
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
@@ -323,11 +323,11 @@ Suggests:	%{dlopen_req ncursesw}
 %rename		wine64
 %endif
 %ifarch %{ix86} %{x86_64}
-BuildRequires:	cross-i686-w64-mingw32-binutils
+BuildRequires:	cross-i686-w64-mingw32-binutils >= 2.38-2
 BuildRequires:	cross-i686-w64-mingw32-gcc-bootstrap
 BuildRequires:	cross-i686-w64-mingw32-libc
 %ifarch %{x86_64}
-BuildRequires:	cross-x86_64-w64-mingw32-binutils
+BuildRequires:	cross-x86_64-w64-mingw32-binutils >= 2.38-2
 BuildRequires:	cross-x86_64-w64-mingw32-gcc-bootstrap
 BuildRequires:	cross-x86_64-w64-mingw32-libc
 %endif
@@ -434,8 +434,7 @@ if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4)'; then
 fi
 
 %make_build depend
-# FIXME https://bugs.winehq.org/show_bug.cgi?id=52770 has been fixed.
-make
+%make_build
 
 %if %{with wow64}
 cd ..
