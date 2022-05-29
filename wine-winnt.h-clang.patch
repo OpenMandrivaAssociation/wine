@@ -1,0 +1,12 @@
+diff -up wine-7.9/include/winnt.h.omv~ wine-7.9/include/winnt.h
+--- wine-7.9/include/winnt.h.omv~	2022-05-29 15:00:42.355832992 +0200
++++ wine-7.9/include/winnt.h	2022-05-29 15:01:03.622768241 +0200
+@@ -204,7 +204,7 @@ extern "C" {
+ #define __WINE_ALLOC_SIZE(...)
+ #endif
+ 
+-#if defined(__GNUC__) && (__GNUC__ > 10)
++#if defined(__GNUC__) && (__GNUC__ > 10) && !defined(__clang__)
+ #define __WINE_DEALLOC(...) __attribute__((malloc (__VA_ARGS__)))
+ #else
+ #define __WINE_DEALLOC(...)

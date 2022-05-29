@@ -67,6 +67,7 @@ Patch3:		wine-7.0-aarch64-compile.patch
 Patch4:		0001-Revert-gdi32-Fix-arguments-for-OSMesaMakeCurrent-whe.patch
 Patch5:		wine-4.14-fix-crackling-audio.patch
 Patch6:		wine-5.11-llvm-libunwind.patch
+Patch7:		wine-winnt.h-clang.patch
 
 # a: => /media/floppy
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
