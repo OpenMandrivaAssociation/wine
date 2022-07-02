@@ -1,5 +1,4 @@
 sources:
-  v7.9.tar.gz: 3e50d4215b15f2026462eb805a30273c2ae55be2
-  wine-7.9.tar.xz: 826dd35845bc2a0a5f2be2df4e82d06f419d1404
-  wine-7.10.tar.xz: 9dd9abb35ca7a0e21377488aaa6e48571f6ab432
-  v7.10.tar.gz: 06e2c304b8363aaa24c67c4e632bc66058b33032
+  v7.12.tar.gz: 2ff1f2918f1553661eb03ad0fd697732266dc01b
+  wine-7.12.tar.xz: 7a074ca4c0e84f2acf4b6d77336721ea07fe80f1
+  wine-7.12.tar.xz.sign: 49a41aae53af6f5965acdf0fd0ef35cb7721d724
