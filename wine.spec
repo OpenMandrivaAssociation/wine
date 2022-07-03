@@ -384,6 +384,7 @@ cd ..
 %patch4 -p1 -b .civ3~
 %patch5 -p1 -b .pulseaudiosucks~
 %patch6 -p1 -b .unwind~
+%patch7 -p1 -b .clang~
 
 autoreconf
 aclocal
