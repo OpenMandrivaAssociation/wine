@@ -1,4 +1,3 @@
 sources:
-  v7.12.tar.gz: 2ff1f2918f1553661eb03ad0fd697732266dc01b
-  wine-7.12.tar.xz: 7a074ca4c0e84f2acf4b6d77336721ea07fe80f1
-  wine-7.12.tar.xz.sign: 49a41aae53af6f5965acdf0fd0ef35cb7721d724
+  wine-7.13.tar.xz: 02569327955e3965758f7ca993dd4b99a3cd5e0d
+  v7.13.tar.gz: 8d28bca2d870c2dc86c88e437815b522f4b43ecb
