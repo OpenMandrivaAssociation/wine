@@ -34,8 +34,7 @@
 %bcond_without staging
 
 Name:		wine
-#(peroyvind): please do backports for new versions
-Version:	7.15
+Version:	7.16
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
