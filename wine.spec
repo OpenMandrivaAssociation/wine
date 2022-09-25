@@ -34,7 +34,7 @@
 %bcond_without staging
 
 Name:		wine
-Version:	7.17
+Version:	7.18
 %if "%{beta}" != ""
 Release:	0.%{beta}.1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
