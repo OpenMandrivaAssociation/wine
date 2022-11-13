@@ -34,7 +34,7 @@
 %bcond_without staging
 
 Name:		wine
-Version:	7.20
+Version:	7.21
 %if "%{beta}" == ""
 Release:	1
 Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz
@@ -205,7 +205,6 @@ BuildRequires:	devel(libdbus-1)
 BuildRequires:	devel(libgsm)
 BuildRequires:	devel(libodbc)
 BuildRequires:	devel(libgnutls)
-BuildRequires:	devel(libintl)
 BuildRequires:	libd3dadapter9-devel
 BuildRequires:	devel(liblcms2)
 BuildRequires:	devel(libOSMesa)
