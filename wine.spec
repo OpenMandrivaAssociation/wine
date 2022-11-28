@@ -34,12 +34,12 @@
 %bcond_without staging
 
 Name:		wine
-Version:	7.21
+Version:	7.22
 %if "%{beta}" == ""
 Release:	1
 Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz
 %else
-Release:	0.%{beta}.1
+Release:	%{?beta:0.%{beta}.}1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
 %endif
 %if "%{sbeta}" != ""
@@ -65,6 +65,7 @@ Patch4:		0001-Revert-gdi32-Fix-arguments-for-OSMesaMakeCurrent-whe.patch
 Patch5:		wine-4.14-fix-crackling-audio.patch
 Patch6:		wine-5.11-llvm-libunwind.patch
 Patch7:		wine-winnt.h-clang.patch
+Patch8:		https://gitlab.winehq.org/wine/wine/-/merge_requests/1568.patch
 
 # a: => /media/floppy
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;

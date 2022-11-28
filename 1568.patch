@@ -1,0 +1,69 @@
+From 64d853b01cbca009f0359c6b3cf6e6b7589af7ca Mon Sep 17 00:00:00 2001
+From: Zhiyi Zhang <zzhang@codeweavers.com>
+Date: Sun, 20 Nov 2022 22:52:40 +0800
+Subject: [PATCH] winex11.drv: Support _KDE_NET_WM_STATE_SKIP_SWITCHER.
+
+KWin has a switcher that triggered by Alt+Tab that basically acts like a pager. And hiding items in
+the switcher is controlled by _KDE_NET_WM_STATE_SKIP_SWITCHER.
+---
+ dlls/winex11.drv/window.c      | 3 ++-
+ dlls/winex11.drv/x11drv.h      | 2 ++
+ dlls/winex11.drv/x11drv_main.c | 1 +
+ 3 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/winex11.drv/window.c b/dlls/winex11.drv/window.c
+index 6b082ecdbec..603314ff3bb 100644
+--- a/dlls/winex11.drv/window.c
++++ b/dlls/winex11.drv/window.c
+@@ -80,6 +80,7 @@ WINE_DECLARE_DEBUG_CHANNEL(systray);
+ 
+ static const unsigned int net_wm_state_atoms[NB_NET_WM_STATES] =
+ {
++    XATOM__KDE_NET_WM_STATE_SKIP_SWITCHER,
+     XATOM__NET_WM_STATE_FULLSCREEN,
+     XATOM__NET_WM_STATE_ABOVE,
+     XATOM__NET_WM_STATE_MAXIMIZED_VERT,
+@@ -1040,7 +1041,7 @@ void update_net_wm_states( struct x11drv_win_data *data )
+     {
+         if (data->skip_taskbar || (ex_style & WS_EX_NOACTIVATE)
+             || (ex_style & WS_EX_TOOLWINDOW && !(ex_style & WS_EX_APPWINDOW)))
+-            new_state |= (1 << NET_WM_STATE_SKIP_TASKBAR) | (1 << NET_WM_STATE_SKIP_PAGER);
++            new_state |= (1 << NET_WM_STATE_SKIP_TASKBAR) | (1 << NET_WM_STATE_SKIP_PAGER) | (1 << KDE_NET_WM_STATE_SKIP_SWITCHER);
+         else if (!(ex_style & WS_EX_APPWINDOW) && NtUserGetWindowRelative( data->hwnd, GW_OWNER ))
+             new_state |= (1 << NET_WM_STATE_SKIP_TASKBAR);
+     }
+diff --git a/dlls/winex11.drv/x11drv.h b/dlls/winex11.drv/x11drv.h
+index 47a29c8eb98..b394795a326 100644
+--- a/dlls/winex11.drv/x11drv.h
++++ b/dlls/winex11.drv/x11drv.h
+@@ -482,6 +482,7 @@ enum x11drv_atoms
+     XATOM_DndProtocol,
+     XATOM_DndSelection,
+     XATOM__ICC_PROFILE,
++    XATOM__KDE_NET_WM_STATE_SKIP_SWITCHER,
+     XATOM__MOTIF_WM_HINTS,
+     XATOM__NET_STARTUP_INFO_BEGIN,
+     XATOM__NET_STARTUP_INFO,
+@@ -594,6 +595,7 @@ enum x11drv_window_messages
+ /* _NET_WM_STATE properties that we keep track of */
+ enum x11drv_net_wm_state
+ {
++    KDE_NET_WM_STATE_SKIP_SWITCHER,
+     NET_WM_STATE_FULLSCREEN,
+     NET_WM_STATE_ABOVE,
+     NET_WM_STATE_MAXIMIZED,
+diff --git a/dlls/winex11.drv/x11drv_main.c b/dlls/winex11.drv/x11drv_main.c
+index 561f25783b6..797e4f92d38 100644
+--- a/dlls/winex11.drv/x11drv_main.c
++++ b/dlls/winex11.drv/x11drv_main.c
+@@ -155,6 +155,7 @@ static const char * const atom_names[NB_XATOMS - FIRST_XATOM] =
+     "DndProtocol",
+     "DndSelection",
+     "_ICC_PROFILE",
++    "_KDE_NET_WM_STATE_SKIP_SWITCHER",
+     "_MOTIF_WM_HINTS",
+     "_NET_STARTUP_INFO_BEGIN",
+     "_NET_STARTUP_INFO",
+-- 
+GitLab
+
