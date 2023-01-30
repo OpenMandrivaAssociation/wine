@@ -24,7 +24,7 @@
 %define	major	1
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%{mklibname -d wine}
-%define beta	rc4
+%define beta	%{nil}
 # Sometimes -staging patches are released late...
 # And sometimes there's interim releases
 %define sbeta	%{beta}
@@ -37,7 +37,7 @@ Name:		wine
 Version:	8.0
 %if "%{beta}" == ""
 Release:	1
-Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).x/wine-%{version}.tar.xz
+Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/wine-%{version}.tar.xz
 %else
 Release:	%{?beta:0.%{beta}.}1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1-2)/%{name}-%{version}-%{beta}.tar.xz
