@@ -34,7 +34,7 @@
 %bcond_without staging
 
 Name:		wine
-Version:	8.1
+Version:	8.2
 %if "%{beta}" == ""
 Release:	1
 Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}.tar.xz
@@ -370,9 +370,7 @@ Wine is often updated.
 # wine-staging
 tar --strip-components=1 -zxf "%{SOURCE900}"
 WINEDIR="$(pwd)"
-cd patches
-./patchinstall.sh --all DESTDIR="$WINEDIR"
-cd ..
+staging/patchinstall.py -a
 %endif
 
 %ifarch %{armx}
