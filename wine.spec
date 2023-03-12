@@ -112,6 +112,7 @@ BuildRequires:	pkgconfig(gpg-error)
 BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(capi20)
 BuildRequires:	pkgconfig(netapi)
+BuildRequires:	pkgconfig(libpcsclite)
 BuildRequires:	glibc-static-devel
 BuildRequires:	chrpath
 BuildRequires:	giflib-devel
