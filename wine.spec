@@ -34,7 +34,7 @@
 %bcond_without staging
 
 Name:		wine
-Version:	8.2
+Version:	8.3
 %if "%{beta}" == ""
 Release:	1
 Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}.tar.xz
@@ -412,8 +412,6 @@ export CONFIGURE_TOP=`pwd`
 mkdir build
 cd build
 %configure	--with-pulse \
-		--without-hal \
-    		--with-xattr \
 		--with-gstreamer \
 %ifarch %{x86_64}
 		--enable-win64
@@ -443,20 +441,18 @@ PKG_CONFIG_PATH="%{_prefix}/lib/pkgconfig:%{_datadir}/pkgconfig" \
 ../configure \
 		--prefix=%{_prefix} \
 		--with-pulse \
-		--without-hal \
-    		--with-xattr \
 		--with-gstreamer \
 		--with-wine64=../build; then
 	echo "32-bit configure failed. Full config.log:"
 	cat config.log
 fi
-if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4|netapi)'; then
+if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4|netapi|pcsclite)'; then
 	echo "Full config.log:"
 	cat config.log
-	echo "***************************************"
+	echo "*************************************************"
 	echo "Missing 32-bit dependencies detected:"
-	echo "(Only missing OSSv4 and netapi are OK):"
-	echo "***************************************"
+	echo "(Only missing OSSv4, netapi and pcsclite are OK):"
+	echo "*************************************************"
 	cat config.log |grep "won't be supported"
 	exit 1
 fi
