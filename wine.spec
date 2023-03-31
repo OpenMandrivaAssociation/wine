@@ -36,7 +36,7 @@
 Name:		wine
 Version:	8.4
 %if "%{beta}" == ""
-Release:	1
+Release:	2
 Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}.tar.xz
 %else
 Release:	%{?beta:0.%{beta}.}1
