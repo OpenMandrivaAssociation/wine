@@ -34,7 +34,7 @@
 %bcond_without staging
 
 Name:		wine
-Version:	8.5
+Version:	8.6
 %if "%{beta}" == ""
 Release:	1
 Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}.tar.xz
@@ -651,12 +651,10 @@ done
 %ifarch %{x86_64}
 %dir %{_libdir}/%{name}/x86_64-unix
 %dir %{_libdir}/%{name}/x86_64-windows
-%{_libdir}/%{name}/x86_64-unix/libwine.so.1*
 %endif
 %ifarch %{aarch64}
 %dir %{_libdir}/%{name}/aarch64-unix
 %dir %{_libdir}/%{name}/aarch64-windows
-%{_libdir}/%{name}/aarch64-unix/libwine.so.1*
 %endif
 %{_libdir}/%{name}/*/*.so
 %{_libdir}/%{name}/*/*.acm
@@ -671,12 +669,10 @@ done
 %{_libdir}/%{name}/*/*.sys
 %{_libdir}/%{name}/*/*.tlb
 %{_libdir}/%{name}/*/*.msstyles
-%{_libdir}/%{name}/*/windows.networking.connectivity
 %if %{with wow64}
 %dir %{_prefix}/lib/%{name}
 %dir %{_prefix}/lib/%{name}/i386-unix
 %dir %{_prefix}/lib/%{name}/i386-windows
-%{_prefix}/lib/%{name}/i386-unix/libwine.so.1*
 %{_prefix}/lib/%{name}/*/*.so
 %{_prefix}/lib/%{name}/*/*.acm
 %{_prefix}/lib/%{name}/*/*.ax
@@ -695,7 +691,6 @@ done
 %{_prefix}/lib/%{name}/*/*.exe16
 %{_prefix}/lib/%{name}/*/*.drv16
 %{_prefix}/lib/%{name}/*/*.mod16
-%{_prefix}/lib/%{name}/*/windows.networking.connectivity
 %endif
 
 %files devel
