@@ -34,7 +34,7 @@
 %bcond_without staging
 
 Name:		wine
-Version:	8.6
+Version:	8.7
 %if "%{beta}" == ""
 Release:	1
 Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}.tar.xz
@@ -113,6 +113,7 @@ BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(capi20)
 BuildRequires:	pkgconfig(netapi)
 BuildRequires:	pkgconfig(libpcsclite)
+BuildRequires:	pkgconfig(wayland-client)
 BuildRequires:	glibc-static-devel
 BuildRequires:	chrpath
 BuildRequires:	giflib-devel
@@ -284,6 +285,7 @@ BuildRequires:	devel(libxcb-shm)
 BuildRequires:	devel(libXau)
 BuildRequires:	devel(libXdmcp)
 BuildRequires:	devel(libXdamage)
+BuildRequires:	devel(libwayland-client)
 %endif
 Suggests:	sane-frontends
 # wine dlopen's these, so let's add the dependencies ourself
