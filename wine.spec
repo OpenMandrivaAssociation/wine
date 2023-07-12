@@ -671,6 +671,7 @@ done
 %{_libdir}/%{name}/*/*.sys
 %{_libdir}/%{name}/*/*.tlb
 %{_libdir}/%{name}/*/*.msstyles
+%{_libdir}/%{name}/*/windows.networking.connectivity
 %if %{with wow64}
 %dir %{_prefix}/lib/%{name}
 %dir %{_prefix}/lib/%{name}/i386-unix
@@ -693,6 +694,7 @@ done
 %{_prefix}/lib/%{name}/*/*.exe16
 %{_prefix}/lib/%{name}/*/*.drv16
 %{_prefix}/lib/%{name}/*/*.mod16
+%{_prefix}/lib/%{name}/*/windows.networking.connectivity
 %endif
 
 %files devel
