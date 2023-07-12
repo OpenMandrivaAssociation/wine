@@ -34,7 +34,7 @@
 %bcond_without staging
 
 Name:		wine
-Version:	8.8
+Version:	8.12
 %if "%{beta}" == ""
 Release:	1
 Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}.tar.xz
@@ -671,7 +671,6 @@ done
 %{_libdir}/%{name}/*/*.sys
 %{_libdir}/%{name}/*/*.tlb
 %{_libdir}/%{name}/*/*.msstyles
-%{_libdir}/%{name}/*/windows.networking.connectivity
 %if %{with wow64}
 %dir %{_prefix}/lib/%{name}
 %dir %{_prefix}/lib/%{name}/i386-unix
@@ -694,7 +693,6 @@ done
 %{_prefix}/lib/%{name}/*/*.exe16
 %{_prefix}/lib/%{name}/*/*.drv16
 %{_prefix}/lib/%{name}/*/*.mod16
-%{_prefix}/lib/%{name}/*/windows.networking.connectivity
 %endif
 
 %files devel
