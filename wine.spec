@@ -34,7 +34,7 @@
 %bcond_without staging
 
 Name:		wine
-Version:	8.13
+Version:	8.14
 %if "%{beta}" == ""
 Release:	1
 Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}.tar.xz
@@ -124,7 +124,7 @@ BuildRequires:	icoutils
 BuildRequires:	imagemagick
 BuildRequires:	pkgconfig(libgphoto2)
 BuildRequires:	desktop-file-utils
-BuildRequires:	openldap-devel
+BuildRequires:	pkgconfig(ldap)
 BuildRequires:	pkgconfig(libxslt)
 BuildRequires:	pkgconfig(dbus-1)
 BuildRequires:	valgrind
@@ -202,8 +202,8 @@ BuildRequires:	devel(libXpm)
 BuildRequires:	devel(librsvg-2)
 BuildRequires:	devel(libgphoto2)
 BuildRequires:	devel(libgphoto2_port)
-BuildRequires:	devel(libldap_r-2.4)
-BuildRequires:	devel(liblber-2.4)
+BuildRequires:	devel(liblber)
+BuildRequires:	devel(libldap)
 BuildRequires:	devel(libdbus-1)
 BuildRequires:	devel(libgsm)
 BuildRequires:	devel(libodbc)
