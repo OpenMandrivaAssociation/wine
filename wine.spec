@@ -59,7 +59,6 @@ Source12:	http://kegel.com/wine/wisotool
 Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
-Patch3:		wine-7.0-aarch64-compile.patch
 # https://bugs.winehq.org/show_bug.cgi?id=41930#c0
 Patch4:		0001-Revert-gdi32-Fix-arguments-for-OSMesaMakeCurrent-whe.patch
 Patch5:		wine-4.14-fix-crackling-audio.patch
@@ -376,9 +375,6 @@ WINEDIR="$(pwd)"
 staging/patchinstall.py -a
 %endif
 
-%ifarch %{armx}
-%patch3 -p1 -b .aarch64~
-%endif
 %patch4 -p1 -b .civ3~
 %patch5 -p1 -b .pulseaudiosucks~
 %patch6 -p1 -b .unwind~
