@@ -59,6 +59,7 @@ Source12:	http://kegel.com/wine/wisotool
 Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
+Patch3:		wine-8.14-dont-return-value-from-void-function.patch
 # https://bugs.winehq.org/show_bug.cgi?id=41930#c0
 Patch4:		0001-Revert-gdi32-Fix-arguments-for-OSMesaMakeCurrent-whe.patch
 Patch5:		wine-4.14-fix-crackling-audio.patch
@@ -371,6 +372,7 @@ Wine is often updated.
 %if %{with staging}
 # wine-staging
 tar --strip-components=1 -zxf "%{SOURCE900}"
+%patch3 -p1 -b .compile~
 WINEDIR="$(pwd)"
 staging/patchinstall.py -a
 %endif
