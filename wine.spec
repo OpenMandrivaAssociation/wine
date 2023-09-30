@@ -286,6 +286,10 @@ BuildRequires:	devel(libXdmcp)
 BuildRequires:	devel(libXdamage)
 BuildRequires:	devel(libwayland-client)
 %endif
+%if %{with staging}
+# So patches can be applied with "git apply"
+BuildRequires:	git-core
+%endif
 Suggests:	sane-frontends
 # wine dlopen's these, so let's add the dependencies ourself
 Requires:	%{dlopen_req freetype}
