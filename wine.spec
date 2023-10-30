@@ -21,14 +21,14 @@
 %bcond_with wow64
 %endif
 
-%define	major	1
-%define	libname	%mklibname %{name} %{major}
-%define	devname	%{mklibname -d wine}
-%define beta	%{nil}
+%define major 1
+%define libname %mklibname %{name} %{major}
+%define devname %{mklibname -d wine}
+%define beta %{nil}
 # Sometimes -staging patches are released late...
 # And sometimes there's interim releases
-%define sbeta	%{beta}
-%define sver	%{version}
+%define sbeta %{beta}
+%define sver %{version}
 #define smaster 1
 
 %bcond_without staging
@@ -151,7 +151,7 @@ BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xrender)
 BuildRequires:	pkgconfig(xext)
 BuildRequires:	pkgconfig(sm)
-BUildRequires:	pkgconfig(vulkan)
+BuildRequires:	pkgconfig(vulkan)
 BuildRequires:	pkgconfig(libvkd3d)
 BuildRequires:	pkgconfig(krb5)
 BuildRequires:	pkgconfig(com_err)
@@ -393,9 +393,9 @@ autoconf
 # http://bugs.winehq.org/show_bug.cgi?id=24606
 # http://bugs.winehq.org/show_bug.cgi?id=25073
 %undefine _fortify_cflags
-export CFLAGS="`echo %{optflags} |sed -e 's,-m64,,g;s,-mx32,,g'`"
-export CXXFLAGS="`echo %{optflags} |sed -e 's,-m64,,g;s,-mx32,,g'`"
-export LDFLAGS="`echo %{build_ldflags} |sed -e 's,-m64,,g;s,-mx32,,g'`"
+export CFLAGS="$(echo %{optflags} |sed -e 's,-m64,,g;s,-mx32,,g')"
+export CXXFLAGS="$(echo %{optflags} |sed -e 's,-m64,,g;s,-mx32,,g')"
+export LDFLAGS="$(echo %{build_ldflags} |sed -e 's,-m64,,g;s,-mx32,,g')"
 %ifarch %{ix86}
 # (Anssi 04/2008) bug #39604
 # Some protection systems complain "debugger detected" with our
@@ -411,14 +411,15 @@ export CC=gcc
 export CXX=g++
 %endif
 
-export CONFIGURE_TOP=`pwd`
+export CONFIGURE_TOP=$(pwd)
 mkdir build
 cd build
-%configure	--with-pulse \
-		--with-gstreamer \
+%configure \
 %ifarch %{x86_64}
-		--enable-win64
+	--enable-win64 \
 %endif
+	--with-pulse \
+	--with-gstreamer
 
 if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4)'; then
 	echo "Full config.log:"
@@ -442,10 +443,10 @@ cd build32
 if ! PKG_CONFIG_LIBDIR="%{_prefix}/lib/pkgconfig:%{_datadir}/pkgconfig" \
 PKG_CONFIG_PATH="%{_prefix}/lib/pkgconfig:%{_datadir}/pkgconfig" \
 ../configure \
-		--prefix=%{_prefix} \
-		--with-pulse \
-		--with-gstreamer \
-		--with-wine64=../build; then
+	--prefix=%{_prefix} \
+	--with-pulse \
+	--with-gstreamer \
+	--with-wine64=../build; then
 	echo "32-bit configure failed. Full config.log:"
 	cat config.log
 fi
@@ -523,11 +524,11 @@ for i in	winecfg:Configurator \
 		wineboot:Reboot \
 		"wineconsole cmd":Command\ Line \
 		"wine uninstaller:Wine Software Uninstaller";
-do cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}-`echo $i|cut -d: -f1`.desktop << EOF
+do cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}-$(echo $i|cut -d: -f1).desktop << EOF
 [Desktop Entry]
-Name=`echo $i|cut -d: -f2`
-Comment=`echo $i|cut -d: -f2`
-Exec=`echo $i|cut -d: -f1`
+Name=$(echo $i|cut -d: -f2)
+Comment=$(echo $i|cut -d: -f2)
+Exec=$(echo $i|cut -d: -f1)
 Icon=%{name}
 Terminal=false
 Type=Application
@@ -612,24 +613,24 @@ done
 %{_bindir}/winefile
 %{_bindir}/winetricks
 %{_bindir}/wisotool
-%{_mandir}/man1/wine.1*
-%lang(de) %{_mandir}/de.UTF-8/man1/wine.1*
-%lang(de) %{_mandir}/de.UTF-8/man1/winemaker.1*
-%lang(de) %{_mandir}/de.UTF-8/man1/wineserver.1*
-%lang(pl) %{_mandir}/pl.UTF-8/man1/wine.1*
-%lang(fr) %{_mandir}/fr.UTF-8/man1/*
-%{_mandir}/man1/wineserver.1*
-%{_mandir}/man1/msiexec.1*
-%{_mandir}/man1/notepad.1*
-%{_mandir}/man1/regedit.1*
-%{_mandir}/man1/regsvr32.1*
-%{_mandir}/man1/wineboot.1*
-%{_mandir}/man1/winecfg.1*
-%{_mandir}/man1/wineconsole.1*
-%{_mandir}/man1/winecpp.1*
-%{_mandir}/man1/winefile.1*
-%{_mandir}/man1/winemine.1*
-%{_mandir}/man1/winepath.1*
+%doc %{_mandir}/man1/wine.1*
+%doc %lang(de) %{_mandir}/de.UTF-8/man1/wine.1*
+%doc %lang(de) %{_mandir}/de.UTF-8/man1/winemaker.1*
+%doc %lang(de) %{_mandir}/de.UTF-8/man1/wineserver.1*
+%doc %lang(pl) %{_mandir}/pl.UTF-8/man1/wine.1*
+%doc %lang(fr) %{_mandir}/fr.UTF-8/man1/*
+%doc %{_mandir}/man1/wineserver.1*
+%doc %{_mandir}/man1/msiexec.1*
+%doc %{_mandir}/man1/notepad.1*
+%doc %{_mandir}/man1/regedit.1*
+%doc %{_mandir}/man1/regsvr32.1*
+%doc %{_mandir}/man1/wineboot.1*
+%doc %{_mandir}/man1/winecfg.1*
+%doc %{_mandir}/man1/wineconsole.1*
+%doc %{_mandir}/man1/winecpp.1*
+%doc %{_mandir}/man1/winefile.1*
+%doc %{_mandir}/man1/winemine.1*
+%doc %{_mandir}/man1/winepath.1*
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/%{name}.inf
 %{_datadir}/%{name}/nls/l_intl.nls
@@ -714,12 +715,12 @@ done
 %{_bindir}/winedbg
 %{_bindir}/winemaker
 %{_bindir}/winedump
-%{_mandir}/man1/wmc.1*
-%{_mandir}/man1/wrc.1*
-%{_mandir}/man1/winebuild.1*
-%{_mandir}/man1/winemaker.1*
-%{_mandir}/man1/winedump.1*
-%{_mandir}/man1/widl.1*
-%{_mandir}/man1/winedbg.1*
-%{_mandir}/man1/wineg++.1*
-%{_mandir}/man1/winegcc.1*
+%doc %{_mandir}/man1/wmc.1*
+%doc %{_mandir}/man1/wrc.1*
+%doc %{_mandir}/man1/winebuild.1*
+%doc %{_mandir}/man1/winemaker.1*
+%doc %{_mandir}/man1/winedump.1*
+%doc %{_mandir}/man1/widl.1*
+%doc %{_mandir}/man1/winedbg.1*
+%doc %{_mandir}/man1/wineg++.1*
+%doc %{_mandir}/man1/winegcc.1*
