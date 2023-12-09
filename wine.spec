@@ -22,9 +22,8 @@
 %endif
 
 %define major 1
-%define libname %mklibname %{name} %{major}
 %define devname %{mklibname -d wine}
-%define beta %{nil}
+%define beta rc1
 # Sometimes -staging patches are released late...
 # And sometimes there's interim releases
 %define sbeta %{beta}
@@ -34,7 +33,7 @@
 %bcond_without staging
 
 Name:		wine
-Version:	8.20
+Version:	9.0
 %if "%{beta}" == ""
 Release:	1
 Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}.tar.xz
@@ -116,6 +115,7 @@ BuildRequires:	pkgconfig(wayland-client)
 BuildRequires:	glibc-static-devel
 BuildRequires:	chrpath
 BuildRequires:	giflib-devel
+BuildRequires:	pkgconfig(xkbregistry)
 BuildRequires:	pkgconfig(xpm)
 BuildRequires:	pkgconfig(libtiff-4)
 BuildRequires:	pkgconfig(librsvg-2.0)
@@ -281,6 +281,8 @@ BuildRequires:	devel(libxcb)
 BuildRequires:	devel(libXft)
 BuildRequires:	devel(libxcb-render)
 BuildRequires:	devel(libxcb-shm)
+BuildRequires:	devel(libxkbcommon)
+BuildRequires:	devel(libxkbregistry)
 BuildRequires:	devel(libXau)
 BuildRequires:	devel(libXdmcp)
 BuildRequires:	devel(libXdamage)
@@ -350,7 +352,6 @@ Summary:	Static libraries and headers for %{name}
 Group:		Development/C
 Requires:	%{name} = %{EVRD}
 %rename		%{devname}
-Obsoletes:	%{mklibname -d wine 1} < %{EVRD}
 %rename wine64-devel
 
 %description devel
@@ -453,10 +454,10 @@ fi
 if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4|netapi|pcsclite)'; then
 	echo "Full config.log:"
 	cat config.log
-	echo "*************************************************"
+	echo "**********************************************"
 	echo "Missing 32-bit dependencies detected:"
-	echo "(Only missing OSSv4, netapi and pcsclite are OK):"
-	echo "*************************************************"
+	echo "(Only missing OSSv4, netapi, pcsclite are OK):"
+	echo "**********************************************"
 	cat config.log |grep "won't be supported"
 	exit 1
 fi
