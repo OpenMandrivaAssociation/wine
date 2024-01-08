@@ -585,7 +585,7 @@ for i in %{buildroot}%{_bindir}/* %{buildroot}%{_libdir}/%{name}/*.so %{buildroo
 done
 
 %files
-%doc ANNOUNCE AUTHORS README
+%doc ANNOUNCE.md AUTHORS README.md
 %ifarch %{x86_64}
 %{_bindir}/wine64
 %{_bindir}/wine64-preloader
