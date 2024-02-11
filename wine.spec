@@ -23,25 +23,20 @@
 
 %define major 1
 %define devname %{mklibname -d wine}
-%define beta rc4
+#define beta rc4
 # Sometimes -staging patches are released late...
 # And sometimes there's interim releases
-%define sbeta %{beta}
+#define sbeta %{beta}
 %define sver %{version}
 #define smaster 1
 
 %bcond_without staging
 
 Name:		wine
-Version:	9.0
-%if "%{beta}" == ""
-Release:	1
-Source0:	http://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}.tar.xz
-%else
+Version:	9.2
 Release:	%{?beta:0.%{beta}.}1
-Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/%{name}-%{version}-%{beta}.tar.xz
-%endif
-%if "%{sbeta}" != ""
+Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}%{?beta:-%{beta}}.tar.xz
+%if 0%{?sbeta:1}
 Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}-%{sbeta}.tar.gz
 %else
 Source900:	https://github.com/wine-staging/wine-staging/archive/%{?smaster:master}%{!?smaster:v%{sver}}.tar.gz
@@ -364,11 +359,7 @@ develop programs which make use of wine.
 Wine is often updated.
 
 %prep
-%if "%{beta}" != ""
-%setup -qn %{name}-%{version}-%{beta}
-%else
-%setup -q
-%endif
+%setup -qn %{name}-%{version}%{?beta:-%{beta}}
 %patch1 -p0 -b .chinese~
 %patch2 -p1 -b .cjk~
 %patch108 -p1 -b .conf~
