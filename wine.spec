@@ -53,8 +53,8 @@ Source12:	http://kegel.com/wine/wisotool
 Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
-# https://bugs.winehq.org/show_bug.cgi?id=41930#c0
-Patch4:		0001-Revert-gdi32-Fix-arguments-for-OSMesaMakeCurrent-whe.patch
+# https://bugs.winehq.org/show_bug.cgi?id=41930
+Patch4:		https://github.com/vchigrin/wine/pull/1.patch
 Patch5:		wine-4.14-fix-crackling-audio.patch
 Patch6:		wine-5.11-llvm-libunwind.patch
 Patch7:		wine-winnt.h-clang.patch
