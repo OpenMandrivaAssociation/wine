@@ -39,11 +39,11 @@ WINETRICKS_VERSION=20240105-next
 # - xz is used by some verbs to decompress tar archives.
 # - zenity is needed by the GUI, though it can limp along somewhat with kdialog/xmessage.
 #
-# On Ubuntu (20.04 and newer), the following line can be used to install all the prerequisites:
-#    sudo apt install aria2 binutils cabextract fuseiso p7zip-full pkexec tor unrar unzip wine xdg-utils xz-utils zenity
+# On Ubuntu (23.04 and newer), the following line can be used to install all the prerequisites:
+#    sudo apt install 7zip aria2 binutils cabextract fuseiso pkexec tor unrar-free unzip wine xdg-utils xz-utils zenity
 #
 # On older Ubuntu, the following line can be used to install all the prerequisites:
-#    sudo apt install aria2 binutils cabextract fuseiso p7zip-full policykit-1 tor unrar unzip wine xdg-utils xz-utils zenity
+#    sudo apt install aria2 binutils cabextract fuseiso p7zip-full policykit-1 tor unrar-free unzip wine xdg-utils xz-utils zenity
 #
 # On Fedora, these commands can be used (RPM Fusion is used to install unrar):
 #    sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
@@ -698,7 +698,7 @@ w_try_7z()
     if [ -z "${WINETRICKS_FORCE_WIN_7Z}" ] && [ -x "$(command -v 7z 2>/dev/null)" ] ; then
         w_try 7z x "${filename}" -o"${destdir}" "$@"
     else
-        w_warn "Cannot find 7z. Using Windows 7-Zip instead. (You can avoid this by installing 7z, e.g. 'sudo apt-get install p7zip-full' or 'sudo yum install p7zip-plugins')."
+        w_warn "Cannot find 7z. Using Windows 7-Zip instead. (You can avoid this by installing 7z, e.g. 'sudo apt install 7zip' or 'sudo yum install p7zip-plugins')."
         WINETRICKS_OPT_SHAREDPREFIX=1 w_call 7zip
 
         # w_call above will wipe $W_TMP; if that's the CWD, things will break. So forcefully reset the directory:
@@ -718,7 +718,7 @@ w_try_ar()
     if [ -z "${WINETRICKS_FORCE_WIN_7Z}" ] && [ -x "$(command -v ar 2>/dev/null)" ]; then
         w_try ar x "$@"
     else
-        w_warn "Cannot find ar. Using Windows 7-zip instead. (You can avoid this by installing binutils, e.g. 'sudo apt-get install binutils' or 'sudo yum install binutils')."
+        w_warn "Cannot find ar. Using Windows 7-zip instead. (You can avoid this by installing binutils, e.g. 'sudo apt install binutils' or 'sudo yum install binutils')."
         WINETRICKS_OPT_SHAREDPREFIX=1 w_call 7zip
 
         # w_call above will wipe $W_TMP; if that's the CWD, things will break. So forcefully reset the directory:
@@ -734,7 +734,7 @@ w_try_cabextract()
 {
     # Not always installed, but shouldn't be fatal unless it's being used
     if test ! -x "$(command -v cabextract 2>/dev/null)"; then
-        w_die "Cannot find cabextract.  Please install it (e.g. 'sudo apt-get install cabextract' or 'sudo yum install cabextract')."
+        w_die "Cannot find cabextract.  Please install it (e.g. 'sudo apt install cabextract' or 'sudo yum install cabextract')."
     fi
 
     w_try cabextract -q "$@"
@@ -900,7 +900,7 @@ w_try_unrar()
     if [ -z "${WINETRICKS_FORCE_WIN_7Z}" ] && [ -x "$(command -v unrar 2>/dev/null)" ]; then
         w_try unrar x "$@"
     else
-        w_warn "Cannot find unrar. Using Windows 7-Zip instead. (You can avoid this by installing unrar, e.g. 'sudo apt-get install unrar' or 'sudo yum install unrar')."
+        w_warn "Cannot find unrar. Using Windows 7-Zip instead. (You can avoid this by installing unrar, e.g. 'sudo apt install unrar-free' or 'sudo yum install unrar')."
         WINETRICKS_OPT_SHAREDPREFIX=1 w_call 7zip
 
         # w_call above will wipe $W_TMP; if that's the CWD, things will break. So forcefully reset the directory:
@@ -931,7 +931,7 @@ w_try_unzip()
             1|*) w_warn "Unzip failed, trying Windows 7-Zip instead." ;;
         esac
     else
-        w_warn "Cannot find unzip. Using Windows 7-Zip instead. (You can avoid this by installing unzip, e.g. 'sudo apt-get install unzip' or 'sudo yum install unzip')."
+        w_warn "Cannot find unzip. Using Windows 7-Zip instead. (You can avoid this by installing unzip, e.g. 'sudo apt install unzip' or 'sudo yum install unzip')."
     fi
 
     WINETRICKS_OPT_SHAREDPREFIX=1 w_call 7zip
@@ -1018,7 +1018,7 @@ w_verify_cabextract_available()
     # This should be called by verb_a, to give a proper warning
 
     if test ! -x "$(command -v cabextract 2>/dev/null)"; then
-        w_die "Cannot find cabextract.  Please install it (e.g. 'sudo apt-get install cabextract' or 'sudo yum install cabextract')."
+        w_die "Cannot find cabextract.  Please install it (e.g. 'sudo apt install cabextract' or 'sudo yum install cabextract')."
     fi
 
     w_try_cabextract -q -v >/dev/null 2>&1
@@ -6064,17 +6064,32 @@ load_cmd()
 
 w_metadata cnc_ddraw dlls \
     title="Reimplentation of ddraw for CnC games" \
-    homepage="https://github.com/CnCNet/cnc-ddraw" \
+    homepage="https://github.com/FunkyFr3sh/cnc-ddraw" \
     publisher="CnCNet" \
     year="2021" \
     media="download" \
-    file1="cnc-ddraw-v5.0.0.0.zip" \
+    file1="cnc-ddraw-v6.2.0.0.zip" \
     installed_file1="${W_SYSTEM32_DLLS_WIN}/Shaders/readme.txt"
 
 load_cnc_ddraw()
 {
     # Note: only works if ddraw.ini contains settings for the executable
-    w_download https://github.com/CnCNet/cnc-ddraw/releases/download/v5.0.0.0/cnc-ddraw.zip 9f37010bf87aafbe3d97a95f4253460a8f0869fb52bb45bcffbb73182b4b00fe cnc-ddraw-v5.0.0.0.zip
+    # 2018/12/11 https://github.com/FunkyFr3sh/cnc-ddraw/releases/download/1.3.4.0/cnc-ddraw.zip
+    # 2020/02/03 https://github.com/FunkyFr3sh/cnc-ddraw/releases/download/1.3.5.0/cnc-ddraw.zip
+    # 2021/09/29 https://github.com/FunkyFr3sh/cnc-ddraw/releases/download/v4.4.4.0/cnc-ddraw.zip
+    # 2022/03/27 https://github.com/FunkyFr3sh/cnc-ddraw/releases/download/v4.4.7.0/cnc-ddraw.zip
+    # 2022/09/18 https://github.com/FunkyFr3sh/cnc-ddraw/releases/download/v4.4.9.0/cnc-ddraw.zip
+    # 2022/10/03 https://github.com/FunkyFr3sh/cnc-ddraw/releases/download/v4.6.0.0/cnc-ddraw.zip
+    # 2023/02/08 https://github.com/FunkyFr3sh/cnc-ddraw/releases/download/v5.0.0.0/cnc-ddraw.zip
+    # 2023/08/15 https://github.com/FunkyFr3sh/cnc-ddraw/releases/download/v5.6.0.0/cnc-ddraw.zip
+    # 2023/08/24 https://github.com/FunkyFr3sh/cnc-ddraw/releases/download/v5.7.0.0/cnc-ddraw.zip
+    # 2023/09/26 https://github.com/FunkyFr3sh/cnc-ddraw/releases/download/v5.8.0.0/cnc-ddraw.zip
+    # 2023/10/20 https://github.com/FunkyFr3sh/cnc-ddraw/releases/download/v5.9.0.0/cnc-ddraw.zip
+    # 2023/11/04 https://github.com/FunkyFr3sh/cnc-ddraw/releases/download/v6.0.0.0/cnc-ddraw.zip
+    # 2024/02/03 https://github.com/FunkyFr3sh/cnc-ddraw/releases/download/v6.1.0.0d/cnc-ddraw.zip
+    # 2024/02/21 https://github.com/FunkyFr3sh/cnc-ddraw/releases/download/v6.2.0.0/cnc-ddraw.zip
+
+    w_download https://github.com/FunkyFr3sh/cnc-ddraw/releases/download/v6.2.0.0/cnc-ddraw.zip e5677ba52c31ffa93421a16edacff0c4d1f03e107aea6fc860861b43e3356119 cnc-ddraw-v6.2.0.0.zip
     w_try_unzip "${W_SYSTEM32_DLLS}" "${W_CACHE}/${W_PACKAGE}/${file1}"
 
     w_override_dlls native,builtin ddraw
@@ -6219,6 +6234,25 @@ load_binkw32()
     w_try_cp_dll "${W_TMP}"/binkw32.dll "${W_SYSTEM32_DLLS}"/binkw32.dll
 
     w_override_dlls native binkw32
+}
+
+#----------------------------------------------------------------
+
+w_metadata d2gl dlls \
+    title="Diablo 2 LoD Glide to OpenGL Wrapper" \
+    publisher="Bayaraa" \
+    year="2023" \
+    media="download" \
+    file1="D2GL.v1.3.3.zip" \
+    installed_file1="${W_PROGRAMS_X86_WIN}/Diablo II/glide3x.dll" \
+    homepage="https://github.com/bayaraa/d2gl"
+
+load_d2gl()
+{
+    w_download https://github.com/bayaraa/d2gl/releases/download/v1.3.3/D2GL.v1.3.3.zip 33862ab74f314f9e72f992dd8850f8bfd0d6533ef0e4a0015867fc6524125ea2
+    w_try_unzip "${W_PROGRAMS_X86_UNIX}/Diablo II" "${W_CACHE}/${W_PACKAGE}/${file1}"
+
+    w_warn "Run Diablo II using game.exe -3dfx"
 }
 
 #----------------------------------------------------------------
@@ -10157,6 +10191,56 @@ load_dotnetdesktop7()
 
 #----------------------------------------------------------------
 
+w_metadata dotnet8 dlls \
+    title="MS .NET Runtime 8.0 LTS" \
+    publisher="Microsoft" \
+    year="2024" \
+    media="download" \
+    file1="dotnet-runtime-8.0.2-win-x86.exe" \
+    installed_file1="${W_PROGRAMS_WIN}/dotnet/dotnet.exe"
+
+load_dotnet8()
+{
+    # Official version, see https://dotnet.microsoft.com/en-us/download/dotnet/8.0
+    w_download https://download.visualstudio.microsoft.com/download/pr/e4987764-bda2-4a72-8820-52605f30e899/f5b412fec80d7f4b20fc4ac7740f7279/dotnet-runtime-8.0.2-win-x86.exe b765676fc2f85cb393cabf2bef5dd118578a2a8761be97454352c0c2634957a4
+
+    w_try_cd "${W_CACHE}"/"${W_PACKAGE}"
+    w_try "${WINE}" "${file1}" ${W_OPT_UNATTENDED:+/quiet}
+
+    if [ "${W_ARCH}" = "win64" ]; then
+        # Also install the 64-bit version
+        w_download https://download.visualstudio.microsoft.com/download/pr/a4bc7333-6e30-4e2d-b300-0b4f23537e5b/4b81af6d46a02fba5d9ce030af438c67/dotnet-runtime-8.0.2-win-x64.exe ec10da69116d12691abcb374929cf9eec65e4607095ff1ff035989848fd1db00
+        w_try "${WINE}" "dotnet-runtime-8.0.2-win-x64.exe" ${W_OPT_UNATTENDED:+/quiet}
+    fi
+}
+
+#----------------------------------------------------------------
+
+w_metadata dotnetdesktop8 dlls \
+    title="MS .NET Desktop Runtime 8.0 LTS" \
+    publisher="Microsoft" \
+    year="2024" \
+    media="download" \
+    file1="windowsdesktop-runtime-8.0.2-win-x86.exe" \
+    installed_file1="${W_PROGRAMS_WIN}/dotnet/dotnet.exe"
+
+load_dotnetdesktop8()
+{
+    # Official version, see https://dotnet.microsoft.com/en-us/download/dotnet/8.0
+    w_download https://download.visualstudio.microsoft.com/download/pr/9b77b480-7e32-4321-b417-a41e0f8ea952/3922bbf5538277b1d41e9b49ee443673/windowsdesktop-runtime-8.0.2-win-x86.exe 548bcca012cde72bfa68e693ee3dab175c3aa7926d3a3621c8f6f3b12904b909
+
+    w_try_cd "${W_CACHE}"/"${W_PACKAGE}"
+    w_try "${WINE}" "${file1}" ${W_OPT_UNATTENDED:+/quiet}
+
+    if [ "${W_ARCH}" = "win64" ]; then
+        # Also install the 64-bit version
+        w_download https://download.visualstudio.microsoft.com/download/pr/84ba33d4-4407-4572-9bfa-414d26e7c67c/bb81f8c9e6c9ee1ca547396f6e71b65f/windowsdesktop-runtime-8.0.2-win-x64.exe 52099c00372c1ef6c78878f98f6994777170c8f8556bc3b42a6c291a268ce750
+        w_try "${WINE}" "windowsdesktop-runtime-8.0.2-win-x64.exe" ${W_OPT_UNATTENDED:+/quiet}
+    fi
+}
+
+#----------------------------------------------------------------
+
 w_metadata dotnet_verifier dlls \
     title="MS .NET Verifier" \
     publisher="Microsoft" \
@@ -13713,9 +13797,10 @@ load_vcrun2022()
     # 2023-04-30: 14.34.31938 @ https://download.visualstudio.microsoft.com/download/pr/b2519016-4a13-4120-936c-cae003d567c4/8AE59D82845159DB3A70763F5CB1571E45EBF6A1ADFECC47574BA17B019483A0/VC_redist.x86.exe 8ae59d82845159db3a70763f5cb1571e45ebf6a1adfecc47574ba17b019483a0
     # 2023/07/04: 14.36.32532 @ https://download.visualstudio.microsoft.com/download/pr/eaab1f82-787d-4fd7-8c73-f782341a0c63/5365A927487945ECB040E143EA770ADBB296074ECE4021B1D14213BDE538C490/VC_redist.x86.exe 5365a927487945ecb040e143ea770adbb296074ece4021b1d14213bde538c490
     # 2023/12/30: c61cef97487536e766130fa8714dd1b4143f6738bfb71806018eee1b5fe6f057
+    # 2024/02/11: 510fc8c2112e2bc544fb29a72191eabcc68d3a5a7468d35d7694493bc8593a79
     w_override_dlls native,builtin concrt140 msvcp140 msvcp140_1 msvcp140_2 msvcp140_atomic_wait msvcp140_codecvt_ids vcamp140 vccorlib140 vcomp140 vcruntime140
 
-    w_download https://aka.ms/vs/17/release/vc_redist.x86.exe c61cef97487536e766130fa8714dd1b4143f6738bfb71806018eee1b5fe6f057
+    w_download https://aka.ms/vs/17/release/vc_redist.x86.exe 510fc8c2112e2bc544fb29a72191eabcc68d3a5a7468d35d7694493bc8593a79
 
     w_try_cd "${W_CACHE}"/"${W_PACKAGE}"
     w_try_ms_installer "${WINE}" vc_redist.x86.exe ${W_OPT_UNATTENDED:+/q}
@@ -13727,10 +13812,11 @@ load_vcrun2022()
             # 2023/04/30: 14.34.31938 @ https://download.visualstudio.microsoft.com/download/pr/8b92f460-7e03-4c75-a139-e264a770758d/26C2C72FBA6438F5E29AF8EBC4826A1E424581B3C446F8C735361F1DB7BEFF72/VC_redist.x64.exe 26c2c72fba6438f5e29af8ebc4826a1e424581b3c446f8c735361f1db7beff72
             # 2023/07/04: 14.36.32532 @ https://download.visualstudio.microsoft.com/download/pr/eaab1f82-787d-4fd7-8c73-f782341a0c63/917C37D816488545B70AFFD77D6E486E4DD27E2ECE63F6BBAAF486B178B2B888/VC_redist.x64.exe 917c37d816488545b70affd77d6e486e4dd27e2ece63f6bbaaf486b178b2b888
             # 2023/12/30: 4dfe83c91124cd542f4222fe2c396cabeac617bb6f59bdcbdf89fd6f0df0a32f
+            # 2024/02/11: 1ad7988c17663cc742b01bef1a6df2ed1741173009579ad50a94434e54f56073
             # vcruntime140_1 is only shipped on x64:
             w_override_dlls native,builtin vcruntime140_1
 
-            w_download https://aka.ms/vs/17/release/vc_redist.x64.exe 4dfe83c91124cd542f4222fe2c396cabeac617bb6f59bdcbdf89fd6f0df0a32f
+            w_download https://aka.ms/vs/17/release/vc_redist.x64.exe 1ad7988c17663cc742b01bef1a6df2ed1741173009579ad50a94434e54f56073
             w_try_ms_installer "${WINE}" vc_redist.x64.exe ${W_OPT_UNATTENDED:+/q}
             ;;
     esac
@@ -16738,14 +16824,27 @@ w_metadata origin apps \
     year="2011" \
     media="download" \
     file1="OriginSetup.exe" \
-    file2="version_v2.dll" \
+    file2="version_v3.dll" \
     installed_file1="${W_PROGRAMS_X86_WIN}/Origin/Origin.exe" \
     homepage="https://www.origin.com/"
 
 load_origin()
 {
     w_download_to origin https://taskinoz.com/downloads/OriginSetup-10.5.119.52718.exe ed6ee5174f697744ac7c5783ff9021da603bbac42ae9836cd468d432cadc9779 OriginSetup.exe
-    w_download_to origin https://github.com/p0358/Fuck_off_EA_App/releases/download/v2/version.dll 5f0bbb15f7cff8540642c28739db0cd6b15e77e5935f4e6701351eea86d929ab version_v2.dll
+    w_download_to origin https://github.com/p0358/Fuck_off_EA_App/releases/download/v3/version.dll 6c2df238a5cbff3475527aa7adf1d8b76d4d2d1a33a6d62edd4749408305c2be version_v3.dll
+
+    w_try_mkdir "${W_DRIVE_C}/ProgramData/Origin"
+
+    w_warn "Stopping Origin from finding updates"
+    cat > "${W_DRIVE_C}/ProgramData/Origin/local.xml" <<_EOF_
+<?xml version="1.0"?>
+<Settings>
+  <Setting value="true" key="MigrationDisabled" type="1"/>
+  <Setting key="UpdateURL" value="http://joe.rilla" type="10"/>
+  <Setting key="AutoPatchGlobal" value="false" type="1"/>
+  <Setting key="AutoUpdate" value="false" type="1"/>
+</Settings>
+_EOF_
 
     w_try_cd "${W_CACHE}/${W_PACKAGE}"
     w_try "${WINE}" "${file1}" /NoLaunch ${W_OPT_UNATTENDED:+/SILENT}
@@ -16779,7 +16878,7 @@ load_origin()
     fi
 
     w_warn "Workaround Forced EA app upgrade."
-    w_try cp -f "${W_CACHE}/${W_PACKAGE}/version_v2.dll" "${W_PROGRAMS_X86_UNIX}/Origin/version.dll"
+    w_try cp -f "${W_CACHE}/${W_PACKAGE}/version_v3.dll" "${W_PROGRAMS_X86_UNIX}/Origin/version.dll"
     w_override_app_dlls Origin.exe native version
 
     w_warn "Pretend EA app is installed"
