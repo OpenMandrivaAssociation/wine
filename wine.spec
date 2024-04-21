@@ -33,7 +33,7 @@
 %bcond_without staging
 
 Name:		wine
-Version:	9.5
+Version:	9.7
 Release:	%{?beta:0.%{beta}.}1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}%{?beta:-%{beta}}.tar.xz
 %if 0%{?sbeta:1}
@@ -50,21 +50,20 @@ Source2:	wine.binfmt
 Source10:	wine.rpmlintrc
 Source11:	https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 Source12:	http://kegel.com/wine/wisotool
-Patch0:		wine-1.0-rc3-fix-conflicts-with-openssl.patch
 Patch1:		wine-1.1.7-chinese-font-substitutes.patch
 Patch2:		wine-cjk.patch
-# https://bugs.winehq.org/show_bug.cgi?id=41930
-Patch4:		https://github.com/vchigrin/wine/pull/1.patch
-Patch5:		wine-4.14-fix-crackling-audio.patch
-Patch6:		wine-5.11-llvm-libunwind.patch
-Patch7:		wine-winnt.h-clang.patch
-Patch8:		https://gitlab.winehq.org/wine/wine/-/merge_requests/1568.patch
-
 # a: => /media/floppy
 # d: => $HOME (at config_dir creation time, not refreshed if $HOME changes;
 #              note that Wine also provides $HOME in My Documents)
 # com4 => /dev/ttyUSB0 (replaces /dev/ttyS3)
-Patch108:	wine-mdkconf.patch
+Patch3:		wine-mdkconf.patch
+# Patches >= 100 are applied after wine-staging
+Patch100:	wine-4.14-fix-crackling-audio.patch
+Patch101:	wine-5.11-llvm-libunwind.patch
+Patch102:	wine-winnt.h-clang.patch
+# https://bugs.winehq.org/show_bug.cgi?id=41930
+Patch103:	https://github.com/vchigrin/wine/pull/1.patch
+
 %ifarch %{x86_64}
 # Wine needs GCC 4.4+ on x86_64 for MS ABI support.
 BuildRequires:	gcc >= 4.4
@@ -360,9 +359,7 @@ Wine is often updated.
 
 %prep
 %setup -qn %{name}-%{version}%{?beta:-%{beta}}
-%patch1 -p0 -b .chinese~
-%patch2 -p1 -b .cjk~
-%patch108 -p1 -b .conf~
+%autopatch -p1 -M 99
 
 %if %{with staging}
 # wine-staging
@@ -371,10 +368,7 @@ WINEDIR="$(pwd)"
 staging/patchinstall.py -a
 %endif
 
-%patch4 -p1 -b .civ3~
-%patch5 -p1 -b .pulseaudiosucks~
-%patch6 -p1 -b .unwind~
-%patch7 -p1 -b .clang~
+%autopatch -p1 -m 100
 
 autoreconf
 aclocal

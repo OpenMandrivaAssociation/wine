@@ -1,5 +1,5 @@
---- loader/wine.inf.in.orig	2008-10-29 06:43:52.000000000 +0100
-+++ loader/wine.inf.in	2008-10-29 06:44:00.000000000 +0100
+--- a/loader/wine.inf.in.orig	2008-10-29 06:43:52.000000000 +0100
++++ b/loader/wine.inf.in	2008-10-29 06:44:00.000000000 +0100
 @@ -297,7 +297,10 @@
  HKLM,%FontSubStr%,"Courier New TUR,162",,"Courier New,162"
  HKLM,%FontSubStr%,"Helv",,"MS Sans Serif"
