@@ -1,0 +1,12 @@
+diff -up wine-9.8/include/msvcrt/corecrt.h.omv~ wine-9.8/include/msvcrt/corecrt.h
+--- wine-9.8/include/msvcrt/corecrt.h.omv~	2024-05-06 17:26:07.260704839 +0200
++++ wine-9.8/include/msvcrt/corecrt.h	2024-05-06 17:26:30.540953915 +0200
+@@ -337,7 +337,7 @@ typedef struct threadlocaleinfostruct {
+ #define __WINE_ALLOC_SIZE(...)
+ #endif
+ 
+-#if defined(__GNUC__) && (__GNUC__ > 10)
++#if defined(__GNUC__) && (__GNUC__ > 10) && !defined(__clang__)
+ #define __WINE_DEALLOC(...) __attribute__((malloc (__VA_ARGS__)))
+ #else
+ #define __WINE_DEALLOC(...)

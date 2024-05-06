@@ -57,6 +57,8 @@ Patch2:		wine-cjk.patch
 #              note that Wine also provides $HOME in My Documents)
 # com4 => /dev/ttyUSB0 (replaces /dev/ttyS3)
 Patch3:		wine-mdkconf.patch
+Patch4:		wine-9.8-clang.patch
+# =============================================
 # Patches >= 100 are applied after wine-staging
 Patch100:	wine-4.14-fix-crackling-audio.patch
 Patch101:	wine-5.11-llvm-libunwind.patch
@@ -359,28 +361,24 @@ Wine is often updated.
 
 %prep
 %setup -qn %{name}-%{version}%{?beta:-%{beta}}
+
+%if %{with staging}
+# staging patchinstall.py uses "git apply", which
+# only works on git repositories...
+git init
+git add .
+git config user.name "OpenMandriva Builder"
+git config user.email "info@openmandriva.org"
+git commit -am "Create fake git repository to make staging scripts happy"
+%endif
+
 %autopatch -p1 -M 99
 
 %if %{with staging}
 # wine-staging
 tar --strip-components=1 -zxf "%{SOURCE900}"
 WINEDIR="$(pwd)"
-# We can use no-autoconf here because it'll still be run later,
-# when all other patches have been applied
-staging/patchinstall.py --no-autoconf -a
-# FIXME why does -a still omit some stuff?
-# This whole loop shouldn't be necessary, but it is
-# (otherwise e.g. windows.networking.connectivity
-# will not be built)
-for i in patches/*; do
-	[ -d "$i" ] || continue
-	if [ -e "$i/definition" ]; then
-		grep -qi 'Disabled: true' $i/definition && continue
-	else
-		echo "No definition for $i"
-	fi
-	staging/patchinstall.py --no-autoconf $(basename $i)
-done
+staging/patchinstall.py -a
 %endif
 
 %autopatch -p1 -m 100
@@ -673,7 +671,6 @@ done
 %{_libdir}/%{name}/*/*.sys
 %{_libdir}/%{name}/*/*.tlb
 %{_libdir}/%{name}/*/*.msstyles
-%{_libdir}/%{name}/*/windows.networking.connectivity
 %if %{with wow64}
 %dir %{_prefix}/lib/%{name}
 %dir %{_prefix}/lib/%{name}/i386-unix
@@ -696,7 +693,6 @@ done
 %{_prefix}/lib/%{name}/*/*.exe16
 %{_prefix}/lib/%{name}/*/*.drv16
 %{_prefix}/lib/%{name}/*/*.mod16
-%{_prefix}/lib/%{name}/*/windows.networking.connectivity
 %endif
 
 %files devel
