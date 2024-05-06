@@ -365,12 +365,27 @@ Wine is often updated.
 # wine-staging
 tar --strip-components=1 -zxf "%{SOURCE900}"
 WINEDIR="$(pwd)"
-staging/patchinstall.py -a
+# We can use no-autoconf here because it'll still be run later,
+# when all other patches have been applied
+staging/patchinstall.py --no-autoconf -a
+# FIXME why does -a still omit some stuff?
+# This whole loop shouldn't be necessary, but it is
+# (otherwise e.g. windows.networking.connectivity
+# will not be built)
+for i in patches/*; do
+	[ -d "$i" ] || continue
+	if [ -e "$i/definition" ]; then
+		grep -qi 'Disabled: true' $i/definition && continue
+	else
+		echo "No definition for $i"
+	fi
+	staging/patchinstall.py --no-autoconf $(basename $i)
+done
 %endif
 
 %autopatch -p1 -m 100
 
-autoreconf
+autoreconf -f
 aclocal
 autoconf
 
