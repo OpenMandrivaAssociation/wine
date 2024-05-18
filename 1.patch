@@ -1,16 +1,6 @@
-From b1dd902fa7440b0adae8705ef3bc1917dfb67128 Mon Sep 17 00:00:00 2001
-From: Vyacheslav Chigrin <vyacheslav.chigrin@izba.dev>
-Date: Sun, 4 Jun 2023 15:03:37 +0300
-Subject: [PATCH 1/2] Make 16-bit off-screen OpenGL context use RGB 555 format.
-
----
- dlls/win32u/dibdrv/dc.c     |  4 +-
- dlls/win32u/dibdrv/opengl.c | 95 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 97 insertions(+), 2 deletions(-)
-
-diff -up wine-9.7/dlls/win32u/dibdrv/bitblt.c.4~ wine-9.7/dlls/win32u/dibdrv/bitblt.c
---- wine-9.7/dlls/win32u/dibdrv/bitblt.c.4~	2024-04-19 22:18:13.000000000 +0200
-+++ wine-9.7/dlls/win32u/dibdrv/bitblt.c	2024-04-21 23:59:38.932408943 +0200
+diff -up wine-9.9/dlls/win32u/dibdrv/bitblt.c.4~ wine-9.9/dlls/win32u/dibdrv/bitblt.c
+--- wine-9.9/dlls/win32u/dibdrv/bitblt.c.4~	2024-05-17 22:10:05.000000000 +0200
++++ wine-9.9/dlls/win32u/dibdrv/bitblt.c	2024-05-18 17:07:45.341815216 +0200
 @@ -30,6 +30,7 @@
  #include "wine/debug.h"
  
@@ -68,9 +58,9 @@ diff -up wine-9.7/dlls/win32u/dibdrv/bitblt.c.4~ wine-9.7/dlls/win32u/dibdrv/bit
  }
  
  /***********************************************************************
-diff -up wine-9.7/dlls/win32u/dibdrv/dc.c.4~ wine-9.7/dlls/win32u/dibdrv/dc.c
---- wine-9.7/dlls/win32u/dibdrv/dc.c.4~	2024-04-19 22:18:13.000000000 +0200
-+++ wine-9.7/dlls/win32u/dibdrv/dc.c	2024-04-21 23:59:38.932408943 +0200
+diff -up wine-9.9/dlls/win32u/dibdrv/dc.c.4~ wine-9.9/dlls/win32u/dibdrv/dc.c
+--- wine-9.9/dlls/win32u/dibdrv/dc.c.4~	2024-05-17 22:10:05.000000000 +0200
++++ wine-9.9/dlls/win32u/dibdrv/dc.c	2024-05-18 17:11:18.856143916 +0200
 @@ -34,7 +34,7 @@
  
  WINE_DEFAULT_DEBUG_CHANNEL(dib);
@@ -90,10 +80,10 @@ diff -up wine-9.7/dlls/win32u/dibdrv/dc.c.4~ wine-9.7/dlls/win32u/dibdrv/dc.c
 +    { 16,  5, 0,  5, 5,  5, 10, 0, 0,   16, 16, 8 },
  };
  
- /**********************************************************************
-diff -up wine-9.7/dlls/win32u/dibdrv/dibdrv.h.4~ wine-9.7/dlls/win32u/dibdrv/dibdrv.h
---- wine-9.7/dlls/win32u/dibdrv/dibdrv.h.4~	2024-04-21 23:59:38.932408943 +0200
-+++ wine-9.7/dlls/win32u/dibdrv/dibdrv.h	2024-04-22 00:00:10.660770294 +0200
+ static void describe_pixel_format( int fmt, PIXELFORMATDESCRIPTOR *descr )
+diff -up wine-9.9/dlls/win32u/dibdrv/dibdrv.h.4~ wine-9.9/dlls/win32u/dibdrv/dibdrv.h
+--- wine-9.9/dlls/win32u/dibdrv/dibdrv.h.4~	2024-05-17 22:10:05.000000000 +0200
++++ wine-9.9/dlls/win32u/dibdrv/dibdrv.h	2024-05-18 17:07:45.341815216 +0200
 @@ -298,6 +298,7 @@ struct osmesa_funcs
      PROC (*get_proc_address)( const char *proc );
      BOOL (*make_current)( struct wgl_context *context, void *bits,
@@ -102,9 +92,9 @@ diff -up wine-9.7/dlls/win32u/dibdrv/dibdrv.h.4~ wine-9.7/dlls/win32u/dibdrv/dib
  };
  
  extern const struct osmesa_funcs *init_opengl_lib(void);
-diff -up wine-9.7/dlls/win32u/dibdrv/graphics.c.4~ wine-9.7/dlls/win32u/dibdrv/graphics.c
---- wine-9.7/dlls/win32u/dibdrv/graphics.c.4~	2024-04-19 22:18:13.000000000 +0200
-+++ wine-9.7/dlls/win32u/dibdrv/graphics.c	2024-04-21 23:59:38.932408943 +0200
+diff -up wine-9.9/dlls/win32u/dibdrv/graphics.c.4~ wine-9.9/dlls/win32u/dibdrv/graphics.c
+--- wine-9.9/dlls/win32u/dibdrv/graphics.c.4~	2024-05-18 17:07:42.869788231 +0200
++++ wine-9.9/dlls/win32u/dibdrv/graphics.c	2024-05-18 17:07:45.341815216 +0200
 @@ -30,6 +30,7 @@
  #include "wine/debug.h"
  
@@ -113,7 +103,7 @@ diff -up wine-9.7/dlls/win32u/dibdrv/graphics.c.4~ wine-9.7/dlls/win32u/dibdrv/g
  
  struct cached_glyph
  {
-@@ -935,6 +936,9 @@ BOOL dibdrv_ExtTextOut( PHYSDEV dev, INT
+@@ -1015,6 +1016,9 @@ BOOL dibdrv_ExtTextOut( PHYSDEV dev, INT
                     &clipped_rects, &bounds );
  
  done:
@@ -123,7 +113,7 @@ diff -up wine-9.7/dlls/win32u/dibdrv/graphics.c.4~ wine-9.7/dlls/win32u/dibdrv/g
      add_clipped_bounds( pdev, &bounds, pdev->clip );
      free_clipped_rects( &clipped_rects );
      return TRUE;
-@@ -1206,6 +1210,9 @@ BOOL dibdrv_PatBlt( PHYSDEV dev, struct
+@@ -1286,6 +1290,9 @@ BOOL dibdrv_PatBlt( PHYSDEV dev, struct
                              &dc->attr->brush_org, rop2 );
          break;
      }
@@ -133,9 +123,9 @@ diff -up wine-9.7/dlls/win32u/dibdrv/graphics.c.4~ wine-9.7/dlls/win32u/dibdrv/g
      free_clipped_rects( &clipped_rects );
      return ret;
  }
-diff -up wine-9.7/dlls/win32u/dibdrv/opengl.c.4~ wine-9.7/dlls/win32u/dibdrv/opengl.c
---- wine-9.7/dlls/win32u/dibdrv/opengl.c.4~	2024-04-19 22:18:13.000000000 +0200
-+++ wine-9.7/dlls/win32u/dibdrv/opengl.c	2024-04-21 23:59:38.932408943 +0200
+diff -up wine-9.9/dlls/win32u/dibdrv/opengl.c.4~ wine-9.9/dlls/win32u/dibdrv/opengl.c
+--- wine-9.9/dlls/win32u/dibdrv/opengl.c.4~	2024-05-17 22:10:05.000000000 +0200
++++ wine-9.9/dlls/win32u/dibdrv/opengl.c	2024-05-18 17:07:45.345815260 +0200
 @@ -56,8 +56,78 @@ struct wgl_context
  {
      OSMesaContext context;
