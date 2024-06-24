@@ -5,6 +5,7 @@
 %define _disable_lto 1
 # OpenCL support doesn't see cl* functions even with -lCL, but works if built...
 %define _disable_ld_no_undefined 1
+%global optflags %{optflags} -Wno-incompatible-function-pointer-types
 # Build time errors with lld 9.0.0-rc1 on x86_32 only
 # ld: error: can't create dynamic relocation R_386_32 against symbol: .L.str in readonly segment; recompile object files with -fPIC or pass '-Wl,-z,notext' to allow text relocations in the output
 %ifarch %{ix86}
