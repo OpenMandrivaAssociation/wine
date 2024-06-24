@@ -65,7 +65,7 @@ Patch101:	wine-5.11-llvm-libunwind.patch
 Patch102:	wine-winnt.h-clang.patch
 # https://bugs.winehq.org/show_bug.cgi?id=41930
 Patch103:	https://github.com/vchigrin/wine/pull/1.patch
-Patch104:	wine-9.9-compile.patch
+#Patch104:	wine-9.9-compile.patch
 
 %ifarch %{x86_64}
 # Wine needs GCC 4.4+ on x86_64 for MS ABI support.
