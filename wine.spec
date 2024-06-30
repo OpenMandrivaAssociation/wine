@@ -33,7 +33,7 @@
 %bcond_without staging
 
 Name:		wine
-Version:	9.10
+Version:	9.12
 Release:	%{?beta:0.%{beta}.}1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}%{?beta:-%{beta}}.tar.xz
 %if 0%{?sbeta:1}
@@ -65,7 +65,7 @@ Patch101:	wine-5.11-llvm-libunwind.patch
 Patch102:	wine-winnt.h-clang.patch
 # https://bugs.winehq.org/show_bug.cgi?id=41930
 Patch103:	https://github.com/vchigrin/wine/pull/1.patch
-Patch104:	wine-9.9-compile.patch
+Patch104:	wine-9.12-compile.patch
 
 %ifarch %{x86_64}
 # Wine needs GCC 4.4+ on x86_64 for MS ABI support.
@@ -397,9 +397,6 @@ git commit -am "Create fake git repository to make staging scripts happy"
 %if %{with staging}
 # wine-staging
 tar --strip-components=1 -zxf "%{SOURCE900}"
-# FIXME this patch breaks clang 18 and gcc 14, fortunately it isn't
-# strictly necessary
-rm patches/Compiler_Warnings/0001-include-Check-element-type-in-CONTAINING_RECORD-and-.patch
 WINEDIR="$(pwd)"
 staging/patchinstall.py -a
 %endif
