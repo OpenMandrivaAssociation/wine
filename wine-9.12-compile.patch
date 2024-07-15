@@ -52,26 +52,3 @@ diff -up wine-9.12/dlls/ntdll/unix/esync.c.omv~ wine-9.12/dlls/ntdll/unix/esync.
          {
              close( esync_list[entry][idx].fd );
              return STATUS_SUCCESS;
-diff -up wine-9.9/dlls/win32u/dibdrv/graphics.c.omv~ wine-9.9/dlls/win32u/dibdrv/graphics.c
---- wine-9.9/dlls/win32u/dibdrv/graphics.c.omv~ 2024-05-18 19:02:47.043275459 +0200
-+++ wine-9.9/dlls/win32u/dibdrv/graphics.c      2024-05-18 19:03:23.271688380 +0200
-@@ -1538,7 +1538,8 @@ BOOL dibdrv_RoundRect( PHYSDEV dev, INT
-     DC *dc = get_physdev_dc( dev );
-     RECT rect;
-     POINT pt[2], *points;
--    int i, end, count;
-+    int i, end;
-+    ULONG count;
-     BOOL ret = TRUE;
-     HRGN outline = 0, interior = 0;
- 
-@@ -1632,7 +1633,7 @@ BOOL dibdrv_RoundRect( PHYSDEV dev, INT
-     }
- 
-     if (pdev->brush.style != BS_NULL &&
--        !(interior = ULongToHandle(NtGdiPolyPolyDraw( ULongToHandle(ALTERNATE), points, (const UINT *)&count, 1, NtGdiPolyPolygonRgn ))))
-+        !(interior = ULongToHandle(NtGdiPolyPolyDraw( ULongToHandle(ALTERNATE), points, &count, 1, NtGdiPolyPolygonRgn ))))
-     {
-         free( points );
-         if (outline) NtGdiDeleteObjectApp( outline );
-
