@@ -33,7 +33,7 @@
 %bcond_without staging
 
 Name:		wine
-Version:	9.17
+Version:	9.18
 Release:	%{?beta:0.%{beta}.}1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}%{?beta:-%{beta}}.tar.xz
 %if 0%{?sbeta:1}
@@ -690,6 +690,7 @@ done
 %{_libdir}/%{name}/*/*.sys
 %{_libdir}/%{name}/*/*.tlb
 %{_libdir}/%{name}/*/*.msstyles
+%exclude %{_libdir}/%{name}/*/d3d8.dll
 %exclude %{_libdir}/%{name}/*/d3d9.dll
 %exclude %{_libdir}/%{name}/*/d3d10core.dll
 %exclude %{_libdir}/%{name}/*/d3d11.dll
@@ -716,6 +717,7 @@ done
 %{_prefix}/lib/%{name}/*/*.exe16
 %{_prefix}/lib/%{name}/*/*.drv16
 %{_prefix}/lib/%{name}/*/*.mod16
+%exclude %{_prefix}/lib/%{name}/*/d3d8.dll
 %exclude %{_prefix}/lib/%{name}/*/d3d9.dll
 %exclude %{_prefix}/lib/%{name}/*/d3d10core.dll
 %exclude %{_prefix}/lib/%{name}/*/d3d11.dll
@@ -724,11 +726,13 @@ done
 
 %files direct3d
 %if %{with wow64}
+%{_prefix}/lib/%{name}/*/d3d8.dll
 %{_prefix}/lib/%{name}/*/d3d9.dll
 %{_prefix}/lib/%{name}/*/d3d10core.dll
 %{_prefix}/lib/%{name}/*/d3d11.dll
 %{_prefix}/lib/%{name}/*/dxgi.dll
 %endif
+%{_libdir}/%{name}/*/d3d8.dll
 %{_libdir}/%{name}/*/d3d9.dll
 %{_libdir}/%{name}/*/d3d10core.dll
 %{_libdir}/%{name}/*/d3d11.dll
