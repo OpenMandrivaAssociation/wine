@@ -44,7 +44,7 @@ Source900:	https://github.com/wine-staging/wine-staging/archive/%{?smaster:maste
 Summary:	WINE Is Not An Emulator - runs MS Windows programs
 License:	LGPLv2+
 Group:		Emulators
-URL:		http://www.winehq.com/
+URL:		https://www.winehq.com/
 
 Source2:	wine.binfmt
 Source10:	wine.rpmlintrc
