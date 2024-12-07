@@ -23,17 +23,17 @@
 
 %define major 1
 %define devname %{mklibname -d wine}
-#define beta rc4
+%define beta rc1
 # Sometimes -staging patches are released late...
 # And sometimes there's interim releases
-#define sbeta %{beta}
+%define sbeta %{beta}
 %define sver %{version}
 #define smaster 1
 
 %bcond_without staging
 
 Name:		wine
-Version:	9.22
+Version:	10.0
 Release:	%{?beta:0.%{beta}.}1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}%{?beta:-%{beta}}.tar.xz
 %if 0%{?sbeta:1}
