@@ -1,7 +1,7 @@
-diff -up wine-9.12/loader/main.c.1~ wine-9.12/loader/main.c
---- wine-9.12/loader/main.c.1~	2024-06-30 12:58:52.510299774 +0200
-+++ wine-9.12/loader/main.c	2024-06-30 13:00:14.967153888 +0200
-@@ -256,6 +256,12 @@ int main( int argc, char *argv[] )
+diff -up wine-10.2/loader/main.c.omv~ wine-10.2/loader/main.c
+--- wine-10.2/loader/main.c.omv~	2025-02-23 18:22:53.023603983 +0100
++++ wine-10.2/loader/main.c	2025-02-23 18:23:02.309107506 +0100
+@@ -166,6 +166,12 @@ int main( int argc, char *argv[] )
  {
      void *handle;
  
@@ -13,4 +13,4 @@ diff -up wine-9.12/loader/main.c.1~ wine-9.12/loader/main.c
 +
      init_reserved_areas();
  
-     if ((handle = load_ntdll( argv[0] )))
+     if ((handle = try_dlopen( get_self_exe() )) ||
