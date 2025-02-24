@@ -603,17 +603,7 @@ done
 
 %files
 %doc ANNOUNCE.md AUTHORS README.md
-%ifarch %{x86_64}
-%{_bindir}/wine64
-%{_bindir}/wine64-preloader
-%if %{with wow64}
 %{_bindir}/wine
-%{_bindir}/wine-preloader
-%endif
-%else
-%{_bindir}/wine
-%{_bindir}/wine-preloader
-%endif
 %config %{_binfmtdir}/wine.conf
 %{_bindir}/winecfg
 %{_bindir}/wineconsole*
