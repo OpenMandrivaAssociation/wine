@@ -12,6 +12,9 @@
 %global ldflags %{ldflags} -Wl,-z,notext -fuse-ld=lld
 %endif
 
+# libdir must be the same for the 32-bit and 64-bit build
+%global _libdir %{_prefix}/lib
+
 %define _fortify_cflags %{nil}
 %define _ssp_cflags %{nil}
 
@@ -33,7 +36,7 @@
 %bcond_without staging
 
 Name:		wine
-Version:	10.2
+Version:	10.4
 Release:	%{?beta:0.%{beta}.}1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}%{?beta:-%{beta}}.tar.xz
 %if 0%{?sbeta:1}
@@ -64,7 +67,8 @@ Patch100:	wine-4.14-fix-crackling-audio.patch
 Patch101:	wine-5.11-llvm-libunwind.patch
 Patch102:	wine-winnt.h-clang.patch
 # https://bugs.winehq.org/show_bug.cgi?id=41930
-Patch103:	https://github.com/vchigrin/wine/pull/1.patch
+# FIXME needs porting
+#Patch103:	https://github.com/vchigrin/wine/pull/1.patch
 
 %ifarch %{x86_64}
 # Wine needs GCC 4.4+ on x86_64 for MS ABI support.
@@ -433,6 +437,7 @@ export CONFIGURE_TOP=$(pwd)
 mkdir build
 cd build
 %configure \
+	--libdir=%{_prefix}/lib \
 %ifarch %{x86_64}
 	--enable-win64 \
 %endif
@@ -450,7 +455,11 @@ if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4)'; then
 	exit 1
 fi
 
-%make_build depend
+# FIXME We should determine WHY wine finds 32-bit glib over 64-bit instead of "fixing" it...
+%if "%{_lib}" != "lib"
+sed -i -e 's,usr/lib/glib,usr/%{_lib}/glib,g' Makefile
+%endif
+
 %make_build
 
 %if %{with wow64}
@@ -462,6 +471,7 @@ if ! PKG_CONFIG_LIBDIR="%{_prefix}/lib/pkgconfig:%{_datadir}/pkgconfig" \
 PKG_CONFIG_PATH="%{_prefix}/lib/pkgconfig:%{_datadir}/pkgconfig" \
 ../configure \
 	--prefix=%{_prefix} \
+	--libdir=%{_prefix}/lib \
 	--with-pulse \
 	--with-gstreamer \
 	--with-wine64=../build; then
@@ -478,7 +488,6 @@ if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4|netapi|pcsclit
 	cat config.log |grep "won't be supported"
 	exit 1
 fi
-%make_build depend
 %make_build
 %endif
 
@@ -604,6 +613,8 @@ done
 %files
 %doc ANNOUNCE.md AUTHORS README.md
 %{_bindir}/wine
+%{_prefix}/lib/wine/*/wine
+%{_prefix}/lib/wine/*/wine-preloader
 %config %{_binfmtdir}/wine.conf
 %{_bindir}/winecfg
 %{_bindir}/wineconsole*
@@ -662,77 +673,84 @@ done
 %ifarch %{x86_64}
 %dir %{_libdir}/%{name}/x86_64-unix
 %dir %{_libdir}/%{name}/x86_64-windows
+%{_libdir}/%{name}/x86_64-*/*.so
+%{_libdir}/%{name}/x86_64-*/*.acm
+%{_libdir}/%{name}/x86_64-*/*.ax
+%{_libdir}/%{name}/x86_64-*/*.com
+%{_libdir}/%{name}/x86_64-*/*.cpl
+%{_libdir}/%{name}/x86_64-*/*.dll
+%{_libdir}/%{name}/x86_64-*/*.drv
+%{_libdir}/%{name}/x86_64-*/*.ds
+%{_libdir}/%{name}/x86_64-*/*.exe
+%{_libdir}/%{name}/x86_64-*/*.ocx
+%{_libdir}/%{name}/x86_64-*/*.sys
+%{_libdir}/%{name}/x86_64-*/*.tlb
+%{_libdir}/%{name}/x86_64-*/*.msstyles
+%exclude %{_libdir}/%{name}/x86_64-*/d3d8.dll
+%exclude %{_libdir}/%{name}/x86_64-*/d3d9.dll
+%exclude %{_libdir}/%{name}/x86_64-*/d3d10core.dll
+%exclude %{_libdir}/%{name}/x86_64-*/d3d11.dll
+%exclude %{_libdir}/%{name}/x86_64-*/dxgi.dll
 %endif
 %ifarch %{aarch64}
 %dir %{_libdir}/%{name}/aarch64-unix
 %dir %{_libdir}/%{name}/aarch64-windows
+%{_libdir}/%{name}/aarch64-*/*.so
+%{_libdir}/%{name}/aarch64-*/*.acm
+%{_libdir}/%{name}/aarch64-*/*.ax
+%{_libdir}/%{name}/aarch64-*/*.com
+%{_libdir}/%{name}/aarch64-*/*.cpl
+%{_libdir}/%{name}/aarch64-*/*.dll
+%{_libdir}/%{name}/aarch64-*/*.drv
+%{_libdir}/%{name}/aarch64-*/*.ds
+%{_libdir}/%{name}/aarch64-*/*.exe
+%{_libdir}/%{name}/aarch64-*/*.ocx
+%{_libdir}/%{name}/aarch64-*/*.sys
+%{_libdir}/%{name}/aarch64-*/*.tlb
+%{_libdir}/%{name}/aarch64-*/*.msstyles
+%exclude %{_libdir}/%{name}/aarch64-*/d3d8.dll
+%exclude %{_libdir}/%{name}/aarch64-*/d3d9.dll
+%exclude %{_libdir}/%{name}/aarch64-*/d3d10core.dll
+%exclude %{_libdir}/%{name}/aarch64-*/d3d11.dll
+%exclude %{_libdir}/%{name}/aarch64-*/dxgi.dll
 %endif
-%{_libdir}/%{name}/*/*.so
-%{_libdir}/%{name}/*/*.acm
-%{_libdir}/%{name}/*/*.ax
-%{_libdir}/%{name}/*/*.com
-%{_libdir}/%{name}/*/*.cpl
-%{_libdir}/%{name}/*/*.dll
-%{_libdir}/%{name}/*/*.drv
-%{_libdir}/%{name}/*/*.ds
-%{_libdir}/%{name}/*/*.exe
-%{_libdir}/%{name}/*/*.ocx
-%{_libdir}/%{name}/*/*.sys
-%{_libdir}/%{name}/*/*.tlb
-%{_libdir}/%{name}/*/*.msstyles
-%exclude %{_libdir}/%{name}/*/d3d8.dll
-%exclude %{_libdir}/%{name}/*/d3d9.dll
-%exclude %{_libdir}/%{name}/*/d3d10core.dll
-%exclude %{_libdir}/%{name}/*/d3d11.dll
-%exclude %{_libdir}/%{name}/*/dxgi.dll
 %if %{with wow64}
-%dir %{_prefix}/lib/%{name}
 %dir %{_prefix}/lib/%{name}/i386-unix
 %dir %{_prefix}/lib/%{name}/i386-windows
-%{_prefix}/lib/%{name}/*/*.so
-%{_prefix}/lib/%{name}/*/*.acm
-%{_prefix}/lib/%{name}/*/*.ax
-%{_prefix}/lib/%{name}/*/*.com
-%{_prefix}/lib/%{name}/*/*.cpl
-%{_prefix}/lib/%{name}/*/*.dll
-%{_prefix}/lib/%{name}/*/*.drv
-%{_prefix}/lib/%{name}/*/*.ds
-%{_prefix}/lib/%{name}/*/*.exe
-%{_prefix}/lib/%{name}/*/*.msstyles
-%{_prefix}/lib/%{name}/*/*.ocx
-%{_prefix}/lib/%{name}/*/*.sys
-%{_prefix}/lib/%{name}/*/*.tlb
-%{_prefix}/lib/%{name}/*/*.vxd
-%{_prefix}/lib/%{name}/*/*.dll16
-%{_prefix}/lib/%{name}/*/*.exe16
-%{_prefix}/lib/%{name}/*/*.drv16
-%{_prefix}/lib/%{name}/*/*.mod16
-%exclude %{_prefix}/lib/%{name}/*/d3d8.dll
-%exclude %{_prefix}/lib/%{name}/*/d3d9.dll
-%exclude %{_prefix}/lib/%{name}/*/d3d10core.dll
-%exclude %{_prefix}/lib/%{name}/*/d3d11.dll
-%exclude %{_prefix}/lib/%{name}/*/dxgi.dll
+%{_prefix}/lib/%{name}/i386-*/*.so
+%{_prefix}/lib/%{name}/i386-*/*.acm
+%{_prefix}/lib/%{name}/i386-*/*.ax
+%{_prefix}/lib/%{name}/i386-*/*.com
+%{_prefix}/lib/%{name}/i386-*/*.cpl
+%{_prefix}/lib/%{name}/i386-*/*.dll
+%{_prefix}/lib/%{name}/i386-*/*.drv
+%{_prefix}/lib/%{name}/i386-*/*.ds
+%{_prefix}/lib/%{name}/i386-*/*.exe
+%{_prefix}/lib/%{name}/i386-*/*.msstyles
+%{_prefix}/lib/%{name}/i386-*/*.ocx
+%{_prefix}/lib/%{name}/i386-*/*.sys
+%{_prefix}/lib/%{name}/i386-*/*.tlb
+%{_prefix}/lib/%{name}/i386-*/*.vxd
+%{_prefix}/lib/%{name}/i386-*/*.dll16
+%{_prefix}/lib/%{name}/i386-*/*.exe16
+%{_prefix}/lib/%{name}/i386-*/*.drv16
+%{_prefix}/lib/%{name}/i386-*/*.mod16
+%exclude %{_prefix}/lib/%{name}/i386-*/d3d8.dll
+%exclude %{_prefix}/lib/%{name}/i386-*/d3d9.dll
+%exclude %{_prefix}/lib/%{name}/i386-*/d3d10core.dll
+%exclude %{_prefix}/lib/%{name}/i386-*/d3d11.dll
+%exclude %{_prefix}/lib/%{name}/i386-*/dxgi.dll
 %endif
 
 %files direct3d
-%if %{with wow64}
 %{_prefix}/lib/%{name}/*/d3d8.dll
 %{_prefix}/lib/%{name}/*/d3d9.dll
 %{_prefix}/lib/%{name}/*/d3d10core.dll
 %{_prefix}/lib/%{name}/*/d3d11.dll
 %{_prefix}/lib/%{name}/*/dxgi.dll
-%endif
-%{_libdir}/%{name}/*/d3d8.dll
-%{_libdir}/%{name}/*/d3d9.dll
-%{_libdir}/%{name}/*/d3d10core.dll
-%{_libdir}/%{name}/*/d3d11.dll
-%{_libdir}/%{name}/*/dxgi.dll
 
 %files devel
 %{_libdir}/%{name}/*/*.a
-%ifarch %{x86_64}
-%{_prefix}/lib/%{name}/*/*.a
-%endif
 %{_includedir}/*
 # %{_bindir}/fnt2bdf
 %{_bindir}/wmc
