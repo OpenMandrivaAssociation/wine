@@ -768,22 +768,35 @@ done
 %endif
 
 %files direct3d
+%ifarch %{aarch64}
 %{_libdir}/%{name}/aarch64-*/d3d8.dll
 %{_libdir}/%{name}/aarch64-*/d3d9.dll
 %{_libdir}/%{name}/aarch64-*/d3d10core.dll
 %{_libdir}/%{name}/aarch64-*/d3d11.dll
 %{_libdir}/%{name}/aarch64-*/dxgi.dll
+%else
+%{_libdir}/%{name}/x86_64-*/d3d8.dll
+%{_libdir}/%{name}/x86_64-*/d3d9.dll
+%{_libdir}/%{name}/x86_64-*/d3d10core.dll
+%{_libdir}/%{name}/x86_64-*/d3d11.dll
+%{_libdir}/%{name}/x86_64-*/dxgi.dll
 %{_prefix}/lib/%{name}/*/d3d8.dll
 %{_prefix}/lib/%{name}/*/d3d9.dll
 %{_prefix}/lib/%{name}/*/d3d10core.dll
 %{_prefix}/lib/%{name}/*/d3d11.dll
 %{_prefix}/lib/%{name}/*/dxgi.dll
+%endif
 
 %files direct3d12
+%ifarch %{aarch64}
+%{_libdir}/%{name}/aarch64-*/d3d12core.dll
+%{_libdir}/%{name}/aarch64-*/d3d12.dll
+%else
 %{_libdir}/%{name}/x86_64-*/d3d12core.dll
 %{_libdir}/%{name}/x86_64-*/d3d12.dll
 %{_prefix}/lib/%{name}/*/d3d12core.dll
 %{_prefix}/lib/%{name}/*/d3d12.dll
+%endif
 
 %files devel
 %{_libdir}/%{name}/*/*.a
