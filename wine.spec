@@ -337,6 +337,7 @@ BuildRequires:	cross-x86_64-w64-mingw32-libc
 %endif
 %endif
 Suggests:	direct3d-implementation
+Suggests:	direct3d12-implementation
 
 %description
 Wine is a program which allows running Microsoft Windows programs
@@ -379,6 +380,25 @@ wine-direct3d is the original implementation from Wine
 proton-direct3d is the implementation from Proton
 proton-experimental-direct3d is the implementation from Proton-experimental
 dxvk is a reimplementation on top of Vulkan rather than OpenGL
+
+%package direct3d12
+Summary:	The Direct3D 12 implementation from the Wine project
+Group:		Emulators
+Requires:	direct3d-implementation
+Provides:	direct3d12-implementation
+
+%description direct3d12
+The Direct3D 12 implementation from the Wine project
+
+Direct3D is a Windows 3D acceleration library used by many games
+and applications.
+
+This is one of several alternative implementations of this interface.
+
+wine-direct3d12 is the original implementation from Wine
+proton-direct3d12 is the implementation from Proton
+proton-experimental-direct3d12 is the implementation from Proton-experimental
+vkd3d-proton is a reimplementation on top of Vulkan rather than OpenGL
 
 %prep
 %setup -qn %{name}-%{version}%{?beta:-%{beta}}
@@ -689,6 +709,8 @@ done
 %exclude %{_libdir}/%{name}/x86_64-*/d3d9.dll
 %exclude %{_libdir}/%{name}/x86_64-*/d3d10core.dll
 %exclude %{_libdir}/%{name}/x86_64-*/d3d11.dll
+%exclude %{_libdir}/%{name}/x86_64-*/d3d12core.dll
+%exclude %{_libdir}/%{name}/x86_64-*/d3d12.dll
 %exclude %{_libdir}/%{name}/x86_64-*/dxgi.dll
 %endif
 %ifarch %{aarch64}
@@ -711,6 +733,8 @@ done
 %exclude %{_libdir}/%{name}/aarch64-*/d3d9.dll
 %exclude %{_libdir}/%{name}/aarch64-*/d3d10core.dll
 %exclude %{_libdir}/%{name}/aarch64-*/d3d11.dll
+%exclude %{_libdir}/%{name}/aarch64-*/d3d12core.dll
+%exclude %{_libdir}/%{name}/aarch64-*/d3d12.dll
 %exclude %{_libdir}/%{name}/aarch64-*/dxgi.dll
 %endif
 %if %{with wow64}
@@ -738,15 +762,28 @@ done
 %exclude %{_prefix}/lib/%{name}/i386-*/d3d9.dll
 %exclude %{_prefix}/lib/%{name}/i386-*/d3d10core.dll
 %exclude %{_prefix}/lib/%{name}/i386-*/d3d11.dll
+%exclude %{_prefix}/lib/%{name}/i386-*/d3d12core.dll
+%exclude %{_prefix}/lib/%{name}/i386-*/d3d12.dll
 %exclude %{_prefix}/lib/%{name}/i386-*/dxgi.dll
 %endif
 
 %files direct3d
+%{_libdir}/%{name}/aarch64-*/d3d8.dll
+%{_libdir}/%{name}/aarch64-*/d3d9.dll
+%{_libdir}/%{name}/aarch64-*/d3d10core.dll
+%{_libdir}/%{name}/aarch64-*/d3d11.dll
+%{_libdir}/%{name}/aarch64-*/dxgi.dll
 %{_prefix}/lib/%{name}/*/d3d8.dll
 %{_prefix}/lib/%{name}/*/d3d9.dll
 %{_prefix}/lib/%{name}/*/d3d10core.dll
 %{_prefix}/lib/%{name}/*/d3d11.dll
 %{_prefix}/lib/%{name}/*/dxgi.dll
+
+%files direct3d12
+%{_libdir}/%{name}/x86_64-*/d3d12core.dll
+%{_libdir}/%{name}/x86_64-*/d3d12.dll
+%{_prefix}/lib/%{name}/*/d3d12core.dll
+%{_prefix}/lib/%{name}/*/d3d12.dll
 
 %files devel
 %{_libdir}/%{name}/*/*.a
