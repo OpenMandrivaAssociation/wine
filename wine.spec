@@ -780,11 +780,11 @@ done
 %{_libdir}/%{name}/x86_64-*/d3d10core.dll
 %{_libdir}/%{name}/x86_64-*/d3d11.dll
 %{_libdir}/%{name}/x86_64-*/dxgi.dll
-%{_prefix}/lib/%{name}/*/d3d8.dll
-%{_prefix}/lib/%{name}/*/d3d9.dll
-%{_prefix}/lib/%{name}/*/d3d10core.dll
-%{_prefix}/lib/%{name}/*/d3d11.dll
-%{_prefix}/lib/%{name}/*/dxgi.dll
+%{_prefix}/lib/%{name}/i386-*/d3d8.dll
+%{_prefix}/lib/%{name}/i386-*/d3d9.dll
+%{_prefix}/lib/%{name}/i386-*/d3d10core.dll
+%{_prefix}/lib/%{name}/i386-*/d3d11.dll
+%{_prefix}/lib/%{name}/i386-*/dxgi.dll
 %endif
 
 %files direct3d12
