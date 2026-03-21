@@ -37,7 +37,7 @@
 
 Name:		wine
 Version:	10.20
-Release:	%{?beta:0.%{beta}.}1
+Release:	%{?beta:0.%{beta}.}2
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}%{?beta:-%{beta}}.tar.xz
 %if 0%{?sbeta:1}
 Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}-%{sbeta}.tar.gz
@@ -106,7 +106,7 @@ BuildRequires:	pkgconfig(audiofile)
 BuildRequires:	pkgconfig(freeglut)
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(libusb-1.0)
-BuildRequires:	pkgconfig(libxml-2.0)
+BuildRequires:	pkgconfig(libxml-2.0) >= 2.15.2
 BuildRequires:	pkgconfig(libxslt)
 BuildRequires:	pkgconfig(libgcrypt)
 BuildRequires:	pkgconfig(gpg-error)
@@ -194,7 +194,7 @@ BuildRequires:	devel(libaudiofile)
 BuildRequires:	devel(libglut)
 BuildRequires:	devel(libpng16)
 BuildRequires:	devel(libusb-1.0)
-BuildRequires:	devel(libxml2)
+BuildRequires:	devel(libxml2) >= 2.15.2
 BuildRequires:	devel(libxslt)
 BuildRequires:	devel(libcapi20)
 BuildRequires:	devel(libgif)
