@@ -12,6 +12,8 @@
 %global ldflags %{ldflags} -Wl,-z,notext -fuse-ld=lld
 %endif
 
+%global optflags %{optflags} -Wno-error -Wno-implicit-function-declaration
+
 # libdir must be the same for the 32-bit and 64-bit build
 %global _libdir %{_prefix}/lib
 
