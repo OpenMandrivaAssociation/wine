@@ -36,8 +36,8 @@
 %bcond_without staging
 
 Name:		wine
-Version:	10.20
-Release:	%{?beta:0.%{beta}.}2
+Version:	11.6
+Release:	%{?beta:0.%{beta}.}1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}%{?beta:-%{beta}}.tar.xz
 %if 0%{?sbeta:1}
 Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}-%{sbeta}.tar.gz
@@ -64,7 +64,7 @@ Patch4:		wine-9.8-clang.patch
 # =============================================
 # Patches >= 100 are applied after wine-staging
 Patch100:	wine-4.14-fix-crackling-audio.patch
-Patch101:	wine-5.11-llvm-libunwind.patch
+#Patch101:	wine-5.11-llvm-libunwind.patch
 Patch102:	wine-winnt.h-clang.patch
 # https://bugs.winehq.org/show_bug.cgi?id=41930
 # FIXME needs porting
