@@ -13,7 +13,7 @@
 %endif
 
 # libdir must be the same for the 32-bit and 64-bit build
-%global _libdir %{_prefix}/lib
+%global _libdir %{_libdir}
 
 %define _fortify_cflags %{nil}
 %define _ssp_cflags %{nil}
@@ -458,7 +458,7 @@ export CONFIGURE_TOP=$(pwd)
 mkdir build
 cd build
 %configure \
-	--libdir=%{_prefix}/lib \
+	--libdir=%{_libdir} \
 %ifarch %{x86_64}
 	--enable-win64 \
 %endif
@@ -488,11 +488,11 @@ cd ..
 
 mkdir build32
 cd build32
-if ! PKG_CONFIG_LIBDIR="%{_prefix}/lib/pkgconfig:%{_datadir}/pkgconfig" \
-PKG_CONFIG_PATH="%{_prefix}/lib/pkgconfig:%{_datadir}/pkgconfig" \
+if ! PKG_CONFIG_LIBDIR="%{_libdir}/pkgconfig:%{_datadir}/pkgconfig" \
+PKG_CONFIG_PATH="%{_libdir}/pkgconfig:%{_datadir}/pkgconfig" \
 ../configure \
 	--prefix=%{_prefix} \
-	--libdir=%{_prefix}/lib \
+	--libdir=%{_libdir} \
 	--with-pulse \
 	--with-gstreamer \
 	--with-wine64=../build; then
@@ -627,15 +627,15 @@ sed -i 's,Icon=%{name},Icon=regedit,' %{buildroot}%{_datadir}/applications/mandr
 sed -i 's,Icon=%{name},Icon=winemine,' %{buildroot}%{_datadir}/applications/mandriva-wine-winemine.desktop
 sed -i 's,Icon=%{name},Icon=msiexec,' "%{buildroot}%{_datadir}/applications/mandriva-wine-wine uninstaller.desktop"
 
-for i in %{buildroot}%{_bindir}/* %{buildroot}%{_libdir}/%{name}/*.so %{buildroot}%{_prefix}/lib/%{name}/*.so; do
+for i in %{buildroot}%{_bindir}/* %{buildroot}%{_libdir}/%{name}/*.so %{buildroot}%{_libdir}/%{name}/*.so; do
 	chrpath -d $i || :
 done
 
 %files
 %doc ANNOUNCE.md AUTHORS README.md
 %{_bindir}/wine
-%{_prefix}/lib/wine/*/wine
-%{_prefix}/lib/wine/*/wine-preloader
+%{_libdir}/wine/*/wine
+%{_libdir}/wine/*/wine-preloader
 %config %{_binfmtdir}/wine.conf
 %{_bindir}/winecfg
 %{_bindir}/wineconsole*
@@ -673,6 +673,7 @@ done
 %doc %{_mandir}/man1/winepath.1*
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/%{name}.inf
+%{_datadir}/%{name}/nls/icudtl.dat
 %{_datadir}/%{name}/nls/l_intl.nls
 %{_datadir}/%{name}/nls/locale.nls
 %{_datadir}/%{name}/nls/c_*
@@ -741,33 +742,33 @@ done
 %exclude %{_libdir}/%{name}/aarch64-*/dxgi.dll
 %endif
 %if %{with wow64}
-%dir %{_prefix}/lib/%{name}/i386-unix
-%dir %{_prefix}/lib/%{name}/i386-windows
-%{_prefix}/lib/%{name}/i386-*/*.so
-%{_prefix}/lib/%{name}/i386-*/*.acm
-%{_prefix}/lib/%{name}/i386-*/*.ax
-%{_prefix}/lib/%{name}/i386-*/*.com
-%{_prefix}/lib/%{name}/i386-*/*.cpl
-%{_prefix}/lib/%{name}/i386-*/*.dll
-%{_prefix}/lib/%{name}/i386-*/*.drv
-%{_prefix}/lib/%{name}/i386-*/*.ds
-%{_prefix}/lib/%{name}/i386-*/*.exe
-%{_prefix}/lib/%{name}/i386-*/*.msstyles
-%{_prefix}/lib/%{name}/i386-*/*.ocx
-%{_prefix}/lib/%{name}/i386-*/*.sys
-%{_prefix}/lib/%{name}/i386-*/*.tlb
-%{_prefix}/lib/%{name}/i386-*/*.vxd
-%{_prefix}/lib/%{name}/i386-*/*.dll16
-%{_prefix}/lib/%{name}/i386-*/*.exe16
-%{_prefix}/lib/%{name}/i386-*/*.drv16
-%{_prefix}/lib/%{name}/i386-*/*.mod16
-%exclude %{_prefix}/lib/%{name}/i386-*/d3d8.dll
-%exclude %{_prefix}/lib/%{name}/i386-*/d3d9.dll
-%exclude %{_prefix}/lib/%{name}/i386-*/d3d10core.dll
-%exclude %{_prefix}/lib/%{name}/i386-*/d3d11.dll
-%exclude %{_prefix}/lib/%{name}/i386-*/d3d12core.dll
-%exclude %{_prefix}/lib/%{name}/i386-*/d3d12.dll
-%exclude %{_prefix}/lib/%{name}/i386-*/dxgi.dll
+%dir %{_libdir}/%{name}/i386-unix
+%dir %{_libdir}/%{name}/i386-windows
+%{_libdir}/%{name}/i386-*/*.so
+%{_libdir}/%{name}/i386-*/*.acm
+%{_libdir}/%{name}/i386-*/*.ax
+%{_libdir}/%{name}/i386-*/*.com
+%{_libdir}/%{name}/i386-*/*.cpl
+%{_libdir}/%{name}/i386-*/*.dll
+%{_libdir}/%{name}/i386-*/*.drv
+%{_libdir}/%{name}/i386-*/*.ds
+%{_libdir}/%{name}/i386-*/*.exe
+%{_libdir}/%{name}/i386-*/*.msstyles
+%{_libdir}/%{name}/i386-*/*.ocx
+%{_libdir}/%{name}/i386-*/*.sys
+%{_libdir}/%{name}/i386-*/*.tlb
+%{_libdir}/%{name}/i386-*/*.vxd
+%{_libdir}/%{name}/i386-*/*.dll16
+%{_libdir}/%{name}/i386-*/*.exe16
+%{_libdir}/%{name}/i386-*/*.drv16
+%{_libdir}/%{name}/i386-*/*.mod16
+%exclude %{_libdir}/%{name}/i386-*/d3d8.dll
+%exclude %{_libdir}/%{name}/i386-*/d3d9.dll
+%exclude %{_libdir}/%{name}/i386-*/d3d10core.dll
+%exclude %{_libdir}/%{name}/i386-*/d3d11.dll
+%exclude %{_libdir}/%{name}/i386-*/d3d12core.dll
+%exclude %{_libdir}/%{name}/i386-*/d3d12.dll
+%exclude %{_libdir}/%{name}/i386-*/dxgi.dll
 %endif
 
 %files direct3d
@@ -783,23 +784,16 @@ done
 %{_libdir}/%{name}/x86_64-*/d3d10core.dll
 %{_libdir}/%{name}/x86_64-*/d3d11.dll
 %{_libdir}/%{name}/x86_64-*/dxgi.dll
-%{_prefix}/lib/%{name}/i386-*/d3d8.dll
-%{_prefix}/lib/%{name}/i386-*/d3d9.dll
-%{_prefix}/lib/%{name}/i386-*/d3d10core.dll
-%{_prefix}/lib/%{name}/i386-*/d3d11.dll
-%{_prefix}/lib/%{name}/i386-*/dxgi.dll
+%{_libdir}/%{name}/i386-*/d3d8.dll
+%{_libdir}/%{name}/i386-*/d3d9.dll
+%{_libdir}/%{name}/i386-*/d3d10core.dll
+%{_libdir}/%{name}/i386-*/d3d11.dll
+%{_libdir}/%{name}/i386-*/dxgi.dll
 %endif
 
 %files direct3d12
-%ifarch %{aarch64}
-%{_libdir}/%{name}/aarch64-*/d3d12core.dll
-%{_libdir}/%{name}/aarch64-*/d3d12.dll
-%else
-%{_libdir}/%{name}/x86_64-*/d3d12core.dll
-%{_libdir}/%{name}/x86_64-*/d3d12.dll
-%{_prefix}/lib/%{name}/*/d3d12core.dll
-%{_prefix}/lib/%{name}/*/d3d12.dll
-%endif
+%{_libdir}/%{name}/*-*/d3d12core.dll
+%{_libdir}/%{name}/*-*/d3d12.dll
 
 %files devel
 %{_libdir}/%{name}/*/*.a
