@@ -72,12 +72,12 @@ Patch102:	wine-winnt.h-clang.patch
 
 %ifarch %{x86_64}
 # Wine needs GCC 4.4+ on x86_64 for MS ABI support.
-BuildRequires:	automake
-BuildRequires:	libtool-base
-BuildRequires:	slibtool
 BuildRequires:	gcc >= 4.4
 %endif
 
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	gpm-devel
