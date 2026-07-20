@@ -18,12 +18,6 @@
 %define _fortify_cflags %{nil}
 %define _ssp_cflags %{nil}
 
-%ifarch %{x86_64}
-%bcond_without wow64
-%else
-%bcond_with wow64
-%endif
-
 %define major 1
 %define devname %{mklibname -d wine}
 #define beta rc4
@@ -36,7 +30,7 @@
 %bcond_without staging
 
 Name:		wine
-Version:	11.6
+Version:	11.13
 Release:	%{?beta:0.%{beta}.}1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}%{?beta:-%{beta}}.tar.xz
 %if 0%{?sbeta:1}
@@ -111,7 +105,6 @@ BuildRequires:	pkgconfig(libxslt)
 BuildRequires:	pkgconfig(libgcrypt)
 BuildRequires:	pkgconfig(gpg-error)
 BuildRequires:	pkgconfig(gtk+-3.0)
-BuildRequires:	pkgconfig(capi20)
 BuildRequires:	pkgconfig(netapi)
 BuildRequires:	pkgconfig(libpcsclite)
 BuildRequires:	pkgconfig(wayland-client)
@@ -169,126 +162,6 @@ BuildRequires:	pkgconfig(libudev)
 BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	cmake(FAudio)
 
-%if %{with wow64}
-# This is ugly, but it has to be until and unless we fix multiarch support
-# in general.
-# We need to pull in 32-bit libraries, but can't install the corresponding
-# -devel packages because the headers would conflict with the 64bit headers.
-# Given the headers are the same anyway, we can just create fake devel
-# environments by symlinking .so files and reusing system (64bit) includes.
-BuildRequires:	devel(libSDL2-2.0)
-BuildRequires:	devel(libOpenCL)
-BuildRequires:	devel(libncurses)
-BuildRequires:	devel(libncursesw)
-BuildRequires:	devel(libcups)
-BuildRequires:	devel(libsane)
-BuildRequires:	devel(libsystemd)
-BuildRequires:	devel(libz)
-BuildRequires:	devel(libbz2)
-BuildRequires:	devel(libjack)
-BuildRequires:	devel(libpulse)
-BuildRequires:	devel(libmpg123)
-BuildRequires:	devel(libopenal)
-BuildRequires:	devel(libasound)
-BuildRequires:	devel(libaudiofile)
-BuildRequires:	devel(libglut)
-BuildRequires:	devel(libpng16)
-BuildRequires:	devel(libusb-1.0)
-BuildRequires:	devel(libxml2) >= 2.15.2
-BuildRequires:	devel(libxslt)
-BuildRequires:	devel(libcapi20)
-BuildRequires:	devel(libgif)
-BuildRequires:	devel(libtiff)
-BuildRequires:	devel(libXpm)
-BuildRequires:	devel(librsvg-2)
-BuildRequires:	devel(libgphoto2)
-BuildRequires:	devel(libgphoto2_port)
-BuildRequires:	devel(liblber)
-BuildRequires:	devel(libldap)
-BuildRequires:	devel(libdbus-1)
-BuildRequires:	devel(libgsm)
-BuildRequires:	devel(libodbc)
-BuildRequires:	devel(libgnutls)
-BuildRequires:	devel(liblcms2)
-BuildRequires:	devel(libOSMesa)
-BuildRequires:	devel(libGL)
-BuildRequires:	devel(libGLU)
-BuildRequires:	devel(libv4l2)
-BuildRequires:	devel(libieee1284)
-BuildRequires:	devel(libjpeg)
-BuildRequires:	devel(libjpegxr)
-BuildRequires:	devel(libXcursor)
-BuildRequires:	devel(libXcomposite)
-BuildRequires:	devel(libXfixes)
-BuildRequires:	devel(libXi)
-BuildRequires:	devel(libXinerama)
-BuildRequires:	devel(libXxf86vm)
-BuildRequires:	devel(libXmu)
-BuildRequires:	devel(libXrandr)
-BuildRequires:	devel(libX11)
-BuildRequires:	devel(libXrender)
-BuildRequires:	devel(libXext)
-BuildRequires:	devel(libSM)
-BuildRequires:	libvulkan-devel
-BuildRequires:	devel(libvkd3d)
-BuildRequires:	devel(libfontconfig)
-BuildRequires:	devel(libfreetype)
-BuildRequires:	devel(libgstreamer-1.0)
-BuildRequires:	devel(libgstvideo-1.0)
-BuildRequires:	devel(libgstaudio-1.0)
-BuildRequires:	devel(libgstbase-1.0)
-BuildRequires:	devel(libva)
-BuildRequires:	devel(libva-x11)
-BuildRequires:	devel(libva-drm)
-BuildRequires:	devel(libavcodec)
-BuildRequires:	devel(libudev)
-BuildRequires:	devel(libFAudio)
-BuildRequires:	devel(libpcap)
-BuildRequires:	devel(libkrb5)
-BuildRequires:	devel(libk5crypto)
-BuildRequires:	devel(libcom_err)
-BuildRequires:	devel(libgcrypt)
-BuildRequires:	devel(libgpg-error)
-BuildRequires:	devel(libgtk-3)
-BuildRequires:	devel(libgdk-3)
-BuildRequires:	devel(libpangocairo-1.0)
-BuildRequires:	devel(libpango-1.0)
-BuildRequires:	devel(libharfbuzz)
-BuildRequires:	devel(libatk-1.0)
-BuildRequires:	devel(libatk-bridge-2.0)
-BuildRequires:	devel(libatspi)
-BuildRequires:	devel(libcairo-gobject)
-BuildRequires:	devel(libcairo)
-BuildRequires:	devel(libgdk_pixbuf-2.0)
-BuildRequires:	devel(libgio-2.0)
-BuildRequires:	devel(libgobject-2.0)
-BuildRequires:	devel(libglib-2.0)
-BuildRequires:	devel(liborc-0.4)
-BuildRequires:	libunwind-nongnu-devel
-BuildRequires:	devel(libelf)
-BuildRequires:	devel(libdw)
-BuildRequires:	devel(liblzma)
-BuildRequires:	devel(libpcre)
-BuildRequires:	devel(libffi)
-BuildRequires:	devel(libepoxy)
-BuildRequires:	devel(libfribidi)
-BuildRequires:	devel(libpangoft2-1.0)
-BuildRequires:	devel(libuuid)
-BuildRequires:	devel(libblkid)
-BuildRequires:	devel(libmount)
-BuildRequires:	devel(libpixman-1)
-BuildRequires:	devel(libexpat)
-BuildRequires:	devel(libxcb)
-BuildRequires:	devel(libXft)
-BuildRequires:	devel(libxcb-render)
-BuildRequires:	devel(libxcb-shm)
-BuildRequires:	devel(libxkbcommon)
-BuildRequires:	devel(libxkbregistry)
-BuildRequires:	devel(libXau)
-BuildRequires:	devel(libXdmcp)
-BuildRequires:	devel(libXdamage)
-BuildRequires:	devel(libwayland-client)
-%endif
 %if %{with staging}
 # So patches can be applied with "git apply"
 BuildRequires:	git-core
@@ -325,10 +198,6 @@ Requires:	libdri-drivers
 # to use distribution packages instead. Therefore suggest wine-gecko here:
 Suggests:	wine-gecko
 Suggests:	%{dlopen_req ncursesw}
-%if %{with wow64}
-%rename		wine32
-%rename		wine64
-%endif
 %ifarch %{ix86} %{x86_64}
 BuildRequires:	cross-i686-w64-mingw32-binutils >= 2.38-2
 BuildRequires:	cross-i686-w64-mingw32-gcc-bootstrap
@@ -337,6 +206,11 @@ BuildRequires:	cross-i686-w64-mingw32-libc
 BuildRequires:	cross-x86_64-w64-mingw32-binutils >= 2.38-2
 BuildRequires:	cross-x86_64-w64-mingw32-gcc-bootstrap
 BuildRequires:	cross-x86_64-w64-mingw32-libc
+# Multi-arch PE (arm/aarch64/arm64ec) and arm64ec hybrid x64 stubs need
+# clang + lld; GNU as cannot assemble the COMDAT sections used for arm64ec.
+BuildRequires:	clang
+BuildRequires:	lld
+BuildRequires:	llvm
 %endif
 %endif
 Suggests:	direct3d-implementation
@@ -460,17 +334,18 @@ cd build
 %configure \
 	--libdir=%{_libdir} \
 %ifarch %{x86_64}
-	--enable-win64 \
+	--enable-archs=i386,x86_64,arm,aarch64,arm64ec \
+	--with-mingw=clang \
 %endif
 	--with-pulse \
 	--with-gstreamer
 
-if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4)'; then
+if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4|capi20)'; then
 	echo "Full config.log:"
 	cat config.log
 	echo "******************************"
 	echo "Missing dependencies detected:"
-	echo "(Only missing OSSv4 is OK):"
+	echo "(Only missing OSSv4 and capi20 are OK):"
 	echo "******************************"
 	cat config.log |grep "won't be supported"
 	exit 1
@@ -483,43 +358,7 @@ sed -i -e 's,usr/lib/glib,usr/%{_lib}/glib,g' Makefile
 
 %make_build
 
-%if %{with wow64}
-cd ..
-
-mkdir build32
-cd build32
-if ! PKG_CONFIG_LIBDIR="%{_libdir}/pkgconfig:%{_datadir}/pkgconfig" \
-PKG_CONFIG_PATH="%{_libdir}/pkgconfig:%{_datadir}/pkgconfig" \
-../configure \
-	--prefix=%{_prefix} \
-	--libdir=%{_libdir} \
-	--with-pulse \
-	--with-gstreamer \
-	--with-wine64=../build; then
-	echo "32-bit configure failed. Full config.log:"
-	cat config.log
-fi
-if cat config.log |grep "won't be supported" |grep -q -vE '(OSSv4|netapi|pcsclite)'; then
-	echo "Full config.log:"
-	cat config.log
-	echo "**********************************************"
-	echo "Missing 32-bit dependencies detected:"
-	echo "(Only missing OSSv4, netapi, pcsclite are OK):"
-	echo "**********************************************"
-	cat config.log |grep "won't be supported"
-	exit 1
-fi
-%make_build
-%endif
-
-
 %install
-%if %{with wow64}
-cd build32
-%make_install LDCONFIG=/bin/true
-cd ..
-%endif
-
 cd build
 %make_install LDCONFIG=/bin/true
 cd ..
@@ -719,8 +558,8 @@ done
 %endif
 %ifarch %{aarch64}
 %dir %{_libdir}/%{name}/aarch64-unix
+%endif
 %dir %{_libdir}/%{name}/aarch64-windows
-%{_libdir}/%{name}/aarch64-*/*.so
 %{_libdir}/%{name}/aarch64-*/*.acm
 %{_libdir}/%{name}/aarch64-*/*.ax
 %{_libdir}/%{name}/aarch64-*/*.com
@@ -740,11 +579,27 @@ done
 %exclude %{_libdir}/%{name}/aarch64-*/d3d12core.dll
 %exclude %{_libdir}/%{name}/aarch64-*/d3d12.dll
 %exclude %{_libdir}/%{name}/aarch64-*/dxgi.dll
-%endif
-%if %{with wow64}
-%dir %{_libdir}/%{name}/i386-unix
+%dir %{_libdir}/%{name}/arm-windows
+%{_libdir}/%{name}/arm-*/*.acm
+%{_libdir}/%{name}/arm-*/*.ax
+%{_libdir}/%{name}/arm-*/*.com
+%{_libdir}/%{name}/arm-*/*.cpl
+%{_libdir}/%{name}/arm-*/*.dll
+%{_libdir}/%{name}/arm-*/*.drv
+%{_libdir}/%{name}/arm-*/*.ds
+%{_libdir}/%{name}/arm-*/*.exe
+%{_libdir}/%{name}/arm-*/*.ocx
+%{_libdir}/%{name}/arm-*/*.sys
+%{_libdir}/%{name}/arm-*/*.tlb
+%{_libdir}/%{name}/arm-*/*.msstyles
+%exclude %{_libdir}/%{name}/arm-*/d3d8.dll
+%exclude %{_libdir}/%{name}/arm-*/d3d9.dll
+%exclude %{_libdir}/%{name}/arm-*/d3d10core.dll
+%exclude %{_libdir}/%{name}/arm-*/d3d11.dll
+%exclude %{_libdir}/%{name}/arm-*/d3d12core.dll
+%exclude %{_libdir}/%{name}/arm-*/d3d12.dll
+%exclude %{_libdir}/%{name}/arm-*/dxgi.dll
 %dir %{_libdir}/%{name}/i386-windows
-%{_libdir}/%{name}/i386-*/*.so
 %{_libdir}/%{name}/i386-*/*.acm
 %{_libdir}/%{name}/i386-*/*.ax
 %{_libdir}/%{name}/i386-*/*.com
@@ -769,16 +624,13 @@ done
 %exclude %{_libdir}/%{name}/i386-*/d3d12core.dll
 %exclude %{_libdir}/%{name}/i386-*/d3d12.dll
 %exclude %{_libdir}/%{name}/i386-*/dxgi.dll
-%endif
 
 %files direct3d
-%ifarch %{aarch64}
 %{_libdir}/%{name}/aarch64-*/d3d8.dll
 %{_libdir}/%{name}/aarch64-*/d3d9.dll
 %{_libdir}/%{name}/aarch64-*/d3d10core.dll
 %{_libdir}/%{name}/aarch64-*/d3d11.dll
 %{_libdir}/%{name}/aarch64-*/dxgi.dll
-%else
 %{_libdir}/%{name}/x86_64-*/d3d8.dll
 %{_libdir}/%{name}/x86_64-*/d3d9.dll
 %{_libdir}/%{name}/x86_64-*/d3d10core.dll
@@ -789,7 +641,6 @@ done
 %{_libdir}/%{name}/i386-*/d3d10core.dll
 %{_libdir}/%{name}/i386-*/d3d11.dll
 %{_libdir}/%{name}/i386-*/dxgi.dll
-%endif
 
 %files direct3d12
 %{_libdir}/%{name}/*-*/d3d12core.dll
