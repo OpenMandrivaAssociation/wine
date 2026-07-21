@@ -64,13 +64,11 @@ Patch102:	wine-winnt.h-clang.patch
 # FIXME needs porting
 #Patch103:	https://github.com/vchigrin/wine/pull/1.patch
 
-%ifarch %{x86_64}
 # Wine needs GCC 4.4+ on x86_64 for MS ABI support.
 BuildRequires:	gcc >= 4.4
-%endif
+BuildRequires:	atomic-devel
 
 BuildRequires:	automake
-BuildRequires:	libtool-base
 BuildRequires:	slibtool
 BuildRequires:	bison
 BuildRequires:	flex
