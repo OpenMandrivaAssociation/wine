@@ -555,6 +555,7 @@ done
 %endif
 %ifarch %{aarch64}
 %dir %{_libdir}/%{name}/aarch64-unix
+%{_libdir}/%{name}/aarch64-*/*.so
 %endif
 %dir %{_libdir}/%{name}/aarch64-windows
 %{_libdir}/%{name}/aarch64-*/*.acm
@@ -576,6 +577,8 @@ done
 %exclude %{_libdir}/%{name}/aarch64-*/d3d12core.dll
 %exclude %{_libdir}/%{name}/aarch64-*/d3d12.dll
 %exclude %{_libdir}/%{name}/aarch64-*/dxgi.dll
+# i386/arm PE trees are only built on x86_64 (--enable-archs=...)
+%ifarch %{x86_64}
 %dir %{_libdir}/%{name}/arm-windows
 %{_libdir}/%{name}/arm-*/*.acm
 %{_libdir}/%{name}/arm-*/*.ax
@@ -621,13 +624,17 @@ done
 %exclude %{_libdir}/%{name}/i386-*/d3d12core.dll
 %exclude %{_libdir}/%{name}/i386-*/d3d12.dll
 %exclude %{_libdir}/%{name}/i386-*/dxgi.dll
+%endif
 
 %files direct3d
+%ifarch %{x86_64} %{aarch64}
 %{_libdir}/%{name}/aarch64-*/d3d8.dll
 %{_libdir}/%{name}/aarch64-*/d3d9.dll
 %{_libdir}/%{name}/aarch64-*/d3d10core.dll
 %{_libdir}/%{name}/aarch64-*/d3d11.dll
 %{_libdir}/%{name}/aarch64-*/dxgi.dll
+%endif
+%ifarch %{x86_64}
 %{_libdir}/%{name}/x86_64-*/d3d8.dll
 %{_libdir}/%{name}/x86_64-*/d3d9.dll
 %{_libdir}/%{name}/x86_64-*/d3d10core.dll
@@ -638,6 +645,7 @@ done
 %{_libdir}/%{name}/i386-*/d3d10core.dll
 %{_libdir}/%{name}/i386-*/d3d11.dll
 %{_libdir}/%{name}/i386-*/dxgi.dll
+%endif
 
 %files direct3d12
 %{_libdir}/%{name}/*-*/d3d12core.dll
