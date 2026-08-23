@@ -30,8 +30,8 @@
 %bcond_without staging
 
 Name:		wine
-Version:	11.15
-Release:	%{?beta:0.%{beta}.}2
+Version:	11.16
+Release:	%{?beta:0.%{beta}.}1
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}%{?beta:-%{beta}}.tar.xz
 %if 0%{?sbeta:1}
 Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}-%{sbeta}.tar.gz
@@ -154,6 +154,7 @@ BuildRequires:	pkgconfig(gstreamer-1.0)
 BuildRequires:	pkgconfig(gstreamer-base-1.0)
 BuildRequires:	pkgconfig(gstreamer-plugins-base-1.0)
 BuildRequires:	pkgconfig(libva)
+BuildRequires:	pkgconfig(libva-drm)
 BuildRequires:	pkgconfig(libavcodec)
 BuildRequires:	pkgconfig(libudev)
 BuildRequires:	pkgconfig(sdl2)
@@ -176,6 +177,8 @@ Requires:	%{dlopen_req Xinerama}
 Requires:	%{dlopen_req Xrandr}
 Requires:	%{dlopen_req Xrender}
 Requires:	%{dlopen_req v4l2}
+Requires:	%{dlopen_req va}
+Requires:	%{dlopen_req va-drm}
 Requires(post):	desktop-file-utils
 Requires(postun):	desktop-file-utils
 Requires(post):	desktop-common-data
