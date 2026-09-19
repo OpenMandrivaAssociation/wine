@@ -630,7 +630,6 @@ done
 
 %files direct3d
 %ifarch %{x86_64} %{aarch64}
-%{_libdir}/%{name}/aarch64-*/d3d8.dll
 %{_libdir}/%{name}/aarch64-*/d3d9.dll
 %{_libdir}/%{name}/aarch64-*/d3d10core.dll
 %{_libdir}/%{name}/aarch64-*/d3d11.dll
