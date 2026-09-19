@@ -548,7 +548,6 @@ done
 %{_libdir}/%{name}/x86_64-*/*.sys
 %{_libdir}/%{name}/x86_64-*/*.tlb
 %{_libdir}/%{name}/x86_64-*/*.msstyles
-%exclude %{_libdir}/%{name}/x86_64-*/d3d8.dll
 %exclude %{_libdir}/%{name}/x86_64-*/d3d9.dll
 %exclude %{_libdir}/%{name}/x86_64-*/d3d10core.dll
 %exclude %{_libdir}/%{name}/x86_64-*/d3d11.dll
@@ -594,7 +593,6 @@ done
 %{_libdir}/%{name}/arm-*/*.sys
 %{_libdir}/%{name}/arm-*/*.tlb
 %{_libdir}/%{name}/arm-*/*.msstyles
-%exclude %{_libdir}/%{name}/arm-*/d3d8.dll
 %exclude %{_libdir}/%{name}/arm-*/d3d9.dll
 %exclude %{_libdir}/%{name}/arm-*/d3d10core.dll
 %exclude %{_libdir}/%{name}/arm-*/d3d11.dll
@@ -619,7 +617,6 @@ done
 %{_libdir}/%{name}/i386-*/*.exe16
 %{_libdir}/%{name}/i386-*/*.drv16
 %{_libdir}/%{name}/i386-*/*.mod16
-%exclude %{_libdir}/%{name}/i386-*/d3d8.dll
 %exclude %{_libdir}/%{name}/i386-*/d3d9.dll
 %exclude %{_libdir}/%{name}/i386-*/d3d10core.dll
 %exclude %{_libdir}/%{name}/i386-*/d3d11.dll
@@ -636,12 +633,10 @@ done
 %{_libdir}/%{name}/aarch64-*/dxgi.dll
 %endif
 %ifarch %{x86_64}
-%{_libdir}/%{name}/x86_64-*/d3d8.dll
 %{_libdir}/%{name}/x86_64-*/d3d9.dll
 %{_libdir}/%{name}/x86_64-*/d3d10core.dll
 %{_libdir}/%{name}/x86_64-*/d3d11.dll
 %{_libdir}/%{name}/x86_64-*/dxgi.dll
-%{_libdir}/%{name}/i386-*/d3d8.dll
 %{_libdir}/%{name}/i386-*/d3d9.dll
 %{_libdir}/%{name}/i386-*/d3d10core.dll
 %{_libdir}/%{name}/i386-*/d3d11.dll
