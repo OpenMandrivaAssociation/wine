@@ -573,7 +573,6 @@ done
 %{_libdir}/%{name}/aarch64-*/*.sys
 %{_libdir}/%{name}/aarch64-*/*.tlb
 %{_libdir}/%{name}/aarch64-*/*.msstyles
-%exclude %{_libdir}/%{name}/aarch64-*/d3d8.dll
 %exclude %{_libdir}/%{name}/aarch64-*/d3d9.dll
 %exclude %{_libdir}/%{name}/aarch64-*/d3d10core.dll
 %exclude %{_libdir}/%{name}/aarch64-*/d3d11.dll
