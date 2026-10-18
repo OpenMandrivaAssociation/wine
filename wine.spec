@@ -3,11 +3,6 @@
 # /tmp/ccHA1ZYg.ltrans0.ltrans.o(.text+0x12): error: undefined reference to 'thread_data'
 # /tmp/ccHA1ZYg.ltrans0.ltrans.o(.text+0x2a): error: undefined reference to 'wld_start'
 %define _disable_lto 1
-# x86_64 compiles i386, x86_64, arm, aarch64 and arm64ec in one tree.
-# make -j32 on the c64 builders was killed.
-%ifarch %{x86_64}
-%global _smp_ncpus_max 8
-%endif
 # OpenCL support doesn't see cl* functions even with -lCL, but works if built...
 %define _disable_ld_no_undefined 1
 # Build time errors with lld 9.0.0-rc1 on x86_32 only
@@ -36,7 +31,7 @@
 
 Name:		wine
 Version:	11.20
-Release:	%{?beta:0.%{beta}.}2
+Release:	%{?beta:0.%{beta}.}3
 Source0:	https://dl.winehq.org/wine/source/%(echo %version |cut -d. -f1).%(if [ $(echo %version |cut -d. -f2) = "0" ]; then echo -n 0; else echo -n x; fi)/wine-%{version}%{?beta:-%{beta}}.tar.xz
 %if 0%{?sbeta:1}
 Source900:	https://github.com/wine-staging/wine-staging/archive/v%{sver}-%{sbeta}.tar.gz
@@ -338,6 +333,7 @@ mkdir build
 cd build
 %configure \
 	--libdir=%{_libdir} \
+	--disable-tests \
 %ifarch %{x86_64}
 	--enable-archs=i386,x86_64,arm,aarch64,arm64ec \
 	--with-mingw=clang \
